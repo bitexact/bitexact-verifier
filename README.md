@@ -1,25 +1,89 @@
 # bitexact-verifier
 
-Standalone verifier for BitExact evidence bundles (`bitexact-bundle/1`).
-Verifies the hash chain (BLAKE2b-256, or SHA-256 for FIPS-mode
-bundles) and, for signed bundles, the ed25519 signature —
-independently of BitExact, with no BitExact license required. Bundles
-from every prior release verify under their original scheme. The
-format is specified in `bundle-spec.md`.
+A standalone, independent verifier for BitExact evidence bundles
+(`bitexact-bundle/1`). It re-derives every hash and signature in a
+bundle from first principles and reports whether the evidence is
+intact — with no dependency on BitExact and no license required.
 
-This directory is a self-contained package (stdlib + `cryptography`
-only, no imports from BitExact) that splits out to its own public
-repository at GA. Until it is published to PyPI, install it from this
-directory:
+Anyone who receives a signed BitExact bundle — an auditor, a regulator,
+a counterparty — can verify it here, offline, on an air-gapped machine
+if they choose. The implementation is a single Python file that depends
+only on the standard library and [`cryptography`](https://pypi.org/project/cryptography/).
 
+## Install
+
+Requires Python 3.10+.
+
+```bash
+pip install .
+bitexact-verifier bundle.json
 ```
+
+Or run the single file directly, without installing:
+
+```bash
 pip install cryptography
 python bitexact_verifier.py bundle.json
-python bitexact_verifier.py bundle.json --expect-key <64-hex ed25519 public key>
-# once published:  pip install bitexact-verifier && bitexact-verifier bundle.json
 ```
 
-Exit code 0 means the bundle verifies; 1 means it does not, with the
-exact failing step or check printed.
+> A published `pip install bitexact-verifier` release will follow; until
+> then, install from source as above.
 
-Licensed under Apache-2.0.
+## Usage
+
+```bash
+# Verify a bundle's integrity
+bitexact-verifier run-42.bundle.json
+
+# Require a specific signing key (hex-encoded ed25519 public key)
+bitexact-verifier run-42.bundle.json --expect-key <64-hex public key>
+
+# Verify against a trust file of accepted bundle- and recorder-keys
+bitexact-verifier run-42.bundle.json --trust-file trust.json
+
+# Large runs export as a streaming JSONL bundle — verified the same way
+bitexact-verifier run-42.bundle.jsonl
+
+# DSSE envelopes (in-toto statements) are detected and verified automatically
+bitexact-verifier run-42.dsse.json
+```
+
+**Exit code `0`** means the bundle verifies; **`1`** means it does not,
+with the exact failing step or check named on stderr.
+
+## What it checks
+
+- **Hash chain** — every entry's hash over its canonical body, linked to
+  its predecessor, from genesis to the recorded head (BLAKE2b-256, or
+  SHA-256 for FIPS-mode bundles).
+- **Field commitments** — each committed field's salted commitment, so a
+  redacted field still verifies while any tampered value fails.
+- **Redaction integrity** — a bundle that *claims* to have redacted a
+  field must actually have removed it; a false redaction claim fails.
+- **Seal semantics** — a sealed run's terminal marker must be final and
+  attest the correct step count, so a complete run is distinguishable
+  from a truncated one.
+- **Signed checkpoints** and the **detached ed25519 bundle signature**,
+  including DSSE envelopes wrapping in-toto statements.
+- **Canonicalization** — RFC 8785 (JCS), so hashes are reproducible
+  across languages.
+
+Bundles from every prior BitExact release verify under their original
+scheme. The wire format is specified in
+[`bundle-spec.md`](bundle-spec.md), and `testdata/` holds the golden
+conformance fixtures and RFC 8785 vectors that any independent
+implementation can validate against.
+
+## Development
+
+```bash
+pip install cryptography pytest
+pytest test_vectors.py
+```
+
+`test_vectors.py` is the cross-implementation conformance suite; it
+imports only this package, never BitExact.
+
+## License
+
+Apache-2.0. See [`LICENSE`](LICENSE).
