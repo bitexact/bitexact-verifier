@@ -107,12 +107,6 @@ def _canonical(obj) -> bytes:
     return "".join(out).encode("utf-8")
 
 
-def _legacy_canonical(obj) -> bytes:
-    """Canonical bytes as written by v1 entries (pre-RFC 8785 releases)."""
-    return json.dumps(obj, sort_keys=True, separators=(",", ":"),
-                      ensure_ascii=False, allow_nan=False).encode("utf-8")
-
-
 _HASH_ALGS = ("blake2b-256", "sha256")
 
 
@@ -192,22 +186,6 @@ def _verify_entry_data(entry: dict):
                     and any(c.startswith(path + ".") for c in commitments)):
                 continue
             return False, f"uncommitted data at path {path}"
-    return True, None
-
-
-def _verify_legacy_entry_data(entry: dict):
-    if "data" in entry:
-        try:
-            commitment = hashlib.blake2b(
-                bytes.fromhex(entry.get("salt", ""))
-                + _legacy_canonical(entry["data"]),
-                digest_size=32).hexdigest()
-        except ValueError:
-            return False, "malformed salt"
-        if commitment != entry.get("data_hash"):
-            return False, "data hash mismatch — data tampered or corrupted"
-    elif not entry.get("redacted"):
-        return False, "data missing without a redaction marker"
     return True, None
 
 
@@ -307,17 +285,11 @@ def _redaction_incomplete(claims, markers, total):
 
 def _entry_check(entry: dict, i: int, prev: str, run_id):
     """One entry against its position, predecessor, and run identity."""
-    version = entry.get("v")
-    if version == 1:
-        body = {k: v for k, v in entry.items()
-                if k not in ("hash", "data", "salt", "redacted")}
-        payload = _legacy_canonical(body)
-    elif version == 2:
-        body = {k: v for k, v in entry.items()
-                if k not in ("hash", "data", "salts", "redacted")}
-        payload = _canonical(body)
-    else:
-        return False, f"step {i}: unsupported entry version {version!r}"
+    if entry.get("v") != 2:
+        return False, f"step {i}: unsupported entry version {entry.get('v')!r}"
+    body = {k: v for k, v in entry.items()
+            if k not in ("hash", "data", "salts", "redacted")}
+    payload = _canonical(body)
     if entry.get("alg") not in _HASH_ALGS:
         return False, f"step {i}: unsupported hash algorithm {entry.get('alg')!r}"
     if body.get("run_id") != run_id:
@@ -329,8 +301,7 @@ def _entry_check(entry: dict, i: int, prev: str, run_id):
         return False, f"step {i}: chain broken"
     if _hash_hex(entry.get("alg"), payload) != entry.get("hash"):
         return False, f"step {i}: hash mismatch — entry tampered or corrupted"
-    ok, err = (_verify_legacy_entry_data(entry) if version == 1
-               else _verify_entry_data(entry))
+    ok, err = _verify_entry_data(entry)
     if not ok:
         return False, f"step {i}: {err}"
     return True, None
@@ -350,10 +321,8 @@ def _check_seals(container: dict, entries_len: int, hash_at, expect_key,
         attested = {"run_id": cp.get("run_id"), "seq": cp.get("seq"),
                     "steps": cp.get("steps"),
                     "head_hash": cp.get("head_hash"),
-                    "prev_checkpoint": cp.get("prev_checkpoint")}
-        if "alg" in cp:
-            attested["alg"] = cp.get("alg")
-            attested["key_id"] = cp.get("key_id")
+                    "prev_checkpoint": cp.get("prev_checkpoint"),
+                    "alg": cp.get("alg"), "key_id": cp.get("key_id")}
         if cp.get("run_id") != container.get("run_id"):
             return False, (f"checkpoint {i}: run_id {cp.get('run_id')!r} "
                            f"does not match bundle run_id")

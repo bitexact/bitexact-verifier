@@ -70,27 +70,11 @@ and `repair` audit entries may follow it); `redaction` entries record
 what was redacted, by whom, and when; `repair` entries record an
 operator's explicit acceptance of truncated history.
 
-### v1 entries (compatibility)
-
-Entries written by pre-1.2 releases carry `v: 1` and commit to the
-whole payload at once: `data_hash` is BLAKE2b-256 over
-`salt || canonical(data)` with a single 16-byte hex `salt`, the chain
-body excludes `hash`, `data`, `salt`, and `redacted` (so it includes
-`data_hash`), and canonical bytes are Python `json.dumps` with sorted
-keys and `,`/`:` separators — not RFC 8785. A redacted v1 entry has
-`data` and `salt` removed and `redacted: true`. Verifiers must verify
-each entry under its own version's scheme; evidence outlives releases.
-v1 bundle signatures cover only `{"format", "run_id", "chain"}` (plus
-`"checkpoints"` when present) — a signature without `signed_at`/
-`key_id` fields is verified against that legacy body. v1 checkpoints
-omit `alg`/`key_id` from the attested body.
-
 ## Chain verification
 
 Starting from `prev = "0" * 64`, for each entry at index `i`:
 
-1. `entry["v"]` is `2` (or `1`, verified under the v1 scheme above)
-   and `entry["alg"]` is supported
+1. `entry["v"]` is `2` and `entry["alg"]` is supported
 2. `entry["run_id"]` equals the bundle `run_id`
 3. `entry["step"] == i` and `entry["prev"] == prev`
 4. `hash(alg, canonical(chain body)) == entry["hash"]`

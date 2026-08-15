@@ -255,42 +255,6 @@ def test_statement_checks_run_after_a_valid_envelope_signature():
     assert not ok and "tampered" in err
 
 
-def test_golden_v1_signed_bundle_verifies():
-    bundle = _load("valid-v1-signed.bundle.json")
-    ok, err = verify_bundle(bundle)
-    assert ok, err
-    assert [e["step"] for e in bundle["entries"] if e.get("redacted")] == [1]
-
-    tampered = json.loads(json.dumps(bundle))
-    tampered["entries"][0]["data"]["response"]["temp"] = 2e16
-    assert verify_bundle(tampered)[0] is False
-
-    tampered = json.loads(json.dumps(bundle))
-    del tampered["checkpoints"]
-    assert verify_bundle(tampered)[0] is False
-
-    tampered = json.loads(json.dumps(bundle))
-    sig = tampered["signature"]["signature"]
-    tampered["signature"]["signature"] = \
-        ("0" if sig[0] != "0" else "1") + sig[1:]
-    assert verify_bundle(tampered)[0] is False
-
-
-def test_v1_entry_failure_modes():
-    bundle = _load("valid-v1-signed.bundle.json")
-
-    b = json.loads(json.dumps(bundle))
-    b["entries"][0]["salt"] = "zz"
-    ok, err = verify_bundle(b)
-    assert not ok and "malformed salt" in err
-
-    b = json.loads(json.dumps(bundle))
-    del b["entries"][0]["data"]
-    del b["entries"][0]["salt"]
-    ok, err = verify_bundle(b)
-    assert not ok and "redaction marker" in err
-
-
 def test_recorder_key_demand_fails_without_checkpoints(tmp_path, capsys):
     bundle = _golden()
     del bundle["checkpoints"]

@@ -68,11 +68,9 @@ with the exact failing step or check named on stderr.
 - **Canonicalization** — RFC 8785 (JCS), so hashes are reproducible
   across languages.
 
-Bundles from every prior BitExact release verify under their original
-scheme. The wire format is specified in
-[`bundle-spec.md`](bundle-spec.md), and `testdata/` holds the golden
-conformance fixtures and RFC 8785 vectors that any independent
-implementation can validate against.
+The wire format is specified in [`bundle-spec.md`](bundle-spec.md), and
+`testdata/` holds the golden conformance fixtures and RFC 8785 vectors
+that any independent implementation can validate against.
 
 ## Development
 
