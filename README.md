@@ -25,7 +25,7 @@ bitexact-verifier bundle.json
 Or run the single file directly, without installing:
 
 ```bash
-pip install cryptography
+pip install cryptography asn1crypto
 python bitexact_verifier.py bundle.json
 ```
 
