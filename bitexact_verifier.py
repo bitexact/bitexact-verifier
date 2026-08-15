@@ -2,8 +2,10 @@
 
 Implements bundle-spec.md (bitexact-bundle/1): hash-chain verification
 over salted data commitments — so redacted entries still verify —
-plus optional ed25519 signature checking. Depends only on the standard
-library, plus `cryptography` when a bundle is signed.
+plus optional ed25519 signature and external-anchor checking. Depends
+only on the standard library, plus `cryptography` when a bundle is
+signed or carries a WORM anchor, and `asn1crypto` to verify an RFC 3161
+timestamp anchor.
 
 SPDX-License-Identifier: Apache-2.0
 """
@@ -192,14 +194,16 @@ def _verify_entry_data(entry: dict):
 def verify_bundle(bundle: dict, expect_key: str | None = None,
                   expect_recorder_key: str | None = None,
                   trusted_bundle_keys: list | None = None,
-                  trusted_recorder_keys: list | None = None):
+                  trusted_recorder_keys: list | None = None,
+                  expect_tsa: str | None = None):
     """Return (ok, error). The error names what failed and where.
 
     Total: hostile input of any shape is a failed verification, never an
     exception."""
     try:
         return _verify_bundle(bundle, expect_key, expect_recorder_key,
-                              trusted_bundle_keys, trusted_recorder_keys)
+                              trusted_bundle_keys, trusted_recorder_keys,
+                              expect_tsa)
     except RuntimeError as exc:
         return False, str(exc)
     except Exception as exc:
@@ -207,7 +211,7 @@ def verify_bundle(bundle: dict, expect_key: str | None = None,
 
 
 def _verify_bundle(bundle, expect_key, expect_recorder_key,
-                   trusted_bundle_keys, trusted_recorder_keys):
+                   trusted_bundle_keys, trusted_recorder_keys, expect_tsa):
     if bundle.get("format") != FORMAT:
         return False, f"unsupported format {bundle.get('format')!r}"
 
@@ -247,7 +251,7 @@ def _verify_bundle(bundle, expect_key, expect_recorder_key,
 
     return _check_seals(bundle, len(entries), hash_at, expect_key,
                         expect_recorder_key, trusted_bundle_keys,
-                        trusted_recorder_keys)
+                        trusted_recorder_keys, expect_tsa)
 
 
 def _seal_step(entry, i, run_end_at):
@@ -309,13 +313,17 @@ def _entry_check(entry: dict, i: int, prev: str, run_id):
 
 def _check_seals(container: dict, entries_len: int, hash_at, expect_key,
                  expect_recorder_key, trusted_bundle_keys,
-                 trusted_recorder_keys):
-    """Checkpoint chain and bundle signature for both bundle forms."""
+                 trusted_recorder_keys, expect_tsa=None):
+    """Checkpoint chain, external anchors, and bundle signature for both
+    bundle forms."""
     checkpoints = container.get("checkpoints", [])
+    worm_anchors = [a for a in container.get("anchors", [])
+                    if a.get("type") == "worm"]
     if ((expect_recorder_key is not None
-         or trusted_recorder_keys is not None) and not checkpoints):
-        return False, ("a recorder key was required but the bundle has no "
-                       "checkpoints for it to have signed")
+         or trusted_recorder_keys is not None)
+            and not checkpoints and not worm_anchors):
+        return False, ("a recorder key was required but the bundle carries "
+                       "no checkpoints or worm anchors for it to have signed")
     prev_checkpoint = GENESIS
     for i, cp in enumerate(checkpoints):
         attested = {"run_id": cp.get("run_id"), "seq": cp.get("seq"),
@@ -352,6 +360,11 @@ def _check_seals(container: dict, entries_len: int, hash_at, expect_key,
         prev_checkpoint = _hash_hex(cp.get("alg", "blake2b-256"),
                                     _canonical(attested))
 
+    anchor_err = _verify_anchors(container, entries_len, hash_at, expect_tsa,
+                                 expect_recorder_key, trusted_recorder_keys)
+    if anchor_err is not None:
+        return False, anchor_err
+
     signature = container.get("signature")
     if signature is None:
         if expect_key is not None or trusted_bundle_keys is not None:
@@ -375,6 +388,8 @@ def _check_seals(container: dict, entries_len: int, hash_at, expect_key,
         signed_body["key_id"] = signature["key_id"]
     if "checkpoints" in container:
         signed_body["checkpoints"] = container["checkpoints"]
+    if "anchors" in container:
+        signed_body["anchors"] = container["anchors"]
     if not _ed25519_verify(signature["public_key"], _canonical(signed_body),
                            signature["signature"]):
         return False, "signature check failed — bundle altered after signing"
@@ -387,7 +402,8 @@ JSONL_FORMAT = "bitexact-bundle-jsonl/1"
 def verify_jsonl(lines, expect_key: str | None = None,
                  expect_recorder_key: str | None = None,
                  trusted_bundle_keys: list | None = None,
-                 trusted_recorder_keys: list | None = None):
+                 trusted_recorder_keys: list | None = None,
+                 expect_tsa: str | None = None):
     """Streaming verification of the JSONL bundle form.
 
     `lines` is any iterable of text lines: header first, then one entry
@@ -397,7 +413,8 @@ def verify_jsonl(lines, expect_key: str | None = None,
     is a failed verification, never an exception."""
     try:
         return _verify_jsonl(lines, expect_key, expect_recorder_key,
-                             trusted_bundle_keys, trusted_recorder_keys)
+                             trusted_bundle_keys, trusted_recorder_keys,
+                             expect_tsa)
     except RuntimeError as exc:
         return False, str(exc), None
     except Exception as exc:
@@ -405,7 +422,7 @@ def verify_jsonl(lines, expect_key: str | None = None,
 
 
 def _verify_jsonl(lines, expect_key, expect_recorder_key,
-                  trusted_bundle_keys, trusted_recorder_keys):
+                  trusted_bundle_keys, trusted_recorder_keys, expect_tsa):
     stream = (line for line in lines if line.strip())
     first = next(stream, None)
     if first is None:
@@ -417,6 +434,10 @@ def _verify_jsonl(lines, expect_key, expect_recorder_key,
     checkpoints = header.get("checkpoints", [])
     needed = {cp.get("steps", 0) - 1 for cp in checkpoints
               if cp.get("steps", 0) > 0}
+    needed |= {a.get("steps", 0) - 1 for a in header.get("anchors", [])
+               if isinstance(a.get("steps"), int)
+               and not isinstance(a.get("steps"), bool)
+               and a.get("steps", 0) > 0}
     captured: dict[int, str] = {}
     markers: dict[int, list] = {}
     claims = []
@@ -454,7 +475,7 @@ def _verify_jsonl(lines, expect_key, expect_recorder_key,
         return False, err, None
     ok, err = _check_seals(header, count, captured.get, expect_key,
                            expect_recorder_key, trusted_bundle_keys,
-                           trusted_recorder_keys)
+                           trusted_recorder_keys, expect_tsa)
     if not ok:
         return False, err, None
     summary = {"steps": count, "signed": "signature" in header,
@@ -480,6 +501,215 @@ def _ed25519_verify(public_hex: str, data: bytes, signature_hex: str) -> bool:
         return False
 
 
+# --- External anchors ----------------------------------------------------
+#
+# A worm anchor is a recorder-signed head attestation exported to an
+# immutable store; an rfc3161 anchor is a timestamp-authority token over
+# the head. Both bind {steps, head_hash}: the verifier checks the anchor's
+# own integrity and that the bundle still carries that head at that step,
+# so truncation below an externally held anchor fails. Mirrors the
+# product's bitexact/anchor.py; the golden anchor vectors keep them in
+# lockstep.
+
+_WORM_ATTESTED = ("type", "run_id", "steps", "head_hash", "alg", "key_id",
+                  "anchored_at")
+_IMPRINT_ALG = "sha256"
+
+
+def _anchor_binding(anchor, run_id, entries_len, hash_at):
+    if anchor.get("run_id") != run_id:
+        return "anchor run_id does not match the bundle"
+    steps = anchor.get("steps")
+    if not isinstance(steps, int) or isinstance(steps, bool) or steps < 0:
+        return "anchor has a non-integer step count"
+    if steps > entries_len:
+        return (f"anchor attests {steps} steps but the bundle has "
+                f"{entries_len} — truncated below an externally anchored "
+                f"head")
+    if steps > 0 and hash_at(steps - 1) != anchor.get("head_hash"):
+        return ("anchor head does not match the bundle chain at the "
+                "anchored step")
+    return None
+
+
+def _verify_worm_anchor(anchor, expect_recorder_key, trusted_recorder_keys):
+    public = anchor.get("public_key", "")
+    if expect_recorder_key is not None and public != expect_recorder_key:
+        return "worm anchor not signed by the trusted recorder key"
+    if (trusted_recorder_keys is not None
+            and public not in trusted_recorder_keys):
+        return "worm anchor not signed by a trusted recorder key"
+    attested = {k: anchor.get(k) for k in _WORM_ATTESTED}
+    if not _ed25519_verify(public, _canonical(attested),
+                           anchor.get("signature", "")):
+        return "worm anchor signature invalid"
+    return None
+
+
+def _verify_anchors(container, entries_len, hash_at, expect_tsa,
+                    expect_recorder_key, trusted_recorder_keys):
+    run_id = container.get("run_id")
+    for i, anchor in enumerate(container.get("anchors", [])):
+        kind = anchor.get("type")
+        if kind == "worm":
+            err = _verify_worm_anchor(anchor, expect_recorder_key,
+                                      trusted_recorder_keys)
+        elif kind == "rfc3161":
+            err = _verify_rfc3161_anchor(anchor, expect_tsa)
+        else:
+            err = f"unknown anchor type {kind!r}"
+        if err is None:
+            err = _anchor_binding(anchor, run_id, entries_len, hash_at)
+        if err is not None:
+            return f"anchor {i}: {err}"
+    return None
+
+
+def _verify_rfc3161_anchor(anchor, expect_tsa):
+    try:
+        token = base64.b64decode(anchor.get("token", ""), validate=True)
+    except Exception:
+        return "rfc3161 anchor token is not valid base64"
+    return _verify_rfc3161_token(token, anchor.get("head_hash", ""), expect_tsa)
+
+
+def _verify_rfc3161_token(token_der, head_hash_hex, expect_tsa):
+    try:
+        from asn1crypto import cms
+        import asn1crypto.tsp  # noqa: F401 — registers the tst_info type
+    except ImportError:
+        raise RuntimeError(
+            "verifying RFC 3161 anchors requires 'asn1crypto' — "
+            "pip install asn1crypto")
+    try:
+        return _rfc3161_checks(cms, token_der, head_hash_hex, expect_tsa)
+    except Exception as exc:
+        return f"malformed timestamp token: {exc!r}"
+
+
+def _rfc3161_checks(cms, token_der, head_hash_hex, expect_tsa):
+    from cryptography import x509
+    from cryptography.exceptions import InvalidSignature
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.asymmetric import ec, padding, rsa
+    from cryptography.x509.oid import ExtendedKeyUsageOID
+
+    info = cms.ContentInfo.load(token_der)
+    if info['content_type'].native != 'signed_data':
+        return "timestamp token is not CMS SignedData"
+    signed = info['content']
+    eci = signed['encap_content_info']
+    if eci['content_type'].native != 'tst_info':
+        return "timestamp token content is not a TSTInfo"
+    tst = eci['content'].parsed
+    imprint = tst['message_imprint']
+    if imprint['hash_algorithm']['algorithm'].native != _IMPRINT_ALG:
+        return "unexpected imprint algorithm"
+    if imprint['hashed_message'].native != hashlib.sha256(
+            bytes.fromhex(head_hash_hex)).digest():
+        return ("timestamp imprint does not match the head — the token is "
+                "for a different head hash")
+    signer_infos = signed['signer_infos']
+    if len(signer_infos) != 1:
+        return f"expected exactly one signer, found {len(signer_infos)}"
+    signer = signer_infos[0]
+    signer_cert = _find_signer_cert(signed, signer)
+    if signer_cert is None:
+        return "signer certificate is not present in the token"
+    cert = x509.load_der_x509_certificate(signer_cert.dump())
+
+    signed_attrs = signer['signed_attrs']
+    if signed_attrs is None or len(signed_attrs) == 0:
+        return "timestamp token has no signed attributes to verify"
+    digest_name = signer['digest_algorithm']['algorithm'].native
+    hash_cls = {"sha256": hashes.SHA256, "sha384": hashes.SHA384,
+                "sha512": hashes.SHA512}.get(digest_name)
+    if hash_cls is None:
+        return f"unsupported digest algorithm {digest_name!r}"
+    attrs = {a['type'].native: a for a in signed_attrs}
+    message_digest = attrs.get('message_digest')
+    if message_digest is None:
+        return "signed attributes are missing the message-digest"
+    if message_digest['values'][0].native != hashlib.new(
+            digest_name, eci['content'].contents).digest():
+        return "signed message-digest does not match the TSTInfo"
+    content_type = attrs.get('content_type')
+    if content_type is None or content_type['values'][0].native != 'tst_info':
+        return "signed content-type attribute is not tst_info"
+    signed_bytes = b'\x31' + signed_attrs.dump()[1:]
+    sig_name = signer['signature_algorithm']['algorithm'].native
+    signature = signer['signature'].native
+    public_key = cert.public_key()
+    try:
+        if sig_name in ('rsassa_pkcs1v15', 'sha256_rsa', 'sha384_rsa',
+                        'sha512_rsa'):
+            if not isinstance(public_key, rsa.RSAPublicKey):
+                return "signature algorithm does not match the key"
+            public_key.verify(signature, signed_bytes, padding.PKCS1v15(),
+                              hash_cls())
+        elif sig_name in ('sha256_ecdsa', 'sha384_ecdsa', 'sha512_ecdsa'):
+            if not isinstance(public_key, ec.EllipticCurvePublicKey):
+                return "signature algorithm does not match the key"
+            public_key.verify(signature, signed_bytes, ec.ECDSA(hash_cls()))
+        else:
+            return f"unsupported signature algorithm {sig_name!r}"
+    except InvalidSignature:
+        return "timestamp signature does not verify"
+
+    try:
+        eku = cert.extensions.get_extension_for_class(
+            x509.ExtendedKeyUsage).value
+        has_timestamping = ExtendedKeyUsageOID.TIME_STAMPING in eku
+    except x509.ExtensionNotFound:
+        has_timestamping = False
+    if not has_timestamping:
+        return "signer certificate lacks the timeStamping extended key usage"
+
+    if expect_tsa is not None:
+        pinned = _load_cert(expect_tsa)
+        if pinned is None:
+            return "the pinned TSA certificate could not be parsed"
+        if cert.fingerprint(hashes.SHA256()) != pinned.fingerprint(
+                hashes.SHA256()):
+            try:
+                cert.verify_directly_issued_by(pinned)
+            except (InvalidSignature, ValueError, TypeError):
+                return ("signer certificate is neither the trusted TSA "
+                        "certificate nor directly issued by it")
+    return None
+
+
+def _find_signer_cert(signed, signer):
+    certs = signed['certificates']
+    if not certs:
+        return None
+    sid = signer['sid']
+    for choice in certs:
+        cert = choice.chosen
+        if sid.name == 'issuer_and_serial_number':
+            ias = sid.chosen
+            if (cert.issuer == ias['issuer']
+                    and cert.serial_number == ias['serial_number'].native):
+                return cert
+        elif sid.name == 'subject_key_identifier':
+            if cert.key_identifier == sid.chosen.native:
+                return cert
+    return None
+
+
+def _load_cert(material):
+    from cryptography import x509
+    if isinstance(material, str):
+        material = material.encode()
+    try:
+        return x509.load_pem_x509_certificate(material)
+    except ValueError:
+        try:
+            return x509.load_der_x509_certificate(material)
+        except ValueError:
+            return None
+
+
 DSSE_PAYLOAD_TYPE = "application/vnd.in-toto+json"
 
 
@@ -491,7 +721,7 @@ def _dsse_pae(payload_type: str, payload: bytes) -> bytes:
 
 def verify_envelope(envelope: dict, expect_key=None,
                     expect_recorder_key=None, trusted_bundle_keys=None,
-                    trusted_recorder_keys=None):
+                    trusted_recorder_keys=None, expect_tsa=None):
     """Verify a DSSE envelope carrying an in-toto statement whose
     predicate is a bundle; returns (ok, error, bundle_or_none).
 
@@ -499,7 +729,8 @@ def verify_envelope(envelope: dict, expect_key=None,
     exception."""
     try:
         return _verify_envelope(envelope, expect_key, expect_recorder_key,
-                                trusted_bundle_keys, trusted_recorder_keys)
+                                trusted_bundle_keys, trusted_recorder_keys,
+                                expect_tsa)
     except RuntimeError as exc:
         return False, str(exc), None
     except Exception as exc:
@@ -507,7 +738,7 @@ def verify_envelope(envelope: dict, expect_key=None,
 
 
 def _verify_envelope(envelope, expect_key, expect_recorder_key,
-                     trusted_bundle_keys, trusted_recorder_keys):
+                     trusted_bundle_keys, trusted_recorder_keys, expect_tsa):
     if envelope.get("payloadType") != DSSE_PAYLOAD_TYPE:
         return False, (f"unsupported payloadType "
                        f"{envelope.get('payloadType')!r}"), None
@@ -553,7 +784,8 @@ def _verify_envelope(envelope, expect_key, expect_recorder_key,
     ok, err = verify_bundle(bundle, expect_key=expect_key,
                             expect_recorder_key=expect_recorder_key,
                             trusted_bundle_keys=trusted_bundle_keys,
-                            trusted_recorder_keys=trusted_recorder_keys)
+                            trusted_recorder_keys=trusted_recorder_keys,
+                            expect_tsa=expect_tsa)
     if not ok:
         return False, err, None
     return True, None, bundle
@@ -579,6 +811,16 @@ def _validate_trust(trust) -> str | None:
     return None
 
 
+def _tsa_caveat(anchors, expect_tsa):
+    """A note when a verified bundle carries RFC 3161 anchors but the TSA
+    was not pinned — the timestamp's attested time is then unverified."""
+    if expect_tsa is None and any(a.get("type") == "rfc3161"
+                                  for a in anchors or []):
+        return (" (RFC 3161 timestamps not pinned — pass --expect-tsa to "
+                "trust the time)")
+    return ""
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         prog="bitexact-verifier",
@@ -592,7 +834,15 @@ def main(argv=None) -> int:
     parser.add_argument("--trust-file",
                         help="JSON file with bundle_keys/recorder_keys "
                              "lists of {key_id, public_key} entries")
+    parser.add_argument("--expect-tsa",
+                        help="require every RFC 3161 anchor to be from this "
+                             "TSA certificate (PEM/DER file)")
     args = parser.parse_args(argv)
+
+    expect_tsa = None
+    if args.expect_tsa:
+        with open(args.expect_tsa, "rb") as f:
+            expect_tsa = f.read()
 
     trusted_bundle_keys = trusted_recorder_keys = None
     if args.trust_file:
@@ -624,7 +874,8 @@ def main(argv=None) -> int:
                 _lines(), expect_key=args.expect_key,
                 expect_recorder_key=args.expect_recorder_key,
                 trusted_bundle_keys=trusted_bundle_keys,
-                trusted_recorder_keys=trusted_recorder_keys)
+                trusted_recorder_keys=trusted_recorder_keys,
+                expect_tsa=expect_tsa)
             if ok:
                 signed = "signed" if summary["signed"] else "unsigned"
                 note = ""
@@ -633,6 +884,7 @@ def main(argv=None) -> int:
                     if not summary["signed"]:
                         note += (" (unsigned redaction — demand a signed "
                                  "bundle)")
+                note += _tsa_caveat(first_doc.get("anchors"), expect_tsa)
                 print(f"OK: {first_doc.get('run_id')} — "
                       f"{summary['steps']} steps, chain verified, "
                       f"{signed}{note} (jsonl, streamed)")
@@ -646,14 +898,16 @@ def main(argv=None) -> int:
             bundle, expect_key=args.expect_key,
             expect_recorder_key=args.expect_recorder_key,
             trusted_bundle_keys=trusted_bundle_keys,
-            trusted_recorder_keys=trusted_recorder_keys)
+            trusted_recorder_keys=trusted_recorder_keys,
+            expect_tsa=expect_tsa)
         bundle = inner or {}
     else:
         ok, err = verify_bundle(
             bundle, expect_key=args.expect_key,
             expect_recorder_key=args.expect_recorder_key,
             trusted_bundle_keys=trusted_bundle_keys,
-            trusted_recorder_keys=trusted_recorder_keys)
+            trusted_recorder_keys=trusted_recorder_keys,
+            expect_tsa=expect_tsa)
     if ok:
         n = len(bundle.get("entries", []))
         signed = "signed" if bundle.get("signature") else "unsigned"
@@ -665,6 +919,7 @@ def main(argv=None) -> int:
             note = f", {redacted} field(s) redacted"
             if not bundle.get("signature"):
                 note += " (unsigned redaction — demand a signed bundle)"
+        note += _tsa_caveat(bundle.get("anchors"), expect_tsa)
         print(f"OK: {bundle.get('run_id')} — {n} steps, chain verified, "
               f"{signed}{note}")
         return 0

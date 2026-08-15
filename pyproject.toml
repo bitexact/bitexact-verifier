@@ -1,6 +1,6 @@
 [project]
 name = "bitexact-verifier"
-version = "1.0.0"
+version = "2.0.0"
 description = "Standalone verifier for BitExact evidence bundles (bitexact-bundle/1)"
 readme = "README.md"
 license = "Apache-2.0"
@@ -18,7 +18,7 @@ classifiers = [
     "Topic :: Software Development :: Quality Assurance",
     "Operating System :: OS Independent",
 ]
-dependencies = ["cryptography>=43"]
+dependencies = ["cryptography>=43", "asn1crypto>=1.5"]
 
 [project.urls]
 Homepage = "https://bitexact.dev"

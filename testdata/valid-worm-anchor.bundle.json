@@ -1,0 +1,136 @@
+{
+ "format": "bitexact-bundle/1",
+ "run_id": "golden-anchored",
+ "entries": [
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-anchored",
+   "step": 0,
+   "kind": "run_meta",
+   "ts": "2026-08-15T21:06:07.629211+00:00",
+   "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+   "data": {
+    "python": "3.14.4",
+    "platform": "win32",
+    "bitexact": "1.5.0"
+   },
+   "salts": {
+    "python": "385b6ed9e348e06b7fce2232894915d1",
+    "platform": "24bb7291d925bbd198216697683da53b",
+    "bitexact": "852e4e3a02bfa782f532b81931d26605"
+   },
+   "commitments": {
+    "python": "7b7c794caf15fbdbe96de5fec5dbe231f5a5c70fb6a7ddc16bf30bca234211d2",
+    "platform": "0f6e9ed24c89ec4dafa0eb8960ce4ecfa71a2cec99fc05fa119093a00c32b517",
+    "bitexact": "2649394396db8e80daf6818a8fd2c7c7738f547ed1bdb8ec1a6274fc3ff86322"
+   },
+   "hash": "d81911a937a5523a58dcdbeaea0f81140f8ad82a2507c1d19d8a2854a386da4f"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-anchored",
+   "step": 1,
+   "kind": "tool_call",
+   "ts": "2026-08-15T21:06:07.681461+00:00",
+   "prev": "d81911a937a5523a58dcdbeaea0f81140f8ad82a2507c1d19d8a2854a386da4f",
+   "data": {
+    "tool": "lookup",
+    "args": [
+     "Paris"
+    ],
+    "kwargs": {},
+    "result": {
+     "temp": 21,
+     "city": "Paris"
+    }
+   },
+   "salts": {
+    "tool": "5841e8e841e103e13f4e6ec3501076ab",
+    "args": "677fdb65fceee82812331752dd3d2991",
+    "kwargs": "be659e50718e649bb38f1bd15d5a8413",
+    "result.temp": "b98a706906a88aee79e4c7b816f2a660",
+    "result.city": "d0acfe211a4d39202e9336a3cf8f6ba9"
+   },
+   "commitments": {
+    "tool": "76b1821d19639babb7c3a65340066b11bdc008aac9f0d98c782d7e40dcd45fa1",
+    "args": "40699d95444e017eb6fcc0903aa77f6944ce4426570bd99582796a73090f6f05",
+    "kwargs": "058ce49ca86739593e4778f0b76dc102fe63878bea377caa0f936cab9751fe34",
+    "result.temp": "d161cd948e0ad53e98347cd27722c8a1f66f9eb7880b3391292246c261620179",
+    "result.city": "b4551aeeced8fdbcf4b9d1cac16cb666cd28d6bfadd71efd49c27d7b2be96a69"
+   },
+   "hash": "b281eac011aebaa93e377cb79041085fd2a860aae1cc202b2159b10939238f30"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-anchored",
+   "step": 2,
+   "kind": "tool_call",
+   "ts": "2026-08-15T21:06:07.712177+00:00",
+   "prev": "b281eac011aebaa93e377cb79041085fd2a860aae1cc202b2159b10939238f30",
+   "data": {
+    "tool": "lookup",
+    "args": [
+     "Lyon"
+    ],
+    "kwargs": {},
+    "result": {
+     "temp": 21,
+     "city": "Lyon"
+    }
+   },
+   "salts": {
+    "tool": "fc872f62fd9ef3f012eecf5760ba43c7",
+    "args": "0593ef0757cc29e03e7bdbd4d3824959",
+    "kwargs": "16fe1d4bec4148b46d3ec9aed7556f53",
+    "result.temp": "f1c2f568dc165e269269fb0e6a75619b",
+    "result.city": "cd6668dc9f8ca9812b8b8336d4df0d92"
+   },
+   "commitments": {
+    "tool": "2767865cedd2a80e3b37fc755664e62b695cbf5925eb45988198d66e97dd53d0",
+    "args": "b1a8a79d91097aa950ed4376415c6a5f51962966d1b344161ad1d56977650803",
+    "kwargs": "84f9e84235d8517f03ea0517d66e093b038c0ba3351ff72388f9a610f02f053c",
+    "result.temp": "06681b443cdab1f5993bc2e55b6c10df0792e8d3100d6937c554c541d076492b",
+    "result.city": "285db610907c9a6317ccf5bbf672bcc2aa631a159f1c25718e42d3ef2d9cb278"
+   },
+   "hash": "e666a1beee9d3745956ee6ccf901214ae4dc84c8931282ac8ee2300e5ad05f86"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-anchored",
+   "step": 3,
+   "kind": "run_end",
+   "ts": "2026-08-15T21:06:07.740768+00:00",
+   "prev": "e666a1beee9d3745956ee6ccf901214ae4dc84c8931282ac8ee2300e5ad05f86",
+   "data": {
+    "steps": 4
+   },
+   "salts": {
+    "steps": "9e5f64bac45e7f159e3f751439ccda95"
+   },
+   "commitments": {
+    "steps": "f7b0191741ea948d4e8816014ef1ae37453131b763e45157dda01cd082962a34"
+   },
+   "hash": "b2077b4a65d9562e9dfbf1739a7bec2bee180529a4c78d634bab5b21f8edf799"
+  }
+ ],
+ "chain": {
+  "head_hash": "b2077b4a65d9562e9dfbf1739a7bec2bee180529a4c78d634bab5b21f8edf799"
+ },
+ "anchors": [
+  {
+   "type": "worm",
+   "run_id": "golden-anchored",
+   "steps": 4,
+   "head_hash": "b2077b4a65d9562e9dfbf1739a7bec2bee180529a4c78d634bab5b21f8edf799",
+   "alg": "blake2b-256",
+   "key_id": "ba2655652874c66c",
+   "anchored_at": "2026-08-15T00:00:00+00:00",
+   "public_key": "d04ab232742bb4ab3a1368bd4615e4e6d0224ab71a016baf8520a332c9778737",
+   "signature": "58f5db4326ddfc25caf9e53eae1f25d5497568682fb71d44d0f10d07ce63bbaf1742592cd6f8b8b91bbe587a2aab524916165b1a9b7bf87f025814606d54aa0f"
+  }
+ ]
+}

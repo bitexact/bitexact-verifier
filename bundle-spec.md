@@ -33,6 +33,7 @@ verify.
 | `entries` | array | The run's manifest entries, in step order (see below). |
 | `chain` | object | `{"head_hash": <hex>}` — the `hash` of the final entry, or `null` for an empty run. |
 | `checkpoints` | array, optional | Signed head attestations (see below). |
+| `anchors` | array, optional | External head anchors (see below). |
 | `signature` | object, optional | Detached ed25519 signature (see below). |
 
 ## Entries
@@ -126,6 +127,60 @@ cannot be forged, reordered, or thinned; that the newest were not
 removed with the manifest tail is guaranteed by the bundle signature
 below or an externally anchored head — never by local files alone.
 
+## Anchors
+
+External anchors pin a run's head *outside* its mutable store, so a
+rollback the local store cannot detect fails against evidence a relying
+party holds independently. The optional `anchors` array carries one record
+per anchor. Each binds `{run_id, steps, head_hash}`: a verifier checks
+that the anchor names the bundle's run and that the bundle still carries
+that head at the anchored step; `steps` beyond the bundle's entry count is
+a truncation failure. The bundle signature covers the anchor set (see
+below), so anchors cannot be added or dropped after signing.
+
+A **WORM anchor** is a recorder-signed head attestation, written to a
+customer WORM / object-lock store:
+
+| Field | Meaning |
+|---|---|
+| `type` | `"worm"`. |
+| `run_id`, `steps`, `head_hash` | the attested run, its step count, and head. |
+| `alg` | the head's hash algorithm. |
+| `key_id`, `public_key` | recorder key identity (`key_id` is BLAKE2b-64 of the raw key). |
+| `anchored_at` | ISO-8601 UTC time the anchor was written. |
+| `signature` | ed25519 over the canonical JSON of `{type, run_id, steps, head_hash, alg, key_id, anchored_at}`. |
+
+A relying party pins a WORM anchor to a recorder key with
+`--expect-recorder-key` (the same key that signs checkpoints); an unpinned
+WORM anchor still binds the head but is not attributed to a specific
+recorder. Its `anchored_at` is recorder-asserted — the external, immutable
+store, not this field, is what makes the head un-rewindable.
+
+An **RFC 3161 anchor** carries an independent timestamp authority's token
+over the head:
+
+| Field | Meaning |
+|---|---|
+| `type` | `"rfc3161"`. |
+| `run_id`, `steps`, `head_hash` | the attested run, its step count, and head. |
+| `hash_alg` | the imprint algorithm, always `"sha256"`. |
+| `token` | base64 DER RFC 3161 TimeStampToken (a CMS SignedData wrapping a TSTInfo). |
+
+The token's message imprint is `SHA-256(bytes.fromhex(head_hash))` —
+SHA-256 regardless of the head's own algorithm, so any TSA can anchor any
+run. Verification checks the imprint against the bundle head, the TSA's
+CMS signature over the signed attributes (whose message-digest and
+content-type must match the TSTInfo), and that the signer certificate
+carries the `timeStamping` extended key usage; a relying party pins the
+authority with `--expect-tsa` (the signer must equal, or be directly
+issued by, the pinned certificate). A timestamp is meant to outlive its
+signing certificate, so certificate validity dates are not enforced —
+revocation and PKI freshness are the relying party's concern.
+
+An anchor proves a head existed and was not rolled back below it. Like the
+rest of a bundle, it never asserts the captured trajectory is the complete
+set of calls the agent made.
+
 ## Signature
 
 ```json
@@ -134,8 +189,8 @@ below or an externally anchored head — never by local files alone.
 ```
 
 The signature is ed25519 over the canonical JSON of `{"format",
-"run_id", "chain", "signed_at", "key_id"}` plus `"checkpoints"` when
-present. The chain head commits to every entry — redaction after
+"run_id", "chain", "signed_at", "key_id"}` plus `"checkpoints"` and
+`"anchors"` when present. The chain head commits to every entry — redaction after
 signing preserves the signature — and the checkpoint set, signing time,
 and key identity are all pinned. `key_id` is BLAKE2b-64 of the raw
 public key. A verifier given a trusted key (or trust file) must reject

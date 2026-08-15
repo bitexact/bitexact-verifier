@@ -37,6 +37,30 @@ def test_golden_signed_bundle_verifies():
     assert ok, err
 
 
+def test_golden_worm_anchor_verifies():
+    ok, err = verify_bundle(_load("valid-worm-anchor.bundle.json"))
+    assert ok, err
+
+
+def test_golden_rfc3161_anchor_verifies_and_pins_tsa():
+    bundle = _load("valid-rfc3161-anchor.bundle.json")
+    ok, err = verify_bundle(bundle)
+    assert ok, err
+    tsa = (TESTDATA / "tsa.crt").read_text(encoding="utf-8")
+    ok, err = verify_bundle(bundle, expect_tsa=tsa)
+    assert ok, err
+
+
+def test_golden_rfc3161_anchor_tamper_fails():
+    import base64
+    bundle = _load("valid-rfc3161-anchor.bundle.json")
+    token = bytearray(base64.b64decode(bundle["anchors"][0]["token"]))
+    token[-1] ^= 0xFF
+    bundle["anchors"][0]["token"] = base64.b64encode(bytes(token)).decode()
+    ok, err = verify_bundle(bundle)
+    assert not ok
+
+
 def test_golden_redacted_bundle_verifies_with_trust_file():
     bundle = _load("valid-redacted.bundle.json")
     trust = _load("trust.json")

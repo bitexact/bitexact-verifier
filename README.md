@@ -8,7 +8,10 @@ intact — with no dependency on BitExact and no license required.
 Anyone who receives a signed BitExact bundle — an auditor, a regulator,
 a counterparty — can verify it here, offline, on an air-gapped machine
 if they choose. The implementation is a single Python file that depends
-only on the standard library and [`cryptography`](https://pypi.org/project/cryptography/).
+only on the standard library, [`cryptography`](https://pypi.org/project/cryptography/),
+and [`asn1crypto`](https://pypi.org/project/asn1crypto/) (both pure-Python
+or self-contained wheels) — `asn1crypto` solely to verify RFC 3161
+timestamp anchors.
 
 ## Install
 
@@ -46,10 +49,13 @@ bitexact-verifier run-42.bundle.jsonl
 
 # DSSE envelopes (in-toto statements) are detected and verified automatically
 bitexact-verifier run-42.dsse.json
+
+# Require every RFC 3161 timestamp anchor to come from a specific TSA
+bitexact-verifier run-42.bundle.json --expect-tsa tsa-root.pem
 ```
 
 **Exit code `0`** means the bundle verifies; **`1`** means it does not,
-with the exact failing step or check named on stderr.
+printing `FAIL:` with the exact failing step or check.
 
 ## What it checks
 
@@ -63,6 +69,11 @@ with the exact failing step or check named on stderr.
 - **Seal semantics** — a sealed run's terminal marker must be final and
   attest the correct step count, so a complete run is distinguishable
   from a truncated one.
+- **External anchors** — a WORM anchor's recorder signature and an RFC
+  3161 timestamp token (its CMS signature, imprint, and timeStamping
+  certificate), each bound to the bundle head, so truncation below an
+  externally held anchor fails. `--expect-tsa <cert>` pins the timestamp
+  authority.
 - **Signed checkpoints** and the **detached ed25519 bundle signature**,
   including DSSE envelopes wrapping in-toto statements.
 - **Canonicalization** — RFC 8785 (JCS), so hashes are reproducible
@@ -75,7 +86,7 @@ that any independent implementation can validate against.
 ## Development
 
 ```bash
-pip install cryptography pytest
+pip install cryptography asn1crypto pytest
 pytest test_vectors.py
 ```
 

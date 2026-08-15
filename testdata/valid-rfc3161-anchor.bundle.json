@@ -1,0 +1,133 @@
+{
+ "format": "bitexact-bundle/1",
+ "run_id": "golden-anchored",
+ "entries": [
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-anchored",
+   "step": 0,
+   "kind": "run_meta",
+   "ts": "2026-08-15T21:06:07.629211+00:00",
+   "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+   "data": {
+    "python": "3.14.4",
+    "platform": "win32",
+    "bitexact": "1.5.0"
+   },
+   "salts": {
+    "python": "385b6ed9e348e06b7fce2232894915d1",
+    "platform": "24bb7291d925bbd198216697683da53b",
+    "bitexact": "852e4e3a02bfa782f532b81931d26605"
+   },
+   "commitments": {
+    "python": "7b7c794caf15fbdbe96de5fec5dbe231f5a5c70fb6a7ddc16bf30bca234211d2",
+    "platform": "0f6e9ed24c89ec4dafa0eb8960ce4ecfa71a2cec99fc05fa119093a00c32b517",
+    "bitexact": "2649394396db8e80daf6818a8fd2c7c7738f547ed1bdb8ec1a6274fc3ff86322"
+   },
+   "hash": "d81911a937a5523a58dcdbeaea0f81140f8ad82a2507c1d19d8a2854a386da4f"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-anchored",
+   "step": 1,
+   "kind": "tool_call",
+   "ts": "2026-08-15T21:06:07.681461+00:00",
+   "prev": "d81911a937a5523a58dcdbeaea0f81140f8ad82a2507c1d19d8a2854a386da4f",
+   "data": {
+    "tool": "lookup",
+    "args": [
+     "Paris"
+    ],
+    "kwargs": {},
+    "result": {
+     "temp": 21,
+     "city": "Paris"
+    }
+   },
+   "salts": {
+    "tool": "5841e8e841e103e13f4e6ec3501076ab",
+    "args": "677fdb65fceee82812331752dd3d2991",
+    "kwargs": "be659e50718e649bb38f1bd15d5a8413",
+    "result.temp": "b98a706906a88aee79e4c7b816f2a660",
+    "result.city": "d0acfe211a4d39202e9336a3cf8f6ba9"
+   },
+   "commitments": {
+    "tool": "76b1821d19639babb7c3a65340066b11bdc008aac9f0d98c782d7e40dcd45fa1",
+    "args": "40699d95444e017eb6fcc0903aa77f6944ce4426570bd99582796a73090f6f05",
+    "kwargs": "058ce49ca86739593e4778f0b76dc102fe63878bea377caa0f936cab9751fe34",
+    "result.temp": "d161cd948e0ad53e98347cd27722c8a1f66f9eb7880b3391292246c261620179",
+    "result.city": "b4551aeeced8fdbcf4b9d1cac16cb666cd28d6bfadd71efd49c27d7b2be96a69"
+   },
+   "hash": "b281eac011aebaa93e377cb79041085fd2a860aae1cc202b2159b10939238f30"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-anchored",
+   "step": 2,
+   "kind": "tool_call",
+   "ts": "2026-08-15T21:06:07.712177+00:00",
+   "prev": "b281eac011aebaa93e377cb79041085fd2a860aae1cc202b2159b10939238f30",
+   "data": {
+    "tool": "lookup",
+    "args": [
+     "Lyon"
+    ],
+    "kwargs": {},
+    "result": {
+     "temp": 21,
+     "city": "Lyon"
+    }
+   },
+   "salts": {
+    "tool": "fc872f62fd9ef3f012eecf5760ba43c7",
+    "args": "0593ef0757cc29e03e7bdbd4d3824959",
+    "kwargs": "16fe1d4bec4148b46d3ec9aed7556f53",
+    "result.temp": "f1c2f568dc165e269269fb0e6a75619b",
+    "result.city": "cd6668dc9f8ca9812b8b8336d4df0d92"
+   },
+   "commitments": {
+    "tool": "2767865cedd2a80e3b37fc755664e62b695cbf5925eb45988198d66e97dd53d0",
+    "args": "b1a8a79d91097aa950ed4376415c6a5f51962966d1b344161ad1d56977650803",
+    "kwargs": "84f9e84235d8517f03ea0517d66e093b038c0ba3351ff72388f9a610f02f053c",
+    "result.temp": "06681b443cdab1f5993bc2e55b6c10df0792e8d3100d6937c554c541d076492b",
+    "result.city": "285db610907c9a6317ccf5bbf672bcc2aa631a159f1c25718e42d3ef2d9cb278"
+   },
+   "hash": "e666a1beee9d3745956ee6ccf901214ae4dc84c8931282ac8ee2300e5ad05f86"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-anchored",
+   "step": 3,
+   "kind": "run_end",
+   "ts": "2026-08-15T21:06:07.740768+00:00",
+   "prev": "e666a1beee9d3745956ee6ccf901214ae4dc84c8931282ac8ee2300e5ad05f86",
+   "data": {
+    "steps": 4
+   },
+   "salts": {
+    "steps": "9e5f64bac45e7f159e3f751439ccda95"
+   },
+   "commitments": {
+    "steps": "f7b0191741ea948d4e8816014ef1ae37453131b763e45157dda01cd082962a34"
+   },
+   "hash": "b2077b4a65d9562e9dfbf1739a7bec2bee180529a4c78d634bab5b21f8edf799"
+  }
+ ],
+ "chain": {
+  "head_hash": "b2077b4a65d9562e9dfbf1739a7bec2bee180529a4c78d634bab5b21f8edf799"
+ },
+ "anchors": [
+  {
+   "type": "rfc3161",
+   "run_id": "golden-anchored",
+   "steps": 4,
+   "head_hash": "b2077b4a65d9562e9dfbf1739a7bec2bee180529a4c78d634bab5b21f8edf799",
+   "hash_alg": "sha256",
+   "token": "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"
+  }
+ ]
+}
