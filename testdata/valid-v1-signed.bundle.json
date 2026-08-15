@@ -1,0 +1,112 @@
+{
+ "format": "bitexact-bundle/1",
+ "run_id": "legacy-run",
+ "entries": [
+  {
+   "v": 1,
+   "alg": "blake2b-256",
+   "run_id": "legacy-run",
+   "step": 0,
+   "kind": "http_call",
+   "ts": "2026-08-15T00:33:54.514136+00:00",
+   "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+   "data": {
+    "model": "gpt-4o",
+    "request": {
+     "method": "POST",
+     "path": "/v1/chat/completions",
+     "text": "SSN 123-45-6789"
+    },
+    "response": {
+     "status": 200,
+     "temp": 1e+16,
+     "pi": 3.14
+    }
+   },
+   "salt": "e1d8125caff92fb96d2e30a57b0bd91b",
+   "data_hash": "6172c1ebaf5d750e1cd7d8fa26cc793f25af8c8ac312cd3563c84a22cd22e076",
+   "hash": "0bcea125b9a0d83b3b7ec1d112517cf567499c5a523c8f89968d3a4eb5aa7b57"
+  },
+  {
+   "v": 1,
+   "alg": "blake2b-256",
+   "run_id": "legacy-run",
+   "step": 1,
+   "kind": "tool_call",
+   "ts": "2026-08-15T00:33:54.560095+00:00",
+   "prev": "0bcea125b9a0d83b3b7ec1d112517cf567499c5a523c8f89968d3a4eb5aa7b57",
+   "data_hash": "c2ef4f0785896aac839a1491d017ae60eeddf1f6a9eeeba9f34d8a948deb3f5a",
+   "hash": "9d0996a03ca20dbc40e78fc6b3c2f6c3d49854a27b30068061acd4319daf2b9d",
+   "redacted": true
+  },
+  {
+   "v": 1,
+   "alg": "blake2b-256",
+   "run_id": "legacy-run",
+   "step": 2,
+   "kind": "nondet",
+   "ts": "2026-08-15T00:33:54.595880+00:00",
+   "prev": "9d0996a03ca20dbc40e78fc6b3c2f6c3d49854a27b30068061acd4319daf2b9d",
+   "data": {
+    "source": "time.time",
+    "value": 1755000000.25
+   },
+   "salt": "8b7fe78ca59c731df630abef348f42d6",
+   "data_hash": "084260cbade4095169c489af3943a48cde92153e1ae438d8f78bb42522dd6411",
+   "hash": "9bf30668f5b1883f71953ae6942d566cc6ea89a869811b66b22727b262619890"
+  },
+  {
+   "v": 1,
+   "alg": "blake2b-256",
+   "run_id": "legacy-run",
+   "step": 3,
+   "kind": "http_call",
+   "ts": "2026-08-15T00:33:54.607620+00:00",
+   "prev": "9bf30668f5b1883f71953ae6942d566cc6ea89a869811b66b22727b262619890",
+   "data": {
+    "model": "gpt-4o",
+    "request": {
+     "method": "POST",
+     "path": "/v1/chat/completions",
+     "text": "again"
+    },
+    "response": {
+     "status": 200
+    }
+   },
+   "salt": "004166ade43c587df7201bbccfe154f4",
+   "data_hash": "b20142706faedad8bffb2ae7dab1434b806d600a10b2e67e7873dee8cfcdc3b4",
+   "hash": "1482dad2ac8152856973404d2fd6aa130a009f5cbdc5360e8723caefee3c5d93"
+  }
+ ],
+ "chain": {
+  "head_hash": "1482dad2ac8152856973404d2fd6aa130a009f5cbdc5360e8723caefee3c5d93"
+ },
+ "checkpoints": [
+  {
+   "run_id": "legacy-run",
+   "seq": 0,
+   "steps": 2,
+   "head_hash": "9d0996a03ca20dbc40e78fc6b3c2f6c3d49854a27b30068061acd4319daf2b9d",
+   "prev_checkpoint": "0000000000000000000000000000000000000000000000000000000000000000",
+   "ts": "2026-08-15T00:33:54.585485+00:00",
+   "public_key": "8a4e6a94959f96511ebab4bd2d682f939dc5ad1e5f61941dd3fad65e8c85ebb6",
+   "signature": "8d1f75d65c4a87a0e3fb0c019073aa594e58858f25991a4999b6111ef3918ed6c5d5e11a710a011b7a25a6c8a7e7a91182373febdf811815ca5ba952a50d3702"
+  },
+  {
+   "run_id": "legacy-run",
+   "seq": 1,
+   "steps": 4,
+   "head_hash": "1482dad2ac8152856973404d2fd6aa130a009f5cbdc5360e8723caefee3c5d93",
+   "prev_checkpoint": "03eb04b5071aa0e90c939e0090e86cb35f1872e9497ae931fd33d9bcb86690ac",
+   "ts": "2026-08-15T00:33:54.629589+00:00",
+   "public_key": "8a4e6a94959f96511ebab4bd2d682f939dc5ad1e5f61941dd3fad65e8c85ebb6",
+   "signature": "09bf038f251629f65561ca524450e9aca55c29770b379cf177846e7b01178ddcfb0d7380867c865ff6137003b06d4fecd6a80065484df9a88ee7b96d9861580b"
+  }
+ ],
+ "signature": {
+  "algorithm": "ed25519",
+  "public_key": "8a4e6a94959f96511ebab4bd2d682f939dc5ad1e5f61941dd3fad65e8c85ebb6",
+  "signature": "4de205b6fa6ca6e12d1fe42f2d498dc7f2936dc70d80dd6e9b01625c9c3a7e99ee182dcdd65945827ea80cfe4820585931d0d54c01fdecd5874caf045ed8340d"
+ }
+}

@@ -1,0 +1,110 @@
+{
+ "description": "RFC 8785 canonicalization vectors; every implementation must produce expected_canonical (UTF-8) for input",
+ "cases": [
+  {
+   "name": "integers-stay-integers",
+   "input": {
+    "a": 1,
+    "b": -7
+   },
+   "expected_canonical": "{\"a\":1,\"b\":-7}"
+  },
+  {
+   "name": "integral-floats-drop-point",
+   "input": {
+    "x": 1.0,
+    "y": -2.0
+   },
+   "expected_canonical": "{\"x\":1,\"y\":-2}"
+  },
+  {
+   "name": "negative-zero-is-zero",
+   "input": [
+    -0.0
+   ],
+   "expected_canonical": "[0]"
+  },
+  {
+   "name": "small-exponents-es6",
+   "input": [
+    1e-07,
+    1e-06,
+    0.0001
+   ],
+   "expected_canonical": "[1e-7,0.000001,0.0001]"
+  },
+  {
+   "name": "large-positional-until-1e21",
+   "input": [
+    1e+20,
+    1e+21
+   ],
+   "expected_canonical": "[100000000000000000000,1e+21]"
+  },
+  {
+   "name": "shortest-round-trip",
+   "input": [
+    0.1,
+    333333333.3333333
+   ],
+   "expected_canonical": "[0.1,333333333.3333333]"
+  },
+  {
+   "name": "string-escapes",
+   "input": {
+    "s": "a\"b\\c\n\u0007\t"
+   },
+   "expected_canonical": "{\"s\":\"a\\\"b\\\\c\\n\\u0007\\t\"}"
+  },
+  {
+   "name": "unicode-literal-not-escaped",
+   "input": {
+    "k": "\u00e9\u20ac"
+   },
+   "expected_canonical": "{\"k\":\"\u00e9\u20ac\"}"
+  },
+  {
+   "name": "utf16-key-ordering",
+   "input": {
+    "\ud800\udc00": 1,
+    "\uff01": 2,
+    "a": 3
+   },
+   "note": "keys sort by UTF-16 code units: a < U+10000 (d800...) < U+FF01",
+   "expected_canonical": "{\"a\":3,\"\ud800\udc00\":1,\"\uff01\":2}"
+  },
+  {
+   "name": "nested-structure",
+   "input": {
+    "b": [
+     true,
+     false,
+     null
+    ],
+    "a": {
+     "z": 1,
+     "y": [
+      2
+     ]
+    }
+   },
+   "expected_canonical": "{\"a\":{\"y\":[2],\"z\":1},\"b\":[true,false,null]}"
+  },
+  {
+   "name": "empty-containers",
+   "input": {
+    "a": {},
+    "b": []
+   },
+   "expected_canonical": "{\"a\":{},\"b\":[]}"
+  },
+  {
+   "name": "lone-surrogate-escapes",
+   "input": {
+    "s": "\ud834",
+    "t": "a\ud834b"
+   },
+   "expected_canonical": "{\"s\":\"\\ud834\",\"t\":\"a\\ud834b\"}"
+  }
+ ]
+}
