@@ -1,0 +1,297 @@
+{
+ "format": "bitexact-bundle/1",
+ "run_id": "loan-decline-sample",
+ "entries": [
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "loan-decline-sample",
+   "step": 0,
+   "kind": "run_meta",
+   "prov": "observed",
+   "ts": "2026-08-16T00:30:42.158251+00:00",
+   "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+   "data": {
+    "python": "3.14.4",
+    "platform": "win32",
+    "bitexact": "1.5.0"
+   },
+   "salts": {
+    "python": "007af9fa6c443acee848d68a3b0e81eb",
+    "platform": "cb059bbb2790237b17489ed767cf652c",
+    "bitexact": "c218ab6ac487e8b26c234075b6a11c0c"
+   },
+   "commitments": {
+    "python": "00a90e2eb3937e9d03e475b75b399290752521dc045311f0f8b24b7d35b96774",
+    "platform": "680d05d178d22452d912416141ee3f8a08b707d52949a55afda4f54031990559",
+    "bitexact": "f2ea86ee4bfd3d4960f57eae5af6925492e7f93845a4dd4e7bd97b8c42839390"
+   },
+   "hash": "4f58b73bd414b3713b231a788b7ee34ac31eba6c0e4143266bb69ba1972312fb"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "loan-decline-sample",
+   "step": 1,
+   "kind": "identity",
+   "prov": "asserted",
+   "ts": "2026-08-16T00:30:42.212248+00:00",
+   "prev": "4f58b73bd414b3713b231a788b7ee34ac31eba6c0e4143266bb69ba1972312fb",
+   "data": {
+    "principal": "svc:loan-adjudicator",
+    "agent_id": "lending-agent@2.3.1",
+    "delegation_from": "app:retail-lending-portal",
+    "scope": [
+     "loans:adjudicate",
+     "creditbureau:read"
+    ],
+    "policy_version": "sha256:ac1deb51e3dfee66673f740e0638f5539990abb624db7f7efe1e1ffd37a84988",
+    "prompt_pack_version": "sha256:eaceeb62f1dd8eccb4f48d1ab3a9bf380d9020a247d42f3e60bde24e35919344",
+    "model_version": "gpt-4o-2024-08-06"
+   },
+   "salts": {
+    "principal": "92e2de97a01e29220d8d923ccc552e59",
+    "agent_id": "a8debc8c42ef65ecb6e5051ebcfd0145",
+    "delegation_from": "f2f61e0662612763864b16f5d24dd280",
+    "scope": "5b4fd1f2f0215f3b02631f367ca7f40b",
+    "policy_version": "03a8ab756f8ca3cdbe22306fb7f88578",
+    "prompt_pack_version": "97995bd6fd866e4bc0d4c18f8043f922",
+    "model_version": "67a115a054de7bc26825237332bb0f9e"
+   },
+   "commitments": {
+    "principal": "0c5d5ad21ac86947eadba99d9653e04e251ba45c36100fe5f935e6baa5fe59cd",
+    "agent_id": "a5019480b7068e6eee169e3fe5e351843fad3b5558437077217929f0accfb50b",
+    "delegation_from": "49fc0b21e101f0ac873570a926a13ecbb24a30ae6e4c18922531c2e22ea03ca2",
+    "scope": "84647d784cec8c0c1c121505cafc32cd67f522af20f12e4af7c074385e0db7d8",
+    "policy_version": "92e0777a80b4aa4fdd7f229d3cb4b4be41bd39ef7a14bb479db587ebb845314e",
+    "prompt_pack_version": "413472051cff0ce2b00f0ffed4f9fe28a29078e1e6c66254f9bfee31b6c14145",
+    "model_version": "482953ebbe89f0d09b8904fee3dc58ef0c728b50f4c2ee17c7fea3abb73d63ea"
+   },
+   "hash": "656619a2eba29d8567c85b19e44ed0a356abbda968d6ec88a6012086b8b61953"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "loan-decline-sample",
+   "step": 2,
+   "kind": "context",
+   "prov": "asserted",
+   "ts": "2026-08-16T00:30:42.241425+00:00",
+   "prev": "656619a2eba29d8567c85b19e44ed0a356abbda968d6ec88a6012086b8b61953",
+   "data": {
+    "name": "application_and_policy",
+    "content_hash": "4ba9b902b8c3f96b532a148641cba0ad052dc9790f419cb575413873e32e0a57",
+    "content": {
+     "application": {
+      "applicant_ref": "app-70255",
+      "product": "unsecured-personal-24",
+      "requested_amount_usd": 18000,
+      "term_months": 60,
+      "stated_annual_income_usd": 52000,
+      "monthly_debt_usd": 1990,
+      "dti_ratio": 0.46
+     },
+     "policy_excerpt": {
+      "max_dti_ratio": 0.43,
+      "min_credit_score": 620,
+      "reference": "Lending Policy §4.2"
+     }
+    },
+    "source": "retail-lending-portal"
+   },
+   "salts": {
+    "name": "bd6afa7f964abab9d370e216c5dba0a8",
+    "content_hash": "dc46a2f44402054884015b7afd06f02d",
+    "content.application": "38af1cc13613c303e3cee8bda4b5fce7",
+    "content.policy_excerpt": "6700b433b0bb06c97f5209a4594db9d6",
+    "source": "1fb12ad8a7a7d4647fe20ebf88271c78"
+   },
+   "commitments": {
+    "name": "9a332a898d7e231c32c2a754ea6075de18790542de354d4be6fa615672715554",
+    "content_hash": "919138b119a9f58199ff5c8af6db0c72519eb68cc0e5b767cb2865f733189c35",
+    "content.application": "614dce6281514aa2ac8bf6fc2c60263f0c4ea422de58d507c2dd04fbcffc1711",
+    "content.policy_excerpt": "9a680b1bc60f95bf2756e81303ac302ad36baeedf9162fa40e0bcb7e88296089",
+    "source": "fd4af9fb7a92882b1ff1fcc23d8f4f0fbc7bed5c68328aed133042d804e998f8"
+   },
+   "hash": "127d8004011b2f1c17041ae520842bf89a6120811ca498ab49959d3baa18383a"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "loan-decline-sample",
+   "step": 3,
+   "kind": "tool_call",
+   "prov": "observed",
+   "ts": "2026-08-16T00:30:42.269665+00:00",
+   "prev": "127d8004011b2f1c17041ae520842bf89a6120811ca498ab49959d3baa18383a",
+   "data": {
+    "tool": "credit_bureau_score",
+    "args": [
+     "app-70255"
+    ],
+    "kwargs": {},
+    "result": {
+     "applicant_ref": "app-70255",
+     "score": 604,
+     "model": "generic-risk-v9",
+     "bureau": "sample-bureau"
+    }
+   },
+   "salts": {
+    "tool": "9071245b61e7a9defdf46a187ef0d920",
+    "args": "69380fd7946a2e6e7ad87d7a57d33a24",
+    "kwargs": "eb9cfcf72e410219aacf997079259274",
+    "result.applicant_ref": "2afa872b6f305ead615309f73359d24a",
+    "result.score": "e69e19af9517b3a1dc11cd35931468ce",
+    "result.model": "86def4f47ee4e80531d44b0232a619d9",
+    "result.bureau": "7306c985a59d44f6c64949c6bdc91766"
+   },
+   "commitments": {
+    "tool": "5e5c4107dcaa388a840260aef1fec325d0c1e867d80537d0dd66f11829d97e02",
+    "args": "02942c9c6b4541842a6e7b95cda63275d5ec84b0f489c40f0ea412a849f53033",
+    "kwargs": "c2641ebf210fc253fa1cb892e89fc74ac81e006155765789db2046fa30e2ab61",
+    "result.applicant_ref": "085cd4bf7154d9a5443bb1cd19e0a677f4a4164522556c5a9edb5f39e3bef1e9",
+    "result.score": "efcb6d52ae0fad2f26a755d2cb98701104f720deffe08cc83f8010852b42ebf9",
+    "result.model": "30e53071176f7917432fdd3a771ca1716df51a0b30907c4993be6d68392bf4f5",
+    "result.bureau": "0235a628cdc655b8310bb8088c10e8ee6852427d4467459bc01cc96cd2307cc3"
+   },
+   "hash": "234290fa9b6d586e9c4e926daed9fe9ecfe7eb2dab4ed13b1171e57b4a778974"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "loan-decline-sample",
+   "step": 4,
+   "kind": "http_call",
+   "prov": "observed",
+   "ts": "2026-08-16T00:30:42.685897+00:00",
+   "prev": "234290fa9b6d586e9c4e926daed9fe9ecfe7eb2dab4ed13b1171e57b4a778974",
+   "data": {
+    "request": {
+     "method": "POST",
+     "path": "/v1/chat/completions",
+     "query": "",
+     "headers": {},
+     "text": "{\"model\":\"gpt-4o-2024-08-06\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an underwriting assistant. Apply the lending policy exactly, state the decision as APPROVE or DECLINE, and give the deciding factors. Do not infer facts not present in the application.\\n\"},{\"role\":\"user\",\"content\":\"Application and policy: {\\\"application\\\": {\\\"applicant_ref\\\": \\\"app-70255\\\", \\\"product\\\": \\\"unsecured-personal-24\\\", \\\"requested_amount_usd\\\": 18000, \\\"term_months\\\": 60, \\\"stated_annual_income_usd\\\": 52000, \\\"monthly_debt_usd\\\": 1990, \\\"dti_ratio\\\": 0.46}, \\\"policy_excerpt\\\": {\\\"max_dti_ratio\\\": 0.43, \\\"min_credit_score\\\": 620, \\\"reference\\\": \\\"Lending Policy \\\\u00a74.2\\\"}} Credit report: {\\\"applicant_ref\\\": \\\"app-70255\\\", \\\"score\\\": 604, \\\"model\\\": \\\"generic-risk-v9\\\", \\\"bureau\\\": \\\"sample-bureau\\\"}\"}]}"
+    },
+    "response": {
+     "status": 200,
+     "streamed": false,
+     "media_type": "application/json",
+     "complete": true,
+     "headers": {},
+     "text": "{\"id\":\"chatcmpl-loan-70255\",\"object\":\"chat.completion\",\"model\":\"gpt-4o-2024-08-06\",\"choices\":[{\"index\":0,\"finish_reason\":\"stop\",\"message\":{\"role\":\"assistant\",\"content\":\"DECISION: DECLINE. The debt-to-income ratio of 46% exceeds the 43% maximum (Lending Policy §4.2) and the credit score of 604 is below the 620 minimum for an unsecured personal loan. The application does not meet current underwriting criteria.\"}}],\"usage\":{\"prompt_tokens\":380,\"completion_tokens\":54,\"total_tokens\":434}}"
+    },
+    "model": "gpt-4o-2024-08-06"
+   },
+   "salts": {
+    "request.method": "a20ffed09a4da4a2f4a31217c484163e",
+    "request.path": "646c7451895ccfef875a3d8fe9b37e09",
+    "request.query": "227752ee522951649369cc7c67718c9c",
+    "request.headers": "0999401be79a1fe4bfd5f8199642fa61",
+    "request.text": "60d819b197a5d23873364444f728662d",
+    "response.status": "8e74b395c5b4a3fee526dddc398a988e",
+    "response.streamed": "1fe635686b8f9818d8833cbba09b2b45",
+    "response.media_type": "9370b1d5482d8e8c9261370e5528f2b4",
+    "response.complete": "e9799cd643cbfd95a73ab99eb44e7ef8",
+    "response.headers": "e013fb9440c94e9a36f7921550a4fcf7",
+    "response.text": "2b10c7a8698ca470e2a13c725fa832b4",
+    "model": "df2be572bc14d67e62b43a5145dbbb3d"
+   },
+   "commitments": {
+    "request.method": "45982c197f63aba6feb1dae1d0d630ed7410e2d0461b3d51301564f789b8fb15",
+    "request.path": "9bfc2f46e51f9b65188fc4130a2018681682245f492c2095972920bade1e1dbb",
+    "request.query": "721b2b4795420c05ef04f1ccfb0d9851eec1137596f79cb4a6bc7b18d6bceaeb",
+    "request.headers": "02be7d88583dcf4fce3f68f312aeccd6090752d9ac8d9acbdfedb5769887dff4",
+    "request.text": "4f2967338a05c31f0b6a6796bbae3386dbb4e8167e98b9954af3a3901e038e7b",
+    "response.status": "45e9ea2ff8c85edaf6e6a6f70137533b4cfda2ab6549a4df7ec6a8df0bb0c0e0",
+    "response.streamed": "0344ed147377a98c73d4ccd5c949d96618a5cc1fb4518b89e8f9525bcadd479d",
+    "response.media_type": "7a60e404651c458af1e8068e26b07e993d29101e4220b33bdfc11385dbc213c3",
+    "response.complete": "1956a80074e308b98de14bf07a709b9e1384bc31ecb3bbe16eccfc70c2d12709",
+    "response.headers": "72910f6ac05a7da9c595bc11155efcb8712e80c439d976b7bf4350f780d1a26f",
+    "response.text": "e707040022984074ddda39212541d998d2e022fe27b40a7f7152daf968606d2a",
+    "model": "68de6f0164d8eb1db9acb06573909f8d1781717ce9ff0190eaff727b68595deb"
+   },
+   "hash": "acbae8d59e45288abeffc25050f67da82f8d32747513c28bf954e963d3cf4ed9"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "loan-decline-sample",
+   "step": 5,
+   "kind": "human_decision",
+   "prov": "asserted",
+   "ts": "2026-08-16T00:30:42.726790+00:00",
+   "prev": "acbae8d59e45288abeffc25050f67da82f8d32747513c28bf954e963d3cf4ed9",
+   "data": {
+    "actor": "loan-officer:reviewer-4471",
+    "decision": "uphold",
+    "reason": "Manual review confirmed DTI 46% over the 43% policy maximum and score 604 below the 620 floor; the decline was upheld under §4.2 and the adverse-action reasons were recorded.",
+    "binds_step": 4
+   },
+   "salts": {
+    "actor": "3713b091feebb7237d98084c6d29cd66",
+    "decision": "dc40b94ff88178ee0572b034cc77f5d6",
+    "reason": "9f1a69a0813853f86a915072267394cb",
+    "binds_step": "87dd1ae0f0b5bf5048d59e3a6ad5a2bf"
+   },
+   "commitments": {
+    "actor": "727337fe026cd31dc0ceb0e1e3bf5f7d4299d884977e4a84435047a70d35fb17",
+    "decision": "a9d6ed2d706812d709ce1be78f6461ed630551c36b20d43312691f84838599f4",
+    "reason": "c709cc75f9ba194801826d3ef0fa68333d01110b7bbcd60596c8d3d8b7267be2",
+    "binds_step": "57a5b856cedd41c91603517747e2de369942a6aecbb975aaab87e7fb69716ac1"
+   },
+   "hash": "fc430216d46b39a7ec4af021e81c8904b6724318f52fcd6bc3f341cc8b3fb898"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "loan-decline-sample",
+   "step": 6,
+   "kind": "marker",
+   "prov": "asserted",
+   "ts": "2026-08-16T00:30:42.755082+00:00",
+   "prev": "fc430216d46b39a7ec4af021e81c8904b6724318f52fcd6bc3f341cc8b3fb898",
+   "data": {
+    "note": "The adverse-action notice was generated and mailed to the applicant by the downstream fulfillment service; that step is outside BitExact's capture boundary and is recorded here as a known gap."
+   },
+   "salts": {
+    "note": "83a7d843dd0f2319d9ec59c0465e0dda"
+   },
+   "commitments": {
+    "note": "4d8f5ab76fc45fc8139014ce822240a8adcf02bbdc8798f9cb80104fa7742484"
+   },
+   "hash": "6e49d772c59092451ad68d9bb54ea064e64d15c1a2042d4a5955b3eb3d956a59"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "loan-decline-sample",
+   "step": 7,
+   "kind": "run_end",
+   "prov": "observed",
+   "ts": "2026-08-16T00:30:42.991233+00:00",
+   "prev": "6e49d772c59092451ad68d9bb54ea064e64d15c1a2042d4a5955b3eb3d956a59",
+   "data": {
+    "steps": 8
+   },
+   "salts": {
+    "steps": "d8104fdabc7e43ce264c04f551ab2bd3"
+   },
+   "commitments": {
+    "steps": "54baa90dc7a51cdb780ed6e320a77bb27aef3ba2ebe0c9f5f0c2efeb446295ba"
+   },
+   "hash": "06f81ea43a86464fadf52b0e4104bda5ab1b5f14ed5cb9a76b8b38a51f4b6d2f"
+  }
+ ],
+ "chain": {
+  "head_hash": "06f81ea43a86464fadf52b0e4104bda5ab1b5f14ed5cb9a76b8b38a51f4b6d2f"
+ },
+ "signature": {
+  "algorithm": "ed25519",
+  "key_id": "ca5910f971d1716a",
+  "public_key": "61f5aa9103d130a9db89ca74d38f0063b59543c8fcd9bcac75b1a54d7955ce21",
+  "signed_at": "2026-08-16T00:30:43.064541+00:00",
+  "signature": "168340f65e5f0a0972ab856d89638c3c58e95bdd0d1fc6d456cfe1a54ac553074d145bec9a934d4d7a7002864bc39286a5940065c05ffc16ddd0fc5f9d1a430b"
+ }
+}

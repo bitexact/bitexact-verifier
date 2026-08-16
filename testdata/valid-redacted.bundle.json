@@ -1,227 +1,183 @@
 {
  "format": "bitexact-bundle/1",
- "run_id": "golden-run",
+ "run_id": "golden-pii",
  "entries": [
   {
    "v": 2,
    "alg": "blake2b-256",
-   "run_id": "golden-run",
+   "run_id": "golden-pii",
    "step": 0,
    "kind": "run_meta",
-   "ts": "2026-08-14T23:09:24.115629+00:00",
+   "prov": "observed",
+   "ts": "2026-08-15T21:52:37.249341+00:00",
    "prev": "0000000000000000000000000000000000000000000000000000000000000000",
    "data": {
     "python": "3.14.4",
     "platform": "win32",
-    "bitexact": "1.1.0"
+    "bitexact": "1.5.0"
    },
    "salts": {
-    "python": "fc64732c44076bb8a4ef89f441e71a9f",
-    "platform": "7690d363a6775620a7710fe5142eda1c",
-    "bitexact": "f6f349a4ffa76665ed9e006dedafae90"
+    "python": "2c930f172f0b6690486aeed07e2841af",
+    "platform": "aa1f38287a686e921d6a74e7ef2aebad",
+    "bitexact": "d043e80cf5dfec07d5ddb7704679284b"
    },
    "commitments": {
-    "python": "c9c972e09e3467104bd79af0b2f380b3a40ac68bb8887f96abd04eb24060d7a9",
-    "platform": "90bafd95fc7a7b390bf09ac73fb60b15f89a0d2cc5b0cbf3126a681d7bbf5b07",
-    "bitexact": "21c6945ad7b89fc7df05961e7b748009212c4eee39dbdb082e739a57dae70150"
+    "python": "684511bc150364b590ed8eff16628a23a4e072b10596033ccc1a879adb87a318",
+    "platform": "ad43aa2d7a16a9a0cccb7c0abae31b96594b5e64acfbae48655c2f4d8b5e5ba5",
+    "bitexact": "8619dfdada0c0ade2031c6998eb8834ecffe815212f671a43e28ed0fb1d585b4"
    },
-   "hash": "b503f78d3bbdbb18a896e00b52bb1acfcf36262fc47c05319c68acbd40b63733"
+   "hash": "69c834043f923b341d91b1f3684c7cba5368bcd72e4e226a0c883f46a69e6239"
   },
   {
    "v": 2,
    "alg": "blake2b-256",
-   "run_id": "golden-run",
+   "run_id": "golden-pii",
    "step": 1,
    "kind": "tool_call",
-   "ts": "2026-08-14T23:09:24.180891+00:00",
-   "prev": "b503f78d3bbdbb18a896e00b52bb1acfcf36262fc47c05319c68acbd40b63733",
+   "prov": "observed",
+   "ts": "2026-08-15T21:52:37.285263+00:00",
+   "prev": "69c834043f923b341d91b1f3684c7cba5368bcd72e4e226a0c883f46a69e6239",
    "data": {
-    "tool": "lookup",
-    "kwargs": {},
-    "result": {
-     "temp": 21,
-     "city": "Paris"
-    }
-   },
-   "salts": {
-    "tool": "58e1e0b9989433566bc8f12bf0088f25",
-    "kwargs": "fb83ae975c6c74c05917d132b2a3e287",
-    "result.temp": "464193e2d4492668c0560e38c9ad19b1",
-    "result.city": "973d6ec2434611ba8712e478fcae244d"
+    "result": {}
    },
    "commitments": {
-    "tool": "89276797b0466d375d5466371158194239c9279b8a3661dbe62b58da3ece28b9",
-    "args": "68cc16b7f36d37a13c96775b93a47c3b8abb9ef5c620c58559a8ad13e1d50cfd",
-    "kwargs": "cdbb34ae61b2e2e47c61ceb666fd32d42fed4f6ab357009c7a3b30636df3d23b",
-    "result.temp": "63045a495a96e0812524cdd279fd050557ef4d5b8b1e9c9af09591ec8e4f9542",
-    "result.city": "f0066c97f4f798dd3a048fb1bc8ea4051340c01f554d0fbf234cf6c9108fc568"
+    "tool": "8e7545d55b97310fa014e80195344e6b76a5cfd7f7af320d2a288bd4d07fefca",
+    "args": "7a018236f6c917f39ef180e0e9119d722dd392f5669f85bfaf24da21c62e2aa3",
+    "kwargs": "f2ef3fd01b67f5cde1fe1991d99f3248ff8a837bd460009d3cea3ac611a57f88",
+    "result.status": "0eab94e543b7bc72d612de76f5c18e83da3cd9d1a9f48176931e34ea6c70578a"
    },
-   "hash": "b95ac6452ab2e0eaefd8ed8029755b370a4cf4132d8072fcb26b1239c3b697e6",
+   "hash": "8ab92cf706b6acb894b50e5ffa461df710ba449193f9ccd6191b663b2557cee1",
    "redacted": [
-    "args"
+    "args",
+    "kwargs",
+    "result.status",
+    "tool"
    ]
   },
   {
    "v": 2,
    "alg": "blake2b-256",
-   "run_id": "golden-run",
+   "run_id": "golden-pii",
    "step": 2,
    "kind": "tool_call",
-   "ts": "2026-08-14T23:09:24.214815+00:00",
-   "prev": "b95ac6452ab2e0eaefd8ed8029755b370a4cf4132d8072fcb26b1239c3b697e6",
+   "prov": "observed",
+   "ts": "2026-08-15T21:52:37.330063+00:00",
+   "prev": "8ab92cf706b6acb894b50e5ffa461df710ba449193f9ccd6191b663b2557cee1",
    "data": {
     "tool": "lookup",
     "args": [
-     "Lyon"
+     "Paris"
     ],
     "kwargs": {},
     "result": {
-     "temp": 21,
-     "city": "Lyon"
+     "temp": 21
     }
    },
    "salts": {
-    "tool": "c815d6e77ca13f43f708570008127007",
-    "args": "f18c7d58b3426cb2f6942aa391a4e327",
-    "kwargs": "66b08d258183dbbd3e966ca64a157e86",
-    "result.temp": "de5fccaa024dc5d6a25163f52b71d9c2",
-    "result.city": "722bf8412eaadc75407794bf172303f5"
+    "tool": "ac02055a376c10875c3f12222c1551fc",
+    "args": "dc61ccdce35cef3c5a93543e3645f3d5",
+    "kwargs": "e0c510ef027da42afe39227ccac4709b",
+    "result.temp": "cc173923555dc1902a8c3be07c4fa968"
    },
    "commitments": {
-    "tool": "d4ab711a858675b2fe9eced87939863a2fced81b09e162239ee712fbd0ecb169",
-    "args": "d1f202a51b4b7b9df7b77c2b16a9aa442acf50e4f773d2f6e11398432ff52631",
-    "kwargs": "152930f60af411af88e1fed180f6f9581ba416827f561e90d7998d80608dfb06",
-    "result.temp": "ea6aa69c08c747f19e3d4d29167a005998e546792e375b316944500f363758ff",
-    "result.city": "f483c91490fbda252d9e63e72c907670362600d848eb0c12f8758d5c87c8370b"
+    "tool": "20cb0b8c0418380f635c052b37119d554dbcf4dc4a4cc61a1e40958585fffb48",
+    "args": "34a64c7cc9766f0c9ae5b16e056d52ec4d1fec50fa41219e2f98912219bd15ab",
+    "kwargs": "156939662caab5a7eebffc7e23a52724e9ae6e1667cc1f73b836f4d09a10bc95",
+    "result.temp": "bf8648e22a71a981e6b2e4ee4d67e5680242fa81ea32a17e760de0a27618f2d9"
    },
-   "hash": "03af3b9580d5b1aa76974e6da9c089f85a752b09766dfbebdea799a1086d238f"
+   "hash": "14df3a60b92e4fd87a908eaf4b371945d05390855e5ca8e9a0179d60dd8988c5"
   },
   {
    "v": 2,
    "alg": "blake2b-256",
-   "run_id": "golden-run",
+   "run_id": "golden-pii",
    "step": 3,
    "kind": "run_end",
-   "ts": "2026-08-14T23:09:24.249403+00:00",
-   "prev": "03af3b9580d5b1aa76974e6da9c089f85a752b09766dfbebdea799a1086d238f",
+   "prov": "observed",
+   "ts": "2026-08-15T21:52:37.372356+00:00",
+   "prev": "14df3a60b92e4fd87a908eaf4b371945d05390855e5ca8e9a0179d60dd8988c5",
    "data": {
     "steps": 4
    },
    "salts": {
-    "steps": "4073f4cea1da32bf940023aba9049758"
+    "steps": "046974fd679003bf7f042737fc1317c2"
    },
    "commitments": {
-    "steps": "f34f5a8a01dd10a02d4bc9a4fbb0bbaedf20c2baa041583c9b5fe83d8ff48e0c"
+    "steps": "3999648dbd0f83097377aefd23c6cbe8612fbe77f4ea980c963d8e21aeff6c3e"
    },
-   "hash": "e83b2e8d6ec8d5fd1f19318ac36715c5c743e2099c5d8e7d67217d1f29676569"
-  },
-  {
-   "v": 2,
-   "alg": "blake2b-256",
-   "run_id": "golden-run",
-   "step": 4,
-   "kind": "redaction",
-   "ts": "2026-08-14T23:09:24.327690+00:00",
-   "prev": "e83b2e8d6ec8d5fd1f19318ac36715c5c743e2099c5d8e7d67217d1f29676569",
-   "data": {
-    "fields": [
-     "1:args"
-    ],
-    "by": "Vivek"
-   },
-   "salts": {
-    "fields": "ebceeac99f9963fad0089f0fd93f6c9d",
-    "by": "21a969fb4f42208416587d3884bdc4d4"
-   },
-   "commitments": {
-    "fields": "255fb83a7f659c2fc5ae3c77d63d63b5f8b4b3a3da6413920365a65d8987ce29",
-    "by": "516c0f2e5a9c3a6c670feac200c13018fbbb7c58fcb7414ca9f241b4f0aa5dd9"
-   },
-   "hash": "381540b0de2bfb84979a4ada73efc239ab5098aa0b5a65fe076b5765997fd5fd"
+   "hash": "ff08cf0ef7912a520058b6fc20802242a007a675179acd2c4de11eb071cb1ba3"
   }
  ],
  "chain": {
-  "head_hash": "381540b0de2bfb84979a4ada73efc239ab5098aa0b5a65fe076b5765997fd5fd"
+  "head_hash": "ff08cf0ef7912a520058b6fc20802242a007a675179acd2c4de11eb071cb1ba3"
  },
  "checkpoints": [
   {
-   "run_id": "golden-run",
+   "run_id": "golden-pii",
    "seq": 0,
    "steps": 1,
-   "head_hash": "b503f78d3bbdbb18a896e00b52bb1acfcf36262fc47c05319c68acbd40b63733",
+   "head_hash": "69c834043f923b341d91b1f3684c7cba5368bcd72e4e226a0c883f46a69e6239",
    "prev_checkpoint": "0000000000000000000000000000000000000000000000000000000000000000",
    "alg": "blake2b-256",
-   "key_id": "326bd0b20c331754",
-   "ts": "2026-08-14T23:09:24.136940+00:00",
-   "public_key": "c1904b2a2485023f01daf7c63e56005923f5cfb2a9ecb830243e4adf6504afad",
-   "signature": "9b034dc84fa40b8ad3c91ade1c5cb471fce0b204fb216c352ace8e5e9d7ff39d71e511e0d8f66d9e74af576664988f3d6e7089984397402f09c6c04a1559c001"
+   "key_id": "cc6e6849cc98b3af",
+   "ts": "2026-08-15T21:52:37.261042+00:00",
+   "public_key": "20a5c5b2cb1076830e4b21adf3a70bc4c90d3ce5a3ae29f901db49316bdd1018",
+   "signature": "54c2e03f43f95813bbae1c392575283eea1a2fb07c025f3ffc056562b66e7e0ff32369fc3e056d6329c11c1accf0a5ab1f9aaf3b8b25c1589b2730bb1c13f306"
   },
   {
-   "run_id": "golden-run",
+   "run_id": "golden-pii",
    "seq": 1,
    "steps": 2,
-   "head_hash": "b95ac6452ab2e0eaefd8ed8029755b370a4cf4132d8072fcb26b1239c3b697e6",
-   "prev_checkpoint": "4ff6355ba6db1323ae9cde6f0c3dbd2715357fb7e061a3f1192da678ed3479b9",
+   "head_hash": "8ab92cf706b6acb894b50e5ffa461df710ba449193f9ccd6191b663b2557cee1",
+   "prev_checkpoint": "6722e5aaa14fb5e5a3b891bceac7e4a826fa49f223636932ea5a02bdd46ecd8b",
    "alg": "blake2b-256",
-   "key_id": "326bd0b20c331754",
-   "ts": "2026-08-14T23:09:24.195854+00:00",
-   "public_key": "c1904b2a2485023f01daf7c63e56005923f5cfb2a9ecb830243e4adf6504afad",
-   "signature": "52b8d02c216ebadbb78304e48c2724beb99050be440f679268ab9a9d5c156cabc4f54374b00241a9bd0c1daa1d21334e13af3e1944297900d0e4b3ff31122600"
+   "key_id": "cc6e6849cc98b3af",
+   "ts": "2026-08-15T21:52:37.309317+00:00",
+   "public_key": "20a5c5b2cb1076830e4b21adf3a70bc4c90d3ce5a3ae29f901db49316bdd1018",
+   "signature": "13d63d59768f5f91448d701521c3785484a3080637669fa520960529079e58af9e15cc7805cb8327a9c1064fc46309ca0f94f46d538b1e5379802b4577d6b909"
   },
   {
-   "run_id": "golden-run",
+   "run_id": "golden-pii",
    "seq": 2,
    "steps": 3,
-   "head_hash": "03af3b9580d5b1aa76974e6da9c089f85a752b09766dfbebdea799a1086d238f",
-   "prev_checkpoint": "2420622bcd7542e2deef51b269340d378a0afb7c4ccc2f8f827678f74a364eeb",
+   "head_hash": "14df3a60b92e4fd87a908eaf4b371945d05390855e5ca8e9a0179d60dd8988c5",
+   "prev_checkpoint": "d34f7aad29492b54ce047777dc2ef7e444d109a56eb5e895aae82c989091928d",
    "alg": "blake2b-256",
-   "key_id": "326bd0b20c331754",
-   "ts": "2026-08-14T23:09:24.230877+00:00",
-   "public_key": "c1904b2a2485023f01daf7c63e56005923f5cfb2a9ecb830243e4adf6504afad",
-   "signature": "d187c04b68813d663910070dd25f42a3d450f7358f98f64239b6ed4f61abb7a75ab4b65d6b6ed7be2309fb6ed843d558870ef4631881bba2ef03aad29963c008"
+   "key_id": "cc6e6849cc98b3af",
+   "ts": "2026-08-15T21:52:37.352017+00:00",
+   "public_key": "20a5c5b2cb1076830e4b21adf3a70bc4c90d3ce5a3ae29f901db49316bdd1018",
+   "signature": "d97f3bae9f3f98c9223a3c5861227e155b162b76daf3ddcc5d6c9ecaddc74baa1f18cea2fabed862eb21d2295d00866ddf29599a9d3cdee38e9477d3171cd605"
   },
   {
-   "run_id": "golden-run",
+   "run_id": "golden-pii",
    "seq": 3,
    "steps": 4,
-   "head_hash": "e83b2e8d6ec8d5fd1f19318ac36715c5c743e2099c5d8e7d67217d1f29676569",
-   "prev_checkpoint": "1d349c1a567fd516821195926f477b2353e275e3fe304eeb894548b4aeb85923",
+   "head_hash": "ff08cf0ef7912a520058b6fc20802242a007a675179acd2c4de11eb071cb1ba3",
+   "prev_checkpoint": "034271a740793700627ef3698e25d3fb7fe52fd28ba5924fd94cedee378f66c7",
    "alg": "blake2b-256",
-   "key_id": "326bd0b20c331754",
-   "ts": "2026-08-14T23:09:24.265343+00:00",
-   "public_key": "c1904b2a2485023f01daf7c63e56005923f5cfb2a9ecb830243e4adf6504afad",
-   "signature": "2465dd44acce20d749d3070111de613a26e5095a3cfd917bc31873bed1ef55aa28321fef84c87c50f9e2f0e4e1911a06b0f7e1524f883c5bf07316ec203fd50e"
+   "key_id": "cc6e6849cc98b3af",
+   "ts": "2026-08-15T21:52:37.392126+00:00",
+   "public_key": "20a5c5b2cb1076830e4b21adf3a70bc4c90d3ce5a3ae29f901db49316bdd1018",
+   "signature": "1f80b3ef77385a5e36a2930f6d1f683caf1773b4fe44416081fd7a8d3c3ab29a2d2b0c0b70ef5874038d088d4f7d274164a474ebe58d3d26d8a6b0377ac8070e"
   },
   {
-   "run_id": "golden-run",
+   "run_id": "golden-pii",
    "seq": 4,
    "steps": 4,
-   "head_hash": "e83b2e8d6ec8d5fd1f19318ac36715c5c743e2099c5d8e7d67217d1f29676569",
-   "prev_checkpoint": "fb4317b45ff9f8228b7087e72bb9c2ec12c03442ff4b11f712255f7fe2f86640",
+   "head_hash": "ff08cf0ef7912a520058b6fc20802242a007a675179acd2c4de11eb071cb1ba3",
+   "prev_checkpoint": "ff9045a67298f05e3af3d50ba2419de5dca8dee4910044304f4381d794b57b09",
    "alg": "blake2b-256",
-   "key_id": "326bd0b20c331754",
-   "ts": "2026-08-14T23:09:24.290391+00:00",
-   "public_key": "c1904b2a2485023f01daf7c63e56005923f5cfb2a9ecb830243e4adf6504afad",
-   "signature": "61003ce4a521c4acc0cc142e94208da4d66afedff09bea79f10cf9c04e52d2d924a1acfa93002d6c1f5fdbea041a76a05ac93f1910e5a79fd7c3a284685cb90a"
-  },
-  {
-   "run_id": "golden-run",
-   "seq": 5,
-   "steps": 5,
-   "head_hash": "381540b0de2bfb84979a4ada73efc239ab5098aa0b5a65fe076b5765997fd5fd",
-   "prev_checkpoint": "104e3affd95d1a7653d5e8bca0bde37940c4bf99ad6b61f7fb4120f5dbcdf477",
-   "alg": "blake2b-256",
-   "key_id": "326bd0b20c331754",
-   "ts": "2026-08-14T23:09:24.338413+00:00",
-   "public_key": "c1904b2a2485023f01daf7c63e56005923f5cfb2a9ecb830243e4adf6504afad",
-   "signature": "ae81f4cf518d7f600918b6d5b648ef79cdaed2baf5df1391d50f3e7a763e4648775103b8ab570453470961ac39bf23122d3ccd061315a4dd9e951ae2df97770c"
+   "key_id": "cc6e6849cc98b3af",
+   "ts": "2026-08-15T21:52:37.424909+00:00",
+   "public_key": "20a5c5b2cb1076830e4b21adf3a70bc4c90d3ce5a3ae29f901db49316bdd1018",
+   "signature": "4d80fb0d1950ed86ba187e59a5454cd5862d95de98b5be7d4805c05048f50ccf09783277526a41c42b2978f05b022679be9b965a44c22042268933c4e86db50d"
   }
  ],
  "signature": {
   "algorithm": "ed25519",
-  "key_id": "14745afee81c2908",
-  "public_key": "13144cbe06f9bd6774726c02e3331fd7bcb9e03776f5a55dbb82397d9d87e0ab",
-  "signed_at": "2026-08-14T23:09:24.360281+00:00",
-  "signature": "4dc4da06636b495d4e50bc70e57f0455b82cc281f6eadf1fb63db1dbbae8948216f31cc6a0ccd2fdf0bd5ba36ea1dc2d8d2b076a7ae1dda8cbbf2667d46a3608"
+  "key_id": "4c65bebbfa7f03e4",
+  "public_key": "5b330c40258cfacecc7a12a61f2c4f0aa25ac0770eb5ff987cdcca49fe9696e8",
+  "signed_at": "2026-08-15T21:52:37.461518+00:00",
+  "signature": "2c011ed1c787c1f104a5e7b239c77fa7c2497ef6831c6518ba11da7c12405a85d11059aa887546abbc4c288d990aaf1839f5c0bc2de6fb3e2ba371aa2e23d501"
  }
 }

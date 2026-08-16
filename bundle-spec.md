@@ -46,7 +46,8 @@ Each entry is one recorded step:
 | `alg` | string | Hash algorithm identifier. |
 | `run_id` | string | Same as the bundle `run_id`; verification fails on mismatch. |
 | `step` | integer | 0-based position; must equal the entry's index. |
-| `kind` | string | `http_call`, `tool_call`, `nondet`, `fork`, `injected`, `run_meta`, `run_end`, `redaction`, or `repair`. `injected` marks a synthetic response written by a response-mutation fork — explicitly not recorded upstream traffic; its data carries `source_step`, the replacement `response`, and `replaced_response` (the recorded response it displaced), and the kind is preserved through every descendant fork. |
+| `kind` | string | `http_call`, `tool_call`, `nondet`, `fork`, `injected`, `identity`, `context`, `human_decision`, `marker`, `run_meta`, `run_end`, `redaction`, or `repair`. A `tool_call` may be `prov: observed` (captured through a wrapped client) or `prov: asserted` (an out-of-band `record_tool_call`); `human_decision` (a human approval/rejection/edit of an output, with an optional `binds_step`) and `marker` (an honest record of a known-uncaptured path) are always `prov: asserted`. `identity` (always `prov: asserted`) records the run's asserted principal, agent, delegation, scope, and policy/model versions — evidence of who acted and under what authority, never an authentication of it. `context` (always `prov: asserted`) commits what the agent knew — its `data` carries a stable `name`, an always-present `content_hash` (hash of the canonical context, so hash-only survives redaction), and optional redactable `content` and a `source` label. `injected` marks a synthetic response written by a response-mutation fork — explicitly not recorded upstream traffic; its data carries `source_step`, the replacement `response`, and `replaced_response` (the recorded response it displaced), and the kind is preserved through every descendant fork. |
+| `prov` | string | Provenance class: `observed` (captured at a wrapped boundary — the proxy, a wrapped client, patched nondeterminism) or `asserted` (committed by an explicit hook). Part of the chain body, so relabeling or dropping it breaks the entry hash; verification rejects any other value. |
 | `ts` | string | ISO-8601 UTC timestamp at recording time. |
 | `prev` | string | The previous entry's `hash`; 64 zeros for step 0 (genesis). |
 | `data` | object | Kind-specific payload; individual fields may be redacted. |
@@ -79,10 +80,11 @@ Starting from `prev = "0" * 64`, for each entry at index `i`:
 2. `entry["run_id"]` equals the bundle `run_id`
 3. `entry["step"] == i` and `entry["prev"] == prev`
 4. `hash(alg, canonical(chain body)) == entry["hash"]`
-5. For every path in `commitments`: if listed in `redacted`, the value
+5. `entry["prov"]` is `observed` or `asserted`
+6. For every path in `commitments`: if listed in `redacted`, the value
    must be absent; otherwise the value must be present and its salted
    commitment must match. Every present data path must be committed.
-6. `prev = entry["hash"]`
+7. `prev = entry["hash"]`
 
 Finally `chain.head_hash` must equal the last entry's `hash`. Any
 failure identifies the exact broken step and path.

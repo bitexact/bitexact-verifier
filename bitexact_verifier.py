@@ -305,6 +305,9 @@ def _entry_check(entry: dict, i: int, prev: str, run_id):
         return False, f"step {i}: chain broken"
     if _hash_hex(entry.get("alg"), payload) != entry.get("hash"):
         return False, f"step {i}: hash mismatch — entry tampered or corrupted"
+    if entry.get("prov") not in ("observed", "asserted", "synthetic"):
+        return False, (f"step {i}: unknown or missing provenance "
+                       f"{entry.get('prov')!r}")
     ok, err = _verify_entry_data(entry)
     if not ok:
         return False, f"step {i}: {err}"

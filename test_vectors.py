@@ -80,6 +80,40 @@ def test_golden_dsse_envelope_verifies():
     assert bundle["run_id"] == "golden-run"
 
 
+def test_golden_adverse_decision_bundle_is_identity_rich_and_verifies():
+    # The auditor-pack sample: an automated loan decline carrying bound
+    # identity, retrieval context, an observed tool call, the model
+    # decision, a human oversight decision, and an honest capture-gap
+    # marker. It must verify, and its provenance must be exactly as
+    # claimed -- asserted evidence is never presented as observed capture.
+    bundle = _load("adverse-decision.bundle.json")
+    ok, err = verify_bundle(bundle,
+                            expect_key=bundle["signature"]["public_key"])
+    assert ok, err
+
+    by_kind = {}
+    for e in bundle["entries"]:
+        by_kind.setdefault(e["kind"], []).append(e)
+    for kind in ("run_meta", "identity", "context", "tool_call",
+                 "http_call", "human_decision", "marker", "run_end"):
+        assert kind in by_kind, f"sample missing a {kind} entry"
+
+    for kind in ("identity", "context", "human_decision", "marker"):
+        assert all(e["prov"] == "asserted" for e in by_kind[kind]), kind
+    assert by_kind["http_call"][0]["prov"] == "observed"
+    assert any(e["prov"] == "observed" for e in by_kind["tool_call"])
+
+    identity = by_kind["identity"][0]["data"]
+    assert identity["principal"] and identity["model_version"]
+    assert identity["policy_version"].startswith("sha256:")
+    assert identity["prompt_pack_version"].startswith("sha256:")
+    assert by_kind["context"][0]["data"]["content_hash"]
+    decision = by_kind["human_decision"][0]["data"]
+    assert decision["decision"] == "uphold"
+    assert decision["binds_step"] == by_kind["http_call"][0]["step"]
+    assert by_kind["marker"][0]["data"]["note"]
+
+
 def test_every_single_byte_matters():
     """Flip each structural element of the golden bundle; all must fail."""
     golden = _load("valid-signed.bundle.json")
@@ -213,6 +247,7 @@ def test_sha256_bundle_verifies():
     commitment = hmac.new(bytes.fromhex(salt), _canonical(1),
                           hashlib.sha256).hexdigest()
     entry = {"v": 2, "alg": "sha256", "run_id": "r", "step": 0, "kind": "k",
+             "prov": "observed",
              "ts": "t", "prev": "0" * 64, "commitments": {"x": commitment}}
     entry["hash"] = hashlib.sha256(_canonical(entry)).hexdigest()
     entry["data"] = {"x": 1}
@@ -585,7 +620,7 @@ def _sealed_bundle():
         commitments = {k: _field_commitment(salt, v, "blake2b-256")
                        for k, v in data.items()}
         body = {"v": 2, "alg": "blake2b-256", "run_id": run_id, "step": i,
-                "kind": kind, "ts": "t", "prev": prev,
+                "kind": kind, "prov": "observed", "ts": "t", "prev": prev,
                 "commitments": commitments}
         h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
         entries.append({**body, "hash": h, "data": data,
@@ -611,7 +646,8 @@ def test_verifier_enforces_run_end_seal_finality():
     tampered = json.loads(json.dumps(bundle))
     prev = tampered["entries"][-1]["hash"]
     body = {"v": 2, "alg": "blake2b-256", "run_id": "sealed-run", "step": 2,
-            "kind": "http_call", "ts": "t", "prev": prev, "commitments": {}}
+            "kind": "http_call", "prov": "observed", "ts": "t",
+            "prev": prev, "commitments": {}}
     h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
     tampered["entries"].append({**body, "hash": h, "data": {}, "salts": {}})
     tampered["chain"]["head_hash"] = h
@@ -654,7 +690,8 @@ def test_jsonl_verifier_enforces_seal_finality():
 
     prev = bundle["entries"][-1]["hash"]
     body = {"v": 2, "alg": "blake2b-256", "run_id": "sealed-run", "step": 2,
-            "kind": "http_call", "ts": "t", "prev": prev, "commitments": {}}
+            "kind": "http_call", "prov": "observed", "ts": "t",
+            "prev": prev, "commitments": {}}
     h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
     extra = {**body, "hash": h, "data": {}, "salts": {}}
     header2 = {**header, "chain": {"head_hash": h}}
@@ -681,8 +718,8 @@ def test_verify_bundle_flags_unapplied_redaction_claim():
     commitments = {k: _field_commitment(salt, v, "blake2b-256")
                    for k, v in data.items()}
     body = {"v": 2, "alg": "blake2b-256", "run_id": "sealed-run", "step": 1,
-            "kind": "redaction", "ts": "t", "prev": entries[0]["hash"],
-            "commitments": commitments}
+            "kind": "redaction", "prov": "observed", "ts": "t",
+            "prev": entries[0]["hash"], "commitments": commitments}
     h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
     entries.append({**body, "hash": h, "data": data,
                     "salts": {k: salt for k in data}})
@@ -713,8 +750,8 @@ def test_verify_bundle_ignores_inert_redaction_tokens():
     commitments = {k: _field_commitment(salt, v, "blake2b-256")
                    for k, v in data.items()}
     body = {"v": 2, "alg": "blake2b-256", "run_id": "sealed-run", "step": 1,
-            "kind": "redaction", "ts": "t", "prev": entries[0]["hash"],
-            "commitments": commitments}
+            "kind": "redaction", "prov": "observed", "ts": "t",
+            "prev": entries[0]["hash"], "commitments": commitments}
     h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
     entries.append({**body, "hash": h, "data": data,
                     "salts": {k: salt for k in data}})
@@ -722,3 +759,19 @@ def test_verify_bundle_ignores_inert_redaction_tokens():
          "entries": entries, "chain": {"head_hash": h}}
     ok, err = verify_bundle(b)
     assert ok, err
+
+
+def test_verifier_rejects_unknown_provenance():
+    import hashlib
+
+    from bitexact_verifier import _canonical, verify_bundle
+
+    body = {"v": 2, "alg": "blake2b-256", "run_id": "r", "step": 0,
+            "kind": "http_call", "prov": "sneaky", "ts": "t",
+            "prev": "0" * 64, "commitments": {}}
+    h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
+    bundle = {"format": "bitexact-bundle/1", "run_id": "r",
+              "entries": [{**body, "hash": h, "data": {}, "salts": {}}],
+              "chain": {"head_hash": h}}
+    ok, err = verify_bundle(bundle)
+    assert not ok and "provenance" in err
