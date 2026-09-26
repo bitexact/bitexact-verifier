@@ -35,5 +35,5 @@ build-backend = "hatchling.build"
 include = ["bitexact_verifier.py"]
 
 [tool.hatch.build.targets.sdist]
-include = ["bitexact_verifier.py", "README.md", "LICENSE",
+include = ["bitexact_verifier.py", "README.md", "LICENSE", "CHECKSUMS.txt",
            "bundle-spec.md", "test_vectors.py", "testdata"]
