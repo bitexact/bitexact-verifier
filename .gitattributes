@@ -1,0 +1,6 @@
+# The standalone repository's own line-ending policy: text is LF, and the
+# golden fixtures keep their exact bytes - their sha256 manifests and
+# signatures cover them, so a CRLF checkout would fail them on Windows.
+# CHECKSUMS.txt digests bitexact_verifier.py with LF endings.
+* text=auto eol=lf
+testdata/** binary
