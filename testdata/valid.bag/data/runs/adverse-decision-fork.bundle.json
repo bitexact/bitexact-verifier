@@ -1,0 +1,556 @@
+{
+ "format": "bitexact-bundle/1",
+ "run_id": "adverse-decision-fork",
+ "entries": [
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 0,
+   "kind": "run_meta",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.963514+00:00",
+   "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+   "data": {
+    "python": "3.14.4",
+    "platform": "win32",
+    "bitexact": "1.5.0",
+    "watermark": {
+     "license_id": "LIC-3218033594ce",
+     "scope": null,
+     "image_digest": null,
+     "fingerprint": "fp:7addcff2e92ba624a5991d44"
+    }
+   },
+   "salts": {
+    "python": "eeb1e6204f992c42e9293c83f8eef362",
+    "platform": "52fc8679b9fd82edec20f45742d430f1",
+    "bitexact": "f2f86e3c1235f40ef6e5ad9a002dedd2",
+    "watermark.license_id": "b608cef1cec6e28c698065964529403a",
+    "watermark.scope": "1ca2722f79efa06dc156b5df20ebaa5e",
+    "watermark.image_digest": "9cc898698488ac21e88f3dc261136e19",
+    "watermark.fingerprint": "d0560ccbabc26b8c869a8d504fdb1a49"
+   },
+   "commitments": {
+    "python": "9472a64de8996886e17a15664105b1f3263d6af26591b50582d624994088a0ab",
+    "platform": "03ce5d12bab8730358521e355f0ce834c903f7a633f148a118b22f90be30fac6",
+    "bitexact": "81bd09a91789cb6ddc75393516c131a16a9fb180995281b2b96575ff99384df4",
+    "watermark.license_id": "d3fa7a3393626f4863c4b65716502f7acf31f754fca411b6608eebddcdf1a88b",
+    "watermark.scope": "3d6700889821f83999665929288c77bc68b3759ebef90b35e7366a7c1cc8eef3",
+    "watermark.image_digest": "a85dc3e9520a80fae44f72747f07eb2ade81592fab96c7ca3a61e42e37a5189b",
+    "watermark.fingerprint": "57b41159f5f706d33b070232fbacb762aa22064e5ab38e13eb79612151236f85"
+   },
+   "hash": "e8a254d994c8166d10d73ef245cb847c78b0ef1f1c8bbc69d8372f5628929d50"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 1,
+   "kind": "identity",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:22.980662+00:00",
+   "prev": "e8a254d994c8166d10d73ef245cb847c78b0ef1f1c8bbc69d8372f5628929d50",
+   "data": {
+    "principal": "svc:loan-adjudicator",
+    "agent_id": "lending-agent@2.3.1",
+    "delegation_from": "app:retail-lending-portal",
+    "scope": [
+     "loans:adjudicate",
+     "creditbureau:read"
+    ],
+    "policy_version": "sha256:ac1deb51e3dfee66673f740e0638f5539990abb624db7f7efe1e1ffd37a84988",
+    "prompt_pack_version": "sha256:eaceeb62f1dd8eccb4f48d1ab3a9bf380d9020a247d42f3e60bde24e35919344",
+    "model_version": "gpt-4o-2024-08-06",
+    "workflow": "loan-adjudication",
+    "workflow_version": "v4.2",
+    "environment": "prod"
+   },
+   "salts": {
+    "principal": "33837e5243ae5b73ca4fe838219b5707",
+    "agent_id": "2f7143b6e970bee9174b18c2f46a4208",
+    "delegation_from": "6f7d513fe233a45b79a2a1e01462d79c",
+    "scope": "6062ebe248c0f6cef84f863134f206d5",
+    "policy_version": "a64c14858e345e1111ff321da5b677aa",
+    "prompt_pack_version": "b1675ec7526fc9e91b96101f70d54ddc",
+    "model_version": "b8203704b6c9165c83b4b8ca9702ebf5",
+    "workflow": "a845abb740eff9a8d18b7f72bf83161f",
+    "workflow_version": "cab174abe63645823d1fccc5543ec94b",
+    "environment": "312640db816c55dbe8168fcdc1df691b"
+   },
+   "commitments": {
+    "principal": "7fcd3e7a0fc7e7edb6530c737b096e813c768538f8f61565119f414ab7f27c23",
+    "agent_id": "867de3bc54ee192c8a0ec8e142bd6fda54563e3905816d0078a03596e2d35092",
+    "delegation_from": "5679e66366b0e9aa5c32d329aade9c773b55a2b3b99b2e57272d7cbdae158180",
+    "scope": "d0fbd24790e1bf8d8c0b3173d847e558ee3b14b8b9c9a9bf544e4f1453e22006",
+    "policy_version": "10fb2b801471b40432bbbf6b553cc8078b16f303ff5d031e53692f260a6e2f32",
+    "prompt_pack_version": "765fcb9fa7afe90497f79f0331fb7a3b1555ecf403da8d3bc5550e8d881a459b",
+    "model_version": "0a7cff563007375e371e7dcbf9fbe3dfd5df6c12baa3d6c1c9a6067474e93f4d",
+    "workflow": "2781f2be3d5c5e2000ea033bb29d73f9c64e73aebcefc48f380f826ced733357",
+    "workflow_version": "ba42daaf2825ecdd419f9d88e93e025bde09bfb5a7ab98b7c008b6934dce2422",
+    "environment": "aafd0bfbdd6bc721502ee39cec7be3bfe26de101388a1e2edbe6f508df8ae20c"
+   },
+   "hash": "a294c509754f00f20a7c4b11d4f3d7411564a072b4fcd334771ffb2df20dfec6"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 2,
+   "kind": "fork",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.997979+00:00",
+   "prev": "a294c509754f00f20a7c4b11d4f3d7411564a072b4fcd334771ffb2df20dfec6",
+   "data": {
+    "source_run": "adverse-decision",
+    "at_step": 5,
+    "source_prev_hash": "391e10b6baf7f7d251b79b8e90ea793d3ef35f5066a95a5b407a90b98dee6d84"
+   },
+   "salts": {
+    "source_run": "d3fcb74296245ec45c66a593af48b9cb",
+    "at_step": "ebcb86c4038a6c929b3dcec210e84a54",
+    "source_prev_hash": "b1c2014a38494b79a319f9ea17d17113"
+   },
+   "commitments": {
+    "source_run": "0cb0e1220e095342ffae8c295d49188b26263db033e9a142606f1acd37e501bf",
+    "at_step": "99242f053db4d3d71078a131538fd1983bb99e4ad13fe9cdb2cd191275e96682",
+    "source_prev_hash": "76a43a816ebd8ae247dcd1abb36db1f4a224c97908a9505e190dd7e0483e02c8"
+   },
+   "hash": "ac8cf067f81afbe4f6dabe25c91d981634b11609b43cc07e171306d770596f65"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 3,
+   "kind": "context",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:23.014658+00:00",
+   "prev": "ac8cf067f81afbe4f6dabe25c91d981634b11609b43cc07e171306d770596f65",
+   "data": {
+    "name": "application_and_policy",
+    "content_hash": "ad8465c4604fca16a0783831aa5c9bf665e366d1b98415043c82f7e1f195b617",
+    "content": {
+     "application": {
+      "applicant_ref": "app-70255",
+      "product": "unsecured-personal-24",
+      "requested_amount_usd": 18000,
+      "term_months": 60,
+      "stated_annual_income_usd": 52000,
+      "monthly_debt_usd": 1990,
+      "dti_ratio": 0.46
+     },
+     "policy_excerpt": {
+      "max_dti_ratio": 0.43,
+      "min_credit_score": 620,
+      "reference": "Lending Policy section 4.2"
+     }
+    },
+    "source": "retail-lending-portal"
+   },
+   "salts": {
+    "name": "91d137aa7e62fa241b9fd6f0d52d7195",
+    "content_hash": "a79f2a7871ca1325fffa6a17c085dbb2",
+    "content.application": "5d640a0c2cbffb6ebcae6d978130ae5a",
+    "content.policy_excerpt": "4b75d938faf3ee7ea4180b96fbb9055c",
+    "source": "e76ac171a5e10ec8fb9bce81891f70e1"
+   },
+   "commitments": {
+    "name": "890bd1e89e6e44d68eff10a1f3e969f324dd4b30f375586954cba468a9d31961",
+    "content_hash": "0854010ff314fbe8bdc9461ffd7253827dfb350f4007047ca749c184373cae20",
+    "content.application": "1563b4b36053b53f616c7fab1cee29e9a7d87b3f872df6aad6088cfc2ce91f90",
+    "content.policy_excerpt": "18c1e4e342adfd7b986109e3c1fef2f4fbf30f6d5ffe180ccd5b91e817b03e1c",
+    "source": "3877bb60bfb2d1875c34d599bd00e57eb03553b0f27396609a254aa06f42b614"
+   },
+   "hash": "3f0d34c83cd5df3780a4c8fab9156cb472db425a071f48d7ac7476e0f28c2ce7"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 4,
+   "kind": "tool_call",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:23.029208+00:00",
+   "prev": "3f0d34c83cd5df3780a4c8fab9156cb472db425a071f48d7ac7476e0f28c2ce7",
+   "data": {
+    "tool": "credit_bureau_score",
+    "args": [
+     "app-70255"
+    ],
+    "kwargs": {},
+    "result": {
+     "applicant_ref": "app-70255",
+     "score": 604,
+     "model": "generic-risk-v9",
+     "bureau": "sample-bureau"
+    }
+   },
+   "salts": {
+    "tool": "af2968cc7631ce090df569a2206a833f",
+    "args": "80f0ef902634809b80d2c3a05122bfda",
+    "kwargs": "ed3e2a25aba01dbcb5dcd17440fbc72c",
+    "result.applicant_ref": "dfc8b90a571509682eeadc86aee04b40",
+    "result.score": "9461921ec24f8d8247518f783a5aa73a",
+    "result.model": "dbfc839953203469c6dbd5eab35a6280",
+    "result.bureau": "b76066f0ffe5f04b20f66f95a47400fb"
+   },
+   "commitments": {
+    "tool": "66cf5a6f860b9b55f3b53b8fd6c4771d4059b30b700a39652e1a6cfe58f9417c",
+    "args": "8a0b114a734e414afe627bc10cddd8cc829e1041415db370148978a76a858d41",
+    "kwargs": "21cd4466a04fe218e6ddb938d0a463bf4a6ef3f4329995e154b3395b13a20118",
+    "result.applicant_ref": "514902c4b67e06d32f92ecca58744056fd2963acb4d991c0bfd88556c178e43f",
+    "result.score": "532096a4e7775ca124d2b7451f2862b995c4ceb764f163ea8f033d25cbc0388e",
+    "result.model": "6d989e1ace50f0fd36e583260704cc3592045d82d35ea543eb9f21d2302ffb28",
+    "result.bureau": "4beca694d48d0b81a141b522c056ba2af8442e0357f2accd62fb8db51a781390"
+   },
+   "hash": "6bac1124eb8c7dad8e5f1a4bfbea9976c12cd7b4615b4f4d73d8b4fd33a1459a"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 5,
+   "kind": "http_call",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:23.219994+00:00",
+   "prev": "6bac1124eb8c7dad8e5f1a4bfbea9976c12cd7b4615b4f4d73d8b4fd33a1459a",
+   "data": {
+    "request": {
+     "method": "POST",
+     "path": "/v1/chat/completions",
+     "query": "",
+     "headers": {},
+     "text": "{\"model\":\"gpt-4o-2024-08-06\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an underwriting assistant. Apply the lending policy exactly, state the decision as APPROVE or DECLINE, and give the deciding factors. Do not infer facts not present in the application.\\n\"},{\"role\":\"user\",\"content\":\"Application and policy: {\\\"application\\\": {\\\"applicant_ref\\\": \\\"app-70255\\\", \\\"product\\\": \\\"unsecured-personal-24\\\", \\\"requested_amount_usd\\\": 18000, \\\"term_months\\\": 60, \\\"stated_annual_income_usd\\\": 52000, \\\"monthly_debt_usd\\\": 1990, \\\"dti_ratio\\\": 0.46}, \\\"policy_excerpt\\\": {\\\"max_dti_ratio\\\": 0.43, \\\"min_credit_score\\\": 620, \\\"reference\\\": \\\"Lending Policy section 4.2\\\"}} Credit report: {\\\"applicant_ref\\\": \\\"app-70255\\\", \\\"score\\\": 604, \\\"model\\\": \\\"generic-risk-v9\\\", \\\"bureau\\\": \\\"sample-bureau\\\"}\"}]}"
+    },
+    "response": {
+     "status": 200,
+     "streamed": false,
+     "media_type": "application/json",
+     "complete": true,
+     "headers": {},
+     "text": "{\"id\":\"chatcmpl-loan-70255\",\"object\":\"chat.completion\",\"model\":\"gpt-4o-2024-08-06\",\"choices\":[{\"index\":0,\"finish_reason\":\"stop\",\"message\":{\"role\":\"assistant\",\"content\":\"DECISION: DECLINE. The debt-to-income ratio of 46% exceeds the 43% maximum (Lending Policy section 4.2) and the credit score of 604 is below the 620 minimum for an unsecured personal loan. The application does not meet current underwriting criteria.\"}}],\"usage\":{\"prompt_tokens\":380,\"completion_tokens\":54,\"total_tokens\":434}}"
+    },
+    "model": "gpt-4o-2024-08-06"
+   },
+   "salts": {
+    "request.method": "11c3c9d400e71302f457bc56fc2a52bf",
+    "request.path": "66be5ae6a7a4c4165324720ff92e498b",
+    "request.query": "0d05f0ff24c4322201ca58a990b8b9b2",
+    "request.headers": "90f59ea31496b81d2c1b83e9c8e554fd",
+    "request.text": "b77006d70c8bda453fd7535cc8ba051e",
+    "response.status": "6a0a8d744e596a035377bc4b789570a2",
+    "response.streamed": "c50a9d32e2c99e4de873d3f598aeebf8",
+    "response.media_type": "f30d3a63264dcd818c87a890df39dfb3",
+    "response.complete": "859d02b028948b90f2a960f4c610cf17",
+    "response.headers": "9663da8e42fec5206acf74f1fb83236e",
+    "response.text": "70e4b91a7a973d69d041820bf3935ef8",
+    "model": "9cab979c6c86e4e6b165fd150643446a"
+   },
+   "commitments": {
+    "request.method": "eff66eeb4330584718bd7ea9ad14c1db9fef8c2ead1215c09ec8ce43144c6c89",
+    "request.path": "1b3394e0e0fa484a51736089e01a5b6e3e3638def23b3443b8ffd76c3ee3deab",
+    "request.query": "d10f35cd6ca009c81afa0aa1e05f171db9e32bae82f6e8c4a0c26a1e1f5053d7",
+    "request.headers": "1e2e7219b48ad1d5a3cd858254fe7a2b1158ed82cb1ea650050d77df7e2b04f3",
+    "request.text": "ab9cdd643ff6d8ad06c196538b9ecdf6fc65803e2496b5a9205ffa4694fb27d2",
+    "response.status": "417eff7ded71fa042c4c169947558ee1a6acd20aae563a3933e91acb57173641",
+    "response.streamed": "ca17566f354d40be5a7363baaf419263f48629ed0a95876e4ce871ce2a853913",
+    "response.media_type": "960cbaf534b00f2ec015e7fbf04f31a8c5e5dddbe01d70812e52fd3be1f7e913",
+    "response.complete": "004cfa8f95ef4909ae19bdba16797959ee9c6360e5643e83a6312566c9c29eb7",
+    "response.headers": "76dae1e03b97e3d2309bf7d728f7dc47982675242e00ba05a5a60e7044f5fe4e",
+    "response.text": "7ee013be54cf1562550d286905d5e7c6a815b5553c3973d68474dace6e1f0ed3",
+    "model": "c053090ecc3e6fbdffa8efd610bc85950c5b026f1456c76d47b0711da47ca1db"
+   },
+   "hash": "c87466feff3be1b97b0dc4e173cd8e20de3a71f6b3c1a3fee031d5a93f860e67"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 6,
+   "kind": "human_decision",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:23.248000+00:00",
+   "prev": "c87466feff3be1b97b0dc4e173cd8e20de3a71f6b3c1a3fee031d5a93f860e67",
+   "data": {
+    "actor": "loan-officer:reviewer-4471",
+    "decision": "uphold",
+    "reason": "Manual review confirmed DTI 46% over the 43% policy maximum and score 604 below the 620 floor; the decline was upheld under section 4.2 and the adverse-action reasons were recorded.",
+    "binds_step": 5
+   },
+   "salts": {
+    "actor": "8e3b5e93bf44235da286431950b2ca33",
+    "decision": "ece621d54f2af86633380ba2341b1066",
+    "reason": "36b759f3694f0ccaf19ad1a553c5cb44",
+    "binds_step": "f5fd2a3593b97ed26bba6a569644f98f"
+   },
+   "commitments": {
+    "actor": "2d3eded64298facdff0c00da18f068a97b68547a0b631738657f84b388f7ac0e",
+    "decision": "2588e18b2a43ad4545e91088e47b88db26451e17a621891485ca5d15f13d7cf4",
+    "reason": "da25e882ed20db00183adc4f50bc06cf37d06afd9924f0830cdd7f477f51f87c",
+    "binds_step": "13e6a13edf3f71b3298135265aa878aafa52a4999f73ccdf39fea06909ba9462"
+   },
+   "hash": "5d47f9a5d54cb1ed2156ae4edcbc67f3197c4f5a9dd2b488e4c3f7420c65e738"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 7,
+   "kind": "decision_record",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:23.262602+00:00",
+   "prev": "5d47f9a5d54cb1ed2156ae4edcbc67f3197c4f5a9dd2b488e4c3f7420c65e738",
+   "data": {
+    "retention_deadline": "2028-10-04T08:54:23.262476+00:00",
+    "retention_basis": "ECOA/Reg B adverse-action record retention (illustrative)",
+    "output_flags": {
+     "is_automated_decision": true,
+     "is_adverse_action": true
+    },
+    "reason_codes": [
+     "DTI_OVER_MAX",
+     "SCORE_BELOW_MIN"
+    ]
+   },
+   "salts": {
+    "retention_deadline": "892fbb7c404ef50877af5c34e4d995ea",
+    "retention_basis": "0e7f0069e1b4034c975277967b54c55e",
+    "output_flags.is_automated_decision": "9b27e9f4286c8c25d31c04d23d03790a",
+    "output_flags.is_adverse_action": "df1c412c6ddcc2c9d230db38f8b062ae",
+    "reason_codes": "cfc070c0673527842c5dd3ad3582a60c"
+   },
+   "commitments": {
+    "retention_deadline": "91264e41637179b327e5189cc52fef4074b55c2e63df131af9d3e7d78b6e6e49",
+    "retention_basis": "52ad0e909726ec67eafb95fb9934d8528e8c3152e7053d277d963df6b1d58ca4",
+    "output_flags.is_automated_decision": "8bf2a8e75108b2293ae8bb90a6d5ae5f8befeb47b9332e6835ff5ed3cdf90174",
+    "output_flags.is_adverse_action": "119b179a0cbc0396265082defc93061bc78fa89ae31dea6f94f9b767bcd37b03",
+    "reason_codes": "c1756738f9f1782d686c2cf5ea1cb139e26ed8942d280da0871c0efa416ade48"
+   },
+   "hash": "76dd74210f5d182f4aac3c6f53bb3fd7d27439707313268692d57241c9aee789"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 8,
+   "kind": "marker",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:23.277284+00:00",
+   "prev": "76dd74210f5d182f4aac3c6f53bb3fd7d27439707313268692d57241c9aee789",
+   "data": {
+    "note": "The adverse-action notice was generated and mailed to the applicant by the downstream fulfillment service; that step is outside BitExact's capture boundary and is recorded here as a known gap."
+   },
+   "salts": {
+    "note": "894f06c3c27c1a356b0d82cc86207e20"
+   },
+   "commitments": {
+    "note": "830968eb84362148711894a1eaba49656cbe04a79fb80223ee250dd08e6faeda"
+   },
+   "hash": "40537bed95d2a5bc2af803dc09bcbb3fb2c1f693f66192ac604a6841d0bb0586"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 9,
+   "kind": "marker",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:23.292042+00:00",
+   "prev": "40537bed95d2a5bc2af803dc09bcbb3fb2c1f693f66192ac604a6841d0bb0586",
+   "data": {
+    "note": "Seeded sample: the model response was served from a fixture, not a live provider call. The recording, chain, and seal are real; the model's answer is illustrative."
+   },
+   "salts": {
+    "note": "8407d9d8d1a03728fc0d527c2a1daee6"
+   },
+   "commitments": {
+    "note": "f91c18531bfeadcdd1c54000242356d9ab04958b1f76d8e903bd62f083809fde"
+   },
+   "hash": "f70901ddde4234ac9118f35e307baca11baf48111e2c9d98e7c4927accee0d8a"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision-fork",
+   "step": 10,
+   "kind": "run_end",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:23.487679+00:00",
+   "prev": "f70901ddde4234ac9118f35e307baca11baf48111e2c9d98e7c4927accee0d8a",
+   "data": {
+    "steps": 11
+   },
+   "salts": {
+    "steps": "ffef5d4e32ed4d1496b66e6954c779af"
+   },
+   "commitments": {
+    "steps": "40a45438d33922dc79cefed1bf1a10a77b4dba315199df6d2f2fd35458f90e68"
+   },
+   "hash": "0f7ae97d5460e18ffe688f167bf788c06a8fffdbf92892d432562e4df9d98e91"
+  }
+ ],
+ "chain": {
+  "head_hash": "0f7ae97d5460e18ffe688f167bf788c06a8fffdbf92892d432562e4df9d98e91"
+ },
+ "checkpoints": [
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 0,
+   "steps": 1,
+   "head_hash": "e8a254d994c8166d10d73ef245cb847c78b0ef1f1c8bbc69d8372f5628929d50",
+   "prev_checkpoint": "0000000000000000000000000000000000000000000000000000000000000000",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.970263+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "718335a2926d19f5ad8ef873479a4992359b6025011f4d39272b2628419174fc03c9c39180b685a1705779eaa81be362d8ace11840e7dfcd12fda3fc63e11c0e"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 1,
+   "steps": 2,
+   "head_hash": "a294c509754f00f20a7c4b11d4f3d7411564a072b4fcd334771ffb2df20dfec6",
+   "prev_checkpoint": "21fb9a51f8026088d8f7c4a04e6dd8455054b2c06b5bd68c1f7929bb937f5fda",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.991273+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "d3429c582661d05c0d364ddf27a57acd22cf03e8ac0278306d1e9e4ce6c1891b4ab822ef4b1e2cc2cdaf8e192b67a1e147dcf6578328f0add0c46d6fe36cf60f"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 2,
+   "steps": 3,
+   "head_hash": "ac8cf067f81afbe4f6dabe25c91d981634b11609b43cc07e171306d770596f65",
+   "prev_checkpoint": "3036ed838a235e44db64581e02472bfd0c33c3f127b021d1fca38c7f0cee09cb",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:23.007837+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "14b08636c0370a60614d45e5eb202122a02714796881c6d7f2c6fce352fe0b7c3927c0514407bb1e1bd13bf0496020a5dee3d6c808394357210275cdb86cdf0d"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 3,
+   "steps": 4,
+   "head_hash": "3f0d34c83cd5df3780a4c8fab9156cb472db425a071f48d7ac7476e0f28c2ce7",
+   "prev_checkpoint": "ca9fefa2f503c188c79544974fb4c8625ad734b8eb356eb4ebdf56a6ede17a29",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:23.024800+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "ea0eaf2d36a1278e6f3bd2182db309b516430780f5c8fb05dcd214da0b1ec27219635590394b7cea3790bf857c6aecbf41ef49c4f214a98e21711cfdc2d32b05"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 4,
+   "steps": 5,
+   "head_hash": "6bac1124eb8c7dad8e5f1a4bfbea9976c12cd7b4615b4f4d73d8b4fd33a1459a",
+   "prev_checkpoint": "37015385f9d489c0060a2ab88ccffebe42e8a899a017daa897a53bacea703285",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:23.039870+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "34b16fb13b0eb8f85540b7c1fbbed0625188537d028e5f1ca4b269188498a3f76dd512bd804a7daaac14e725eec3000e95e3629c1b5bdf007653d1cefb7ad401"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 5,
+   "steps": 6,
+   "head_hash": "c87466feff3be1b97b0dc4e173cd8e20de3a71f6b3c1a3fee031d5a93f860e67",
+   "prev_checkpoint": "1e80eb5d239716cd2ae3db43c69c298b1e6806ae26765cf8b6e2345f5a6ffdc3",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:23.230959+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "b6f13204e1ed6494e4dcb2dbb222852ebad41786d26251eb83aec9a67986f403adb9df07abe5deb24527e350f7200a54192dbfb213d77063be7c9a2a172a5803"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 6,
+   "steps": 7,
+   "head_hash": "5d47f9a5d54cb1ed2156ae4edcbc67f3197c4f5a9dd2b488e4c3f7420c65e738",
+   "prev_checkpoint": "745008b1a601d9e3207cb1b64c05d60b4390f2e9e8d4558c8e6284c3c7bc369b",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:23.258174+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "4b6b7bad9bd7191dc08ac95fb91a830b0b547571d32f889c42f8a682f6769270e13e7200d82e912f12d62c5a2e44ee0b9955b64944190fd8e2a46285f6fcd106"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 7,
+   "steps": 8,
+   "head_hash": "76dd74210f5d182f4aac3c6f53bb3fd7d27439707313268692d57241c9aee789",
+   "prev_checkpoint": "7358405d9343515f326b9e76327b4aa39c715fce74dd38012529d95dd8a2da52",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:23.272908+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "a69502dcde2700d68fe29c1233f85083f7125ea8bf9d3e59fdf224bac33eea22d66f8e6554ade15e22f37d7c0464cb788db95d5e4ec22c415d99e2c39a5caf00"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 8,
+   "steps": 9,
+   "head_hash": "40537bed95d2a5bc2af803dc09bcbb3fb2c1f693f66192ac604a6841d0bb0586",
+   "prev_checkpoint": "a840f464b4e82958a70de3a81483d4547400aa9f76004f53f3b7174b2033dd1b",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:23.287609+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "5399c57d5a54654c284e19802232a27600eca069f2f03d28f0c7361e032ea714c9e8087403e48f03677b62594178f544f2134dd5757c6ab6e3319b23d6cc6f08"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 9,
+   "steps": 10,
+   "head_hash": "f70901ddde4234ac9118f35e307baca11baf48111e2c9d98e7c4927accee0d8a",
+   "prev_checkpoint": "584cad6fe194afecba991f7a82fba38b37288448f5b6d5a58adecd401a9635ce",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:23.303195+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "be86bea5916bcf3f8bd7595cb6a4cdd3c7d5d40a8a4a361a1476dbf50d49a1b7f4ed640b7e83d28ac445cd69320bcc75e9e29968324c9595be3156f0606f710a"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "seq": 10,
+   "steps": 11,
+   "head_hash": "0f7ae97d5460e18ffe688f167bf788c06a8fffdbf92892d432562e4df9d98e91",
+   "prev_checkpoint": "0a95fce6de4e8a96d77a224fee25dc56c42650e4f11752aed88f40aff9c86302",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:23.500213+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "7ef81d2dbd55fa73e1b5e3a40beeee8509ef42332789bf13053c68c855e5860b7ab60f28d4484c2b29eb8906c0ec71b95c31cfd7683335610f13cc550d479e06"
+  }
+ ],
+ "license_cert": {
+  "format": "bitexact-license/1",
+  "licensee": "Golden Fixtures",
+  "expires": "2099-01-01",
+  "tier": "fixtures",
+  "license_id": "LIC-3218033594ce",
+  "entitlements": [
+   "anchor",
+   "evidence",
+   "fork",
+   "governance",
+   "lifecycle",
+   "otel",
+   "record",
+   "regress",
+   "replay"
+  ],
+  "signature": "7a3f806e437afdb5e078668c41ca1c796d31d75739f9da87e5fed0114281f4a35d002b7069c0db52c0048cb7833a29c671e9ff6ed5bae57745a5ec4413ad4703"
+ },
+ "signature": {
+  "algorithm": "ed25519",
+  "key_id": "94a8b44c5cfbd4f6",
+  "public_key": "c16f1a3e575779b066c54dcff62214e6472fd0d313bdc55167f699566b19ef9a",
+  "signed_at": "2026-09-05T08:54:23.541467+00:00",
+  "signature": "d95255ddab4abb64716c175e26765771e65ad8a91650c6cfb6b2cb71e15ae06018ad13a1683ab545d2a100ca05dae22c127afe51c259e7df048054c31e891c0c"
+ }
+}

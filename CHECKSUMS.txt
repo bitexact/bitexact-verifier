@@ -1,0 +1,15 @@
+# Canonical SHA-256 digests of bitexact_verifier.py, one row per release.
+#
+# The verifier is the offline root of trust. Confirm the copy you hold matches
+# its version's digest below, cross-checked against an INDEPENDENT channel — the
+# PyPI record for bitexact-verifier==<version>, the verifier-v<version> git tag,
+# or a mirror — never only a copy obtained from the party whose evidence you are
+# auditing. The file is one Python file (standard library plus cryptography
+# and asn1crypto) you can also read in full.
+#
+# The digest covers the file as distributed (LF line endings). Format per row:
+#   <version>  <sha256>
+2.0.0  fdb862c8bdc512a474cd5a5f8992ddb6fad84af9515d4ffa448126f11df4790e
+2.1.0  9d93700b6403da2c0509560ded939a414862686f9e00a5ffb4a0d0940f1d06f9
+2.2.0  bb41062faf99f916b5b0c9dca744dfe7d337447c3d3bdc65116c33d3eed21913
+2.3.0  765399cb0b1939f2a9d487e2fb3a0659a2aaf3eb27460fd2da02f1e738ddc3f6

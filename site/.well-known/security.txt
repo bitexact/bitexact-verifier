@@ -1,0 +1,5 @@
+Contact: mailto:security@bitexact.ai
+Expires: 2027-09-25T00:00:00Z
+Preferred-Languages: en
+Canonical: https://bitexact.org/.well-known/security.txt
+Policy: https://bitexact.dev/security.md

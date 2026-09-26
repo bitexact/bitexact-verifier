@@ -1,0 +1,521 @@
+{
+ "format": "bitexact-bundle/1",
+ "run_id": "adverse-decision",
+ "entries": [
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision",
+   "step": 0,
+   "kind": "run_meta",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.387463+00:00",
+   "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+   "data": {
+    "python": "3.14.4",
+    "platform": "win32",
+    "bitexact": "1.5.0",
+    "watermark": {
+     "license_id": "LIC-3218033594ce",
+     "scope": null,
+     "image_digest": null,
+     "fingerprint": "fp:7addcff2e92ba624a5991d44"
+    }
+   },
+   "salts": {
+    "python": "08dc0864beb94336f84c7442c496c8b2",
+    "platform": "f23415af18ae41c9b7348466a2ac028e",
+    "bitexact": "2c518c4d7b57287c8b80a9c30bc5336b",
+    "watermark.license_id": "ff7b2bce35bb1dd22f56d75292a80557",
+    "watermark.scope": "57a4447ed73ed5c522d7856d7cc4625e",
+    "watermark.image_digest": "aa9791cec559c96308aae992f5a94932",
+    "watermark.fingerprint": "2cd6bb1a320742f534310dfb3d60efbc"
+   },
+   "commitments": {
+    "python": "55a6ee27dc50498282f6e662db5d2fc3bfe86e5276ab396cbebc3cd4ff6a1da7",
+    "platform": "c2611bb2fe5792295e341e80d6f438e057ff48e82f2500977b96523c6387c35f",
+    "bitexact": "cd9e8e0eb4127c2a05220bf7e4fb26ee68b2b39325a726ce72130a64a5a5ce60",
+    "watermark.license_id": "f447cec1b273d54e3155b9ce29ffbc9e9a5cd7ccfe03224c663bb9f3397903e1",
+    "watermark.scope": "1d6a34d75b2577612a1cdb9260b87f957eb93350f9406574df502c91e592d2a1",
+    "watermark.image_digest": "0d3190049c637d38a51a3c388046c059f88cd61668d232329592974b143d51ab",
+    "watermark.fingerprint": "4ad81a01e06ba671e2376097ea252d33265bd41107a2fe4447f0dc86622a73a1"
+   },
+   "hash": "b39206d2f4d313b8e5faaaf172492c5c5448a9b535f7f92d69259a1c62e2d317"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision",
+   "step": 1,
+   "kind": "identity",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:22.404196+00:00",
+   "prev": "b39206d2f4d313b8e5faaaf172492c5c5448a9b535f7f92d69259a1c62e2d317",
+   "data": {
+    "principal": "svc:loan-adjudicator",
+    "agent_id": "lending-agent@2.3.1",
+    "delegation_from": "app:retail-lending-portal",
+    "scope": [
+     "loans:adjudicate",
+     "creditbureau:read"
+    ],
+    "policy_version": "sha256:ac1deb51e3dfee66673f740e0638f5539990abb624db7f7efe1e1ffd37a84988",
+    "prompt_pack_version": "sha256:eaceeb62f1dd8eccb4f48d1ab3a9bf380d9020a247d42f3e60bde24e35919344",
+    "model_version": "gpt-4o-2024-08-06",
+    "workflow": "loan-adjudication",
+    "workflow_version": "v4.2",
+    "environment": "prod",
+    "workflow_digest": "ff64a803439392b7608d73f2fb023795c4be9a8a0da82a9859adb08ef5e9157a"
+   },
+   "salts": {
+    "principal": "99b2018336f0b0be7309772c0afcaf70",
+    "agent_id": "695f5aaaf6655760b69a3ead1d793440",
+    "delegation_from": "40db49a1a367ba7587a625b32e6ac665",
+    "scope": "f3d7e307d9eacd409c05eec5f9149b01",
+    "policy_version": "d6d7be0b25bafdb700f1c60df273c65c",
+    "prompt_pack_version": "62bfebdddd220b76fa6c9a97f530d23d",
+    "model_version": "e8fca9b1035bf56ec6d7f05e462926ca",
+    "workflow": "4938590bc7151a45c366cfbbb8eb7b93",
+    "workflow_version": "4c0016775f36f7c9fb1f5f9add518749",
+    "environment": "ab4be92c50860c9f48fc4c9e260df836",
+    "workflow_digest": "42e03cacce8df2e4c5177bb3ea205c28"
+   },
+   "commitments": {
+    "principal": "3b6ac06ba7bb21d03df45169f38e08a8434cb232cd4c809c48f106d15458e756",
+    "agent_id": "bfac26b4cf9dc6acfd34c133aec836f4687122842aeee57f3a81fbce5831effc",
+    "delegation_from": "29d41092879f47250a4a40bec3a51d453e749bc4dd9deae644d94dba25fa3938",
+    "scope": "07e89f573068a95e0f097e13b596ae706f9cbbc10092b7e9882cf2022af390e5",
+    "policy_version": "f7232ada1c61ba24be0e8d0cde69e5a82dfe153882f5345b1a4fa4a12360d0cd",
+    "prompt_pack_version": "7b9fcd7900fc741d447536af5dac2a65561dfed134a794352bb475cdc57d04e1",
+    "model_version": "85682473ab4c951a35a0380c3505ec8b34b010a203451677f207fd6e08de2a74",
+    "workflow": "5bf8d04f3e5bb1fff3c5afa41e153de726fb6044b338987a682854b0ff83386b",
+    "workflow_version": "afcc49fdca7ab0ff3dfb8791931517096c5659a2047a689f8fea597fcec7cacf",
+    "environment": "abb8e6f55a911f791fb67385f85033dbdec438009004e86d80da594f77fccb9c",
+    "workflow_digest": "d4fd4a0198c2bb4027ba172b9e11ec8fa0e7da4181ac605381d006a44b66c228"
+   },
+   "hash": "6d0312d20f2b138a008e1db8dd456b6b761f60399e7b9aeba6ccd4729a2e9885"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision",
+   "step": 2,
+   "kind": "context",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:22.423560+00:00",
+   "prev": "6d0312d20f2b138a008e1db8dd456b6b761f60399e7b9aeba6ccd4729a2e9885",
+   "data": {
+    "name": "application_and_policy",
+    "content_hash": "ad8465c4604fca16a0783831aa5c9bf665e366d1b98415043c82f7e1f195b617",
+    "content": {
+     "application": {
+      "applicant_ref": "app-70255",
+      "product": "unsecured-personal-24",
+      "requested_amount_usd": 18000,
+      "term_months": 60,
+      "stated_annual_income_usd": 52000,
+      "monthly_debt_usd": 1990,
+      "dti_ratio": 0.46
+     },
+     "policy_excerpt": {
+      "max_dti_ratio": 0.43,
+      "min_credit_score": 620,
+      "reference": "Lending Policy section 4.2"
+     }
+    },
+    "source": "retail-lending-portal"
+   },
+   "salts": {
+    "name": "dc47a6bf783b79dfb0b64f4698b9e970",
+    "content_hash": "66f4f4e1a206a09f6b529f0c70abd2dc",
+    "content.application": "e94e6e8697435ccc51a47027a61be969",
+    "content.policy_excerpt": "0a87412cfb257ab9eb125fafc5250cfc",
+    "source": "8c1e08a2ff70fb86f971069c9bb21c4a"
+   },
+   "commitments": {
+    "name": "d98989d8ac6ec9360e9fbc0cf4f0f3d43c0898bf8a9dcf12c91d72ea2de952a4",
+    "content_hash": "f2dd4563fb85022d36a2e4e1a00cffb4cb89b262de4db3bf8e43e4100d2b041e",
+    "content.application": "905b671b32fc8080755d03612af036b0ba344be6fdc708002d41577072170c4a",
+    "content.policy_excerpt": "3b5accf5d4c987f90f186902c4d15a7b7612fb593b4691011228970641000229",
+    "source": "c6bd35ecc0ae82b073333be1da0693405eda156f7650aa71c6e17ab5b08dc5f7"
+   },
+   "hash": "85c366d110b20518f0fe4a60a3a85d3f7b92689f2b380f4eb1267ce3de3a288e"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision",
+   "step": 3,
+   "kind": "tool_call",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.438168+00:00",
+   "prev": "85c366d110b20518f0fe4a60a3a85d3f7b92689f2b380f4eb1267ce3de3a288e",
+   "data": {
+    "tool": "credit_bureau_score",
+    "args": [
+     "app-70255"
+    ],
+    "kwargs": {},
+    "result": {
+     "applicant_ref": "app-70255",
+     "score": 604,
+     "model": "generic-risk-v9",
+     "bureau": "sample-bureau"
+    }
+   },
+   "salts": {
+    "tool": "d1bc531fec78760265063874a8af54e9",
+    "args": "b3640b928296e8f738e1bd8695ac6dea",
+    "kwargs": "76b78febe8398aafd00fcc8a3157d756",
+    "result.applicant_ref": "1640fcfbf440fbef2f47f130a1a41ede",
+    "result.score": "15bdaba2bc158ef2e1473c63db6a6019",
+    "result.model": "d2027c85608ab2f641f541e279273ed3",
+    "result.bureau": "e45223da087b898380ddba30a3b643ab"
+   },
+   "commitments": {
+    "tool": "186ad4cfe18e7135b996229c814699aeba262811784eb4745b33a3f57ac05c3e",
+    "args": "74575c10223e2c31d04529a56be403e1896abb2e898502eaa093dca268d576e3",
+    "kwargs": "8ccfe43f1877f7893b7001738eef3e93561576703e6ee4e57d4dbbc6ac3141c6",
+    "result.applicant_ref": "f4803dbedb367f70bd47780b2c9495829691da74dd0ed4574668955edaf45898",
+    "result.score": "7c2d744c583e6da547520dcdb1d697216bfef0428b86ea407d5d671aec3238d2",
+    "result.model": "2dc6166c7a93f73edb24b50819edcdedec6f35a797466d31809f344c00e147b9",
+    "result.bureau": "5f61c7a924383851467087a437bf851a5ae467f4392e88028dc77b03614ee2ea"
+   },
+   "hash": "b5ede961fc753c4bd5e7176ed43a4897e811e2b1eb728a1bdd510b3dd042d220"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision",
+   "step": 4,
+   "kind": "http_call",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.666439+00:00",
+   "prev": "b5ede961fc753c4bd5e7176ed43a4897e811e2b1eb728a1bdd510b3dd042d220",
+   "data": {
+    "request": {
+     "method": "POST",
+     "path": "/v1/chat/completions",
+     "query": "",
+     "headers": {},
+     "text": "{\"model\":\"gpt-4o-2024-08-06\",\"messages\":[{\"role\":\"system\",\"content\":\"You are an underwriting assistant. Apply the lending policy exactly, state the decision as APPROVE or DECLINE, and give the deciding factors. Do not infer facts not present in the application.\\n\"},{\"role\":\"user\",\"content\":\"Application and policy: {\\\"application\\\": {\\\"applicant_ref\\\": \\\"app-70255\\\", \\\"product\\\": \\\"unsecured-personal-24\\\", \\\"requested_amount_usd\\\": 18000, \\\"term_months\\\": 60, \\\"stated_annual_income_usd\\\": 52000, \\\"monthly_debt_usd\\\": 1990, \\\"dti_ratio\\\": 0.46}, \\\"policy_excerpt\\\": {\\\"max_dti_ratio\\\": 0.43, \\\"min_credit_score\\\": 620, \\\"reference\\\": \\\"Lending Policy section 4.2\\\"}} Credit report: {\\\"applicant_ref\\\": \\\"app-70255\\\", \\\"score\\\": 604, \\\"model\\\": \\\"generic-risk-v9\\\", \\\"bureau\\\": \\\"sample-bureau\\\"}\"}]}"
+    },
+    "response": {
+     "status": 200,
+     "streamed": false,
+     "media_type": "application/json",
+     "complete": true,
+     "headers": {},
+     "text": "{\"id\":\"chatcmpl-loan-70255\",\"object\":\"chat.completion\",\"model\":\"gpt-4o-2024-08-06\",\"choices\":[{\"index\":0,\"finish_reason\":\"stop\",\"message\":{\"role\":\"assistant\",\"content\":\"DECISION: DECLINE. The debt-to-income ratio of 46% exceeds the 43% maximum (Lending Policy section 4.2) and the credit score of 604 is below the 620 minimum for an unsecured personal loan. The application does not meet current underwriting criteria.\"}}],\"usage\":{\"prompt_tokens\":380,\"completion_tokens\":54,\"total_tokens\":434}}"
+    },
+    "model": "gpt-4o-2024-08-06"
+   },
+   "salts": {
+    "request.method": "3923fc9c798a7b122b861148678b0da2",
+    "request.path": "4e933600418158da93f4776bcc4de6da",
+    "request.query": "f627fcfc950248bf53c19dc390e8caf5",
+    "request.headers": "bf5c7acb0da0f596559ee27b47978cf5",
+    "request.text": "78a7dd8db324a416ea87eae8da4b9fca",
+    "response.status": "1088b641e2e1b681f7cb9038213a6a11",
+    "response.streamed": "8d323dd9cb438b72e18c2503886f4c53",
+    "response.media_type": "a5efa4f2b953be7b504d9daec517e6eb",
+    "response.complete": "19d1e412829be56b9bfea1c3fb50d4f5",
+    "response.headers": "c2689bf3ec80b8576a908b5f4a0a9333",
+    "response.text": "747cffcdd90ed3b35c87da8d3d087158",
+    "model": "76cb3abd7e080da5b387b56e3ed0511f"
+   },
+   "commitments": {
+    "request.method": "de9ecb3bdf6d7b24ef6c641ba3c004f4e13b357228a239722514b52d7a6732c0",
+    "request.path": "70f7828384e9fbd06d06b48ce9f034e059330e252ca52c88b70983467eb0ad9b",
+    "request.query": "d8d6f3c7f378ab78e943b50589e311bcb5b2cb799a09e19c6a2b663b23b71f0f",
+    "request.headers": "f63f3a4087a9029c36986b1b6ecdcb924604d3512e63d1ca8a983483d6f3f4a6",
+    "request.text": "1d184820f7a290977d564f21e48669de5479278127bb6da7a7d213bd83f6bcc9",
+    "response.status": "53dcee31d7817757fbf48ae1f076147c638569d757c7390e56f37f67dc64d2d9",
+    "response.streamed": "2fcf0b1b4036c7a521f8dc2bf260005a5bbb4d0fed0b464f66c03a7c5aeb721d",
+    "response.media_type": "d26b1069ad8f704d96df30c2e33512d1d4c7007e268dbd21872d3ca2fd245e02",
+    "response.complete": "349e11cbaf68502dc36ba530ec71c0646fe81290ae3bce4fbd9d8d4d80b9e410",
+    "response.headers": "09dcd21b0fbf26171ea093ffdb03e7064742200a6b217b003312a7ee5e97de39",
+    "response.text": "1422eea0f76d384650ed802d8d214d47b5005fa68f446fc485b743b41bb20564",
+    "model": "8a7c94308b4ccb90ccf002755228f71e0febbdf4c8f7b564d31dfb20aecc9449"
+   },
+   "hash": "391e10b6baf7f7d251b79b8e90ea793d3ef35f5066a95a5b407a90b98dee6d84"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision",
+   "step": 5,
+   "kind": "human_decision",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:22.695265+00:00",
+   "prev": "391e10b6baf7f7d251b79b8e90ea793d3ef35f5066a95a5b407a90b98dee6d84",
+   "data": {
+    "actor": "loan-officer:reviewer-4471",
+    "decision": "uphold",
+    "reason": "Manual review confirmed DTI 46% over the 43% policy maximum and score 604 below the 620 floor; the decline was upheld under section 4.2 and the adverse-action reasons were recorded.",
+    "binds_step": 4
+   },
+   "salts": {
+    "actor": "56a999d6a4cf33bd83b9a8f537ab308e",
+    "decision": "2bd2acc96fa9788539a0f92e6e74a506",
+    "reason": "2f4452cfcd87dc58d9405d6fa8ae01d6",
+    "binds_step": "2149b17750fc279f53f47ceb03bfdc37"
+   },
+   "commitments": {
+    "actor": "685519516d5cbe434453c7072c7acd83e783881c28c6f53e6b6f8544633e04a5",
+    "decision": "3a90b5745fab87e35151ceb226830d4e0b9ba526b1cb96e46b977fc383ed1718",
+    "reason": "a63be76d81dec664634af81c12ff626fabd1706465b38b17cb38db7cf7c2c597",
+    "binds_step": "1cb4efac00487c85d4990375a117ab6b99b4b83b005fc7b917aae0632af32433"
+   },
+   "hash": "13014b721d00eb151c81d17bfc91cccc5410fa30ba48f9ebb6de18f6e96956db"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision",
+   "step": 6,
+   "kind": "decision_record",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:22.710999+00:00",
+   "prev": "13014b721d00eb151c81d17bfc91cccc5410fa30ba48f9ebb6de18f6e96956db",
+   "data": {
+    "retention_deadline": "2028-10-04T08:54:22.710879+00:00",
+    "retention_basis": "ECOA/Reg B adverse-action record retention (illustrative)",
+    "output_flags": {
+     "is_automated_decision": true,
+     "is_adverse_action": true
+    },
+    "reason_codes": [
+     "DTI_OVER_MAX",
+     "SCORE_BELOW_MIN"
+    ]
+   },
+   "salts": {
+    "retention_deadline": "2761ed65ec00df29078332e018402000",
+    "retention_basis": "6f404ecf5af89b9a51bdb4fab8cca47b",
+    "output_flags.is_automated_decision": "d2887287abb457cad42d178a95af51a5",
+    "output_flags.is_adverse_action": "428366b5f9983a5be7455761dba1d7e5",
+    "reason_codes": "dd9872da4ccc7bec40010ad54b6d4ef3"
+   },
+   "commitments": {
+    "retention_deadline": "970742d5d5bcbbc558f8e6887ce2bbdfa4a6d8ae08b7bf387d86696f72cecfaf",
+    "retention_basis": "e39a539d65ad575a9d154a3779176bfaf30e1138405175bb163e3de49dc34cc6",
+    "output_flags.is_automated_decision": "85c8e46793d887050d375ec58265ae4b311491a9be3ac145116c6a6b1e30381f",
+    "output_flags.is_adverse_action": "4883d3dd513ef44e983e0356a6317f344d42dee43b0506bfdc429428a96c3df4",
+    "reason_codes": "171552d9ccf219ad688e0ae50f65ddeb7c88c978613756667f82bb3be9779624"
+   },
+   "hash": "98426e91be2f821065bb2b505666755a8265080d7c45fed7c3b07336ff49a03e"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision",
+   "step": 7,
+   "kind": "marker",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:22.725218+00:00",
+   "prev": "98426e91be2f821065bb2b505666755a8265080d7c45fed7c3b07336ff49a03e",
+   "data": {
+    "note": "The adverse-action notice was generated and mailed to the applicant by the downstream fulfillment service; that step is outside BitExact's capture boundary and is recorded here as a known gap."
+   },
+   "salts": {
+    "note": "09a543286c5d74b306dc5626035a2fa7"
+   },
+   "commitments": {
+    "note": "d05f8bae54c0864ce7e838b695a36aea21e8714a849c2ee4ccbc55bc920d5f15"
+   },
+   "hash": "acafac59ac4b2b1e4127147167ca159c255a35ae604f1317243f24fbf202e175"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision",
+   "step": 8,
+   "kind": "marker",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:22.740234+00:00",
+   "prev": "acafac59ac4b2b1e4127147167ca159c255a35ae604f1317243f24fbf202e175",
+   "data": {
+    "note": "Seeded sample: the model response was served from a fixture, not a live provider call. The recording, chain, and seal are real; the model's answer is illustrative."
+   },
+   "salts": {
+    "note": "a485760420e5c7e74c94859c4dd27a60"
+   },
+   "commitments": {
+    "note": "e0ae22b6f737f62b096b98d67b4edcf4239424641c2c0f5711549869cf686204"
+   },
+   "hash": "5b4e5ca4c25f9485c694bce0b51c3c33f19a4dc694dd9ff8ee6c905b6910e066"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "adverse-decision",
+   "step": 9,
+   "kind": "run_end",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.912924+00:00",
+   "prev": "5b4e5ca4c25f9485c694bce0b51c3c33f19a4dc694dd9ff8ee6c905b6910e066",
+   "data": {
+    "steps": 10
+   },
+   "salts": {
+    "steps": "c82a3d9f3fdae75b4cd2eb1623f56308"
+   },
+   "commitments": {
+    "steps": "5cf138dc5a705774d325e5c8f1040fa4e9ca5e9ce959a19272c660f4488fe08b"
+   },
+   "hash": "02768dbef736bfb3d8200f93dcb474a77bc1757419804130623c467659b3c5ab"
+  }
+ ],
+ "chain": {
+  "head_hash": "02768dbef736bfb3d8200f93dcb474a77bc1757419804130623c467659b3c5ab"
+ },
+ "checkpoints": [
+  {
+   "run_id": "adverse-decision",
+   "seq": 0,
+   "steps": 1,
+   "head_hash": "b39206d2f4d313b8e5faaaf172492c5c5448a9b535f7f92d69259a1c62e2d317",
+   "prev_checkpoint": "0000000000000000000000000000000000000000000000000000000000000000",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.394160+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "5eddfca59bb4f113a10a8b6807f5e55f9b4488c58be255c9d2c24b1f2e69be93278f1f2e4714e303543548bbf4723da24b10ba9890f47c15c8a3228201166d07"
+  },
+  {
+   "run_id": "adverse-decision",
+   "seq": 1,
+   "steps": 2,
+   "head_hash": "6d0312d20f2b138a008e1db8dd456b6b761f60399e7b9aeba6ccd4729a2e9885",
+   "prev_checkpoint": "3c338d08b35b430913efa160d1cf2fc3a55021f84ebc5b5c49c84f8ea3abb5e9",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.414555+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "02dc91738cd883a8bb59e9a6551926898f22d8094e136e05549aa9e12c1cb65e384b9b3074f926f33ad7f9805ae97a7f06be6268568cd12360a5c39ff9f54c01"
+  },
+  {
+   "run_id": "adverse-decision",
+   "seq": 2,
+   "steps": 3,
+   "head_hash": "85c366d110b20518f0fe4a60a3a85d3f7b92689f2b380f4eb1267ce3de3a288e",
+   "prev_checkpoint": "8885ade49cd1291b3ffb715cd7251dbcf859c27cc6013009774962fd196b69e0",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.433534+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "2170fce179ed5c18675cecc29060d99e4b8f8769b469e85bf23b2f419c641f692859e6dc63c983c994cb3371338e4890ee8c611f58299057c922c882c8d39b01"
+  },
+  {
+   "run_id": "adverse-decision",
+   "seq": 3,
+   "steps": 4,
+   "head_hash": "b5ede961fc753c4bd5e7176ed43a4897e811e2b1eb728a1bdd510b3dd042d220",
+   "prev_checkpoint": "66ecc05ae61fe7af39f4b21f47f231e313c3b0072113089731c413e39258f71e",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.448430+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "c9d26db1230bda68cd71a6560e1a1d31e10326d7ebaba4daa2a4465cb78ad822ba021d4c31ce05ed7678507c87ee13a56395c7fbbc4bfd980ab504e768ea360d"
+  },
+  {
+   "run_id": "adverse-decision",
+   "seq": 4,
+   "steps": 5,
+   "head_hash": "391e10b6baf7f7d251b79b8e90ea793d3ef35f5066a95a5b407a90b98dee6d84",
+   "prev_checkpoint": "22f86f5b3fd0a9884a86fecf32aa8f469c411e26bc59852d04174377ea6778e9",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.676668+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "0ae4635e8ad37f3c6d5bb0f1a307ef6c98dceb4dd90efc0c205f94a226331568f8639a42c75a524f6761c21f1f63d97bc68740798d9953023362a12a06349201"
+  },
+  {
+   "run_id": "adverse-decision",
+   "seq": 5,
+   "steps": 6,
+   "head_hash": "13014b721d00eb151c81d17bfc91cccc5410fa30ba48f9ebb6de18f6e96956db",
+   "prev_checkpoint": "adf91a773958bfdee1394a8978e15477cb692dee7432b183232172c464062cdb",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.706562+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "cc060b9281aa5d068dd12711e03cc382db00411f27f499535813f6cf61b054eb754d4ada9741ac8ac00075f9cf460ede1db2b136de8424c9ba3801e2e7a5ad0c"
+  },
+  {
+   "run_id": "adverse-decision",
+   "seq": 6,
+   "steps": 7,
+   "head_hash": "98426e91be2f821065bb2b505666755a8265080d7c45fed7c3b07336ff49a03e",
+   "prev_checkpoint": "3ebbc83a536ba9f44c9a123d79d651a3d7a9467dc8506db0a7227587cb246cfc",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.720966+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "1579d149d860f94c70454c553cd6e1ccce33c5e79fa818261abba9a42c8f47b470bc32c3da7e85f93ab650e1ff7165b05c2f6817f5bb8cef9ab718a7f622b104"
+  },
+  {
+   "run_id": "adverse-decision",
+   "seq": 7,
+   "steps": 8,
+   "head_hash": "acafac59ac4b2b1e4127147167ca159c255a35ae604f1317243f24fbf202e175",
+   "prev_checkpoint": "188067e60551e0702fe7075c3407b396808cf17602715ba1ae696d2b5f5cfde8",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.735641+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "1bf23c182d93f2007fdac0b63aa00dad2bc4bc2bcba18620767ee98c89c3ede0cc6f3da5ecd751331dd93b4b89213047d848307ee3b6cf78e624e57ef1c1cf0b"
+  },
+  {
+   "run_id": "adverse-decision",
+   "seq": 8,
+   "steps": 9,
+   "head_hash": "5b4e5ca4c25f9485c694bce0b51c3c33f19a4dc694dd9ff8ee6c905b6910e066",
+   "prev_checkpoint": "3588514448fcf8f74c98e98916391cabdad46254a78ac2f23849e405d042810b",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.750488+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "a98a51e7559f474e2352817edffe253d3c8def0a03fefd4c1e3805fc8ac7ff5d8bd3782a8b2faa8b00cc61ed5ba06e9f834b991b390b1d5ad65798f4be5cf30e"
+  },
+  {
+   "run_id": "adverse-decision",
+   "seq": 9,
+   "steps": 10,
+   "head_hash": "02768dbef736bfb3d8200f93dcb474a77bc1757419804130623c467659b3c5ab",
+   "prev_checkpoint": "483b751749443856915c837e160bd5f3e1d2ee5f486bfa74dfb97eb39e6ea240",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.925717+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "0ff6d4f545e153699b7512b40f248dc3ce4c09273d8cf36d04c01ad87df9e63dad5535f53d2c55f02a7fa4c92faac244690a19d85165a8fd522a0e02b63bcc05"
+  }
+ ],
+ "license_cert": {
+  "format": "bitexact-license/1",
+  "licensee": "Golden Fixtures",
+  "expires": "2099-01-01",
+  "tier": "fixtures",
+  "license_id": "LIC-3218033594ce",
+  "entitlements": [
+   "anchor",
+   "evidence",
+   "fork",
+   "governance",
+   "lifecycle",
+   "otel",
+   "record",
+   "regress",
+   "replay"
+  ],
+  "signature": "7a3f806e437afdb5e078668c41ca1c796d31d75739f9da87e5fed0114281f4a35d002b7069c0db52c0048cb7833a29c671e9ff6ed5bae57745a5ec4413ad4703"
+ },
+ "signature": {
+  "algorithm": "ed25519",
+  "key_id": "94a8b44c5cfbd4f6",
+  "public_key": "c16f1a3e575779b066c54dcff62214e6472fd0d313bdc55167f699566b19ef9a",
+  "signed_at": "2026-09-05T08:54:23.532944+00:00",
+  "signature": "f68b60a26e0015141d986338c8866b5e8427f6d47646fa1789d6a9077277038709e2b125c2fb3d1e2277404b8f1bad05305514abae9e2fdfbc222a727a59c70e"
+ }
+}

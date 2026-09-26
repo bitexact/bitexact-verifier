@@ -1,0 +1,240 @@
+{
+ "format": "bitexact-bundle/1",
+ "run_id": "golden-accountable",
+ "entries": [
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-accountable",
+   "step": 0,
+   "kind": "run_meta",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:21.973802+00:00",
+   "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+   "data": {
+    "python": "3.14.4",
+    "platform": "win32",
+    "bitexact": "1.5.0",
+    "watermark": {
+     "license_id": "LIC-3218033594ce",
+     "scope": null,
+     "image_digest": null,
+     "fingerprint": "fp:7addcff2e92ba624a5991d44"
+    }
+   },
+   "salts": {
+    "python": "09911ab1f3e8b2a3c1fbd631e3fe711b",
+    "platform": "3ac4eeef551e1a01ae1b7382c3e72c93",
+    "bitexact": "24e6455314315fb6e0283f5ef2444d96",
+    "watermark.license_id": "b55e1dc0d1883db80b07626f59e94aa8",
+    "watermark.scope": "95138957d1bedd6ffef856c3b4f5bb5a",
+    "watermark.image_digest": "e6eb8a6d44c81750434b78ff3cde7c7d",
+    "watermark.fingerprint": "9635618bd1bb1f1c9d3177e79bee1b5d"
+   },
+   "commitments": {
+    "python": "ea7f74e07fe68e4cc6e2401e6c33bfabd2a77f9c0cac7d2b32e0ba30f1353563",
+    "platform": "89ddbd1a3f2207db303d3ab02b1403f224807f2c0880bac8a818676402ea6b67",
+    "bitexact": "23a3e8d2dcd5a0e48c4439b38ec2993eecaf5a263f82443558148a42d171a807",
+    "watermark.license_id": "8d99facdae489ac1dd5c2325a622d197744bc68ba5873114e53ac8f5302bcec6",
+    "watermark.scope": "95f66e9aa0538dbe817816056c8a23edbbd88a07ffa1b8c02ee4b6df052f6cad",
+    "watermark.image_digest": "34763fc165d1cd7688f8130651fc5dc73da54b64bf39d5e718745c0644f4a982",
+    "watermark.fingerprint": "f12b3dad4a54fbc9aead79cff95daee31ad94d2552f3639aa02622cab4d3c835"
+   },
+   "hash": "18673789f5f4a7b088c3fa53bf9ca157a2ddc5993fad4d1ae64c9e61e32fcc55"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-accountable",
+   "step": 1,
+   "kind": "tool_call",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:21.991593+00:00",
+   "prev": "18673789f5f4a7b088c3fa53bf9ca157a2ddc5993fad4d1ae64c9e61e32fcc55",
+   "data": {
+    "tool": "lookup",
+    "kwargs": {},
+    "result": {
+     "temp": 21
+    }
+   },
+   "salts": {
+    "tool": "08aa06acb8ba4dcea3dc5db15b75f147",
+    "kwargs": "323b617717afcaa34657dfad6dedfb8b",
+    "result.temp": "1ea9469490080fd7d95a30b721625141"
+   },
+   "commitments": {
+    "tool": "c586dd5c57bc6538a898f8857015c645e7b634e1ca6d135426ebf4c1bc190f4f",
+    "args": "c3df610f6b529faa83140936ecd9aa651a9ac817428e4e8a5b458ef69a0bf5bc",
+    "kwargs": "81992dd38b534bdf4ece6e83f830dcfda4e20b6a78fd3c467cf6b29cc53ccc27",
+    "result.temp": "0c9b085eb0aad06e7eaf9ac811d3534cacde1fb0369ef5bed10f5f7b335f6e3f"
+   },
+   "hash": "635057f909364fe4b998bcf9cedb71b059471e18f84dc4add79740debc227c58",
+   "redacted": [
+    "args"
+   ]
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-accountable",
+   "step": 2,
+   "kind": "tool_call",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.007099+00:00",
+   "prev": "635057f909364fe4b998bcf9cedb71b059471e18f84dc4add79740debc227c58",
+   "data": {
+    "tool": "lookup",
+    "args": [
+     "Lyon"
+    ],
+    "kwargs": {},
+    "result": {
+     "temp": 21
+    }
+   },
+   "salts": {
+    "tool": "5d2c90f1134ea2e58579e1a928e10bc0",
+    "args": "edbc652546177883d0af4352d4aa199a",
+    "kwargs": "02cdf05f61282612d0d466311fac4a6c",
+    "result.temp": "1418cf8621e251e6ee0313d527e8337d"
+   },
+   "commitments": {
+    "tool": "e11422767ad06cecc6338881807f33bd11782595eabf3a2929b140de2d073906",
+    "args": "dd804fe99d41d8d49bf0b63c715bcef70c3b1ce1d010285c2d5c4c947d2fa18b",
+    "kwargs": "0d22de043c89b20bd79717345955a09dc5f312d899185f40a5b198309907bbe2",
+    "result.temp": "1571c9c1155d07109090950c8f18e88c63359bc097f9b94f9b2833d61adf11fb"
+   },
+   "hash": "99a1e43b9423f8d2732f890dc17d7af064c0a468cdc818d7001c903db585a21c"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-accountable",
+   "step": 3,
+   "kind": "run_end",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.021488+00:00",
+   "prev": "99a1e43b9423f8d2732f890dc17d7af064c0a468cdc818d7001c903db585a21c",
+   "data": {
+    "steps": 4
+   },
+   "salts": {
+    "steps": "a2f7453a40f393c34943df224400a89f"
+   },
+   "commitments": {
+    "steps": "f9e7caa57b3aed00d6a8fdd82ee99cdf6484e9e783a5df582dd99d34d09a93ed"
+   },
+   "hash": "bd8c31c15448674a44eeb1703e4c051f6e331ebf3550a13f6e8e440c775cc50d"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-accountable",
+   "step": 4,
+   "kind": "redaction",
+   "prov": "asserted",
+   "ts": "2026-09-05T08:54:22.057847+00:00",
+   "prev": "bd8c31c15448674a44eeb1703e4c051f6e331ebf3550a13f6e8e440c775cc50d",
+   "data": {
+    "fields": [
+     "1:args"
+    ],
+    "by": "counsel"
+   },
+   "salts": {
+    "fields": "23cdf9787f84380cbe228ae39e79eae5",
+    "by": "3de58221ab82230404abe6900a9fd648"
+   },
+   "commitments": {
+    "fields": "2493392a855080ae2d639ba45713bc224c6d2e698bee353796a78a61c1478ecb",
+    "by": "ea666e6e65c4f61b3e5d0f47b3f3d7c79bb6de66b1d0df3e0052fcc60524496d"
+   },
+   "hash": "baffa3bb3b241808a7c9c98537e3d5ff6d77f6bc75840b31cc6e54bb8d2bc514"
+  }
+ ],
+ "chain": {
+  "head_hash": "baffa3bb3b241808a7c9c98537e3d5ff6d77f6bc75840b31cc6e54bb8d2bc514"
+ },
+ "checkpoints": [
+  {
+   "run_id": "golden-accountable",
+   "seq": 0,
+   "steps": 1,
+   "head_hash": "18673789f5f4a7b088c3fa53bf9ca157a2ddc5993fad4d1ae64c9e61e32fcc55",
+   "prev_checkpoint": "0000000000000000000000000000000000000000000000000000000000000000",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:21.981353+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "782bde2112e5315886ff2124b5dc63fdba95677eb7e91219a0e9b9917dd22e0fc9a8abe8e761fd13f89402101019dd011d710421c71f808392bc18ebf51d1303"
+  },
+  {
+   "run_id": "golden-accountable",
+   "seq": 1,
+   "steps": 2,
+   "head_hash": "635057f909364fe4b998bcf9cedb71b059471e18f84dc4add79740debc227c58",
+   "prev_checkpoint": "8e75d31ba6c05257d2620df8b8e209083ceb09c658af68809ae1f18fd94c29a4",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.002415+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "5e85f4a2f7cdba5aacb785fc3adb91d4730eb1e91e999eb872171f66f90017f8d2b725eb5bf486ded695cf643df59c417a00c2754fcd5dfcd909348f60d86f0b"
+  },
+  {
+   "run_id": "golden-accountable",
+   "seq": 2,
+   "steps": 3,
+   "head_hash": "99a1e43b9423f8d2732f890dc17d7af064c0a468cdc818d7001c903db585a21c",
+   "prev_checkpoint": "1405d5a9013754143b9abde6e8cc47e1ca4e5bc856e27709cd1e7139d76634cb",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.017060+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "8054a8d45e2f4238c1366c6dd7de5807d5e2a8c2ab9667540fdad24b320f5ed220b3637fc51f2e28ae51b6e1e4d0d3e87009929f33e5b620f2dfceee271dae06"
+  },
+  {
+   "run_id": "golden-accountable",
+   "seq": 3,
+   "steps": 4,
+   "head_hash": "bd8c31c15448674a44eeb1703e4c051f6e331ebf3550a13f6e8e440c775cc50d",
+   "prev_checkpoint": "25a0b5a7bd36675aa1846771450dcf634b40a67764ca33d49d291f3ec695855d",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.031602+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "c32afe40efc6d88b955b38d5c94c441145c7b0e6035535891d7f97a2d6670036c20b3d1025d90db9be66a94e6239628d64f730b16cb354b69e928bae787b8b0d"
+  },
+  {
+   "run_id": "golden-accountable",
+   "seq": 4,
+   "steps": 5,
+   "head_hash": "baffa3bb3b241808a7c9c98537e3d5ff6d77f6bc75840b31cc6e54bb8d2bc514",
+   "prev_checkpoint": "8ded7018e229ca68f30d9a19238e1e8986dc378caff95f41b7f32962368a027b",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.065035+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "69521956046ec52a30b785ecc2436e3d96087475ac57af5de90ce0b5605f855a41381bdbabc7698262fff40117448927882452aa4d82e0ad55c534d05852c003"
+  }
+ ],
+ "license_cert": {
+  "format": "bitexact-license/1",
+  "licensee": "Golden Fixtures",
+  "expires": "2099-01-01",
+  "tier": "fixtures",
+  "license_id": "LIC-3218033594ce",
+  "entitlements": [
+   "anchor",
+   "evidence",
+   "fork",
+   "governance",
+   "lifecycle",
+   "otel",
+   "record",
+   "regress",
+   "replay"
+  ],
+  "signature": "7a3f806e437afdb5e078668c41ca1c796d31d75739f9da87e5fed0114281f4a35d002b7069c0db52c0048cb7833a29c671e9ff6ed5bae57745a5ec4413ad4703"
+ }
+}

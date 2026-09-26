@@ -9,24 +9,38 @@
    "step": 0,
    "kind": "run_meta",
    "prov": "observed",
-   "ts": "2026-08-15T21:52:36.985675+00:00",
+   "ts": "2026-09-05T08:54:21.782441+00:00",
    "prev": "0000000000000000000000000000000000000000000000000000000000000000",
    "data": {
     "python": "3.14.4",
     "platform": "win32",
-    "bitexact": "1.5.0"
+    "bitexact": "1.5.0",
+    "watermark": {
+     "license_id": "LIC-3218033594ce",
+     "scope": null,
+     "image_digest": null,
+     "fingerprint": "fp:7addcff2e92ba624a5991d44"
+    }
    },
    "salts": {
-    "python": "308fe2e720ce76740695c7c41248adb3",
-    "platform": "f6c202c6e34003eba356dd34c84fe7a9",
-    "bitexact": "fc17068b2cd48be4462fb3f313bbfcae"
+    "python": "2604a4f1913267f8e1f216038d65783c",
+    "platform": "706118660ce34d03e4b287b830c9b499",
+    "bitexact": "d4344239a7ebf88bb4acff10b3f7e5c8",
+    "watermark.license_id": "ae3425ad46f641e9936e2008ff977fb0",
+    "watermark.scope": "6b75d4b966ab2a6226971d4ebdec991b",
+    "watermark.image_digest": "d5a94d19c60ff780ee73cb01d55b930b",
+    "watermark.fingerprint": "003fa5114209e7a8272560d33efdf882"
    },
    "commitments": {
-    "python": "09edcd6b64ef224203e160b7afe50a4826f6f23fab57776c07c093b70555d29f",
-    "platform": "e664441a5c48265bcc45e5d1450547e14f073e66dc5cd05db4b87f82cdc92749",
-    "bitexact": "06326bab8d0bda418d823df562c0baed1d1b2601370bee37910259dd76e7ba1f"
+    "python": "b06e40dd85895af62ff8df10d192b3f45755e8c6e419230212868d4873a91b83",
+    "platform": "533f8e9933ab9ee0492bb65add5e497015fe0837b2c39f1b1c7867889a4f7fe0",
+    "bitexact": "a68eb603b5f84b2d45a65b3f025db5666f63e03d299b16662178b63cfc0e24ad",
+    "watermark.license_id": "174f9c3ab30c3aae65eac07300971a8886c382438515a472a3d005dce3237091",
+    "watermark.scope": "32e5dd5e7e4b1edaafd24348806626309077562f90f1f9780ffdfb479069bc30",
+    "watermark.image_digest": "c1faf07bab508b018435dcb53240ab21d7e1b9230dd091151e5bbd338c91a568",
+    "watermark.fingerprint": "1165d87c917df5cb6c8077f30a46000b9e6794f0196be0de34b2bd02cb954f63"
    },
-   "hash": "0f7c83321c00a0c87d05d9da3af1cbf955f890657adff3a73c30db2681445368"
+   "hash": "564a7ba6f3993a67863a78d5161dc6314b5b7d3a49acc01a08bf9160a8b79a9b"
   },
   {
    "v": 2,
@@ -35,8 +49,8 @@
    "step": 1,
    "kind": "tool_call",
    "prov": "observed",
-   "ts": "2026-08-15T21:52:37.055160+00:00",
-   "prev": "0f7c83321c00a0c87d05d9da3af1cbf955f890657adff3a73c30db2681445368",
+   "ts": "2026-09-05T08:54:21.795570+00:00",
+   "prev": "564a7ba6f3993a67863a78d5161dc6314b5b7d3a49acc01a08bf9160a8b79a9b",
    "data": {
     "tool": "lookup",
     "args": [
@@ -48,18 +62,18 @@
     }
    },
    "salts": {
-    "tool": "fcb42923e48491b93c1b603fbb29edc0",
-    "args": "02aa6101d4f7d9874a500927ebaeaca2",
-    "kwargs": "b0c1160fc120c0b042f9f68eb460d09c",
-    "result.temp": "358d1cbf1f2e9e6806b10013181e013a"
+    "tool": "58e8bc18e7f1cb3b5dd168f670ce7c7c",
+    "args": "61c8c7c81ad07120520f0e1be02ab8f2",
+    "kwargs": "d41db9d1356e18eca0296d088d387383",
+    "result.temp": "11a1205707b6d2b2b704509d403cb003"
    },
    "commitments": {
-    "tool": "0d84d51a751945e640f2ad47e14e8f3dc680b24bedce1106e8d247c73b17fc59",
-    "args": "56a5db5c4aab2349dc24c430642f0ffb6c04a82618e96aae9e46a3b5af9d8461",
-    "kwargs": "4247ea9960a7522b89fbd5743296aac6eeb61e1100a48161a76573a6d36de71c",
-    "result.temp": "42480f5f7fd67fa7145ea96bb6b59643bf32bfdd4d4d81d75614686c2cc408b3"
+    "tool": "7cda6fc868a9c5f97cc3729860ee0a0321fd0b9929fd05c96e4a0d1cc69604fe",
+    "args": "c1a5d5b5e675d7b1b99fe7890e1f447dfd0aeb7e8b586d4e9725e8cb51f250fb",
+    "kwargs": "c201538b2db521c19b95d05064990e2620aa4c91454fc4d4c48892044ae84992",
+    "result.temp": "6e15c3ec5b65d129309d3edff07c7649c8bf79ceff4eef20722ca0acd9a8c2af"
    },
-   "hash": "8160c11f50d8b8c856e2c0ec435d725edeccdeadac1a47cf372880658e35e0ed"
+   "hash": "76223107e65e350822a53194769518c136b6914c2773f9cd2af64ed1a8f62a68"
   },
   {
    "v": 2,
@@ -68,8 +82,8 @@
    "step": 2,
    "kind": "tool_call",
    "prov": "observed",
-   "ts": "2026-08-15T21:52:37.099433+00:00",
-   "prev": "8160c11f50d8b8c856e2c0ec435d725edeccdeadac1a47cf372880658e35e0ed",
+   "ts": "2026-09-05T08:54:21.811543+00:00",
+   "prev": "76223107e65e350822a53194769518c136b6914c2773f9cd2af64ed1a8f62a68",
    "data": {
     "tool": "lookup",
     "args": [
@@ -81,18 +95,18 @@
     }
    },
    "salts": {
-    "tool": "722ca78d209b62373a9d1143f2c4f66c",
-    "args": "140ae1f8495266707f2114bf264667b9",
-    "kwargs": "bdbd36064629eccc05543b562ed55659",
-    "result.temp": "48ffcb19b6b8735686d91b3c12fc6bd9"
+    "tool": "b37a1cd2367bd6149c5c1eb4109b1188",
+    "args": "059175b00cf1ededb6ca6479063a837e",
+    "kwargs": "7ab6bb5d8f14791a7c9ff8b63622cc9d",
+    "result.temp": "a9c1f9d48c06e4ae45c86687ee228547"
    },
    "commitments": {
-    "tool": "deeb10f5388b16701bb8afa45d89e6314509d16074da2043575b95434203b2c8",
-    "args": "721e5538fcb10cc01def264c1b055d96520a5f29ff8ff5c1b6d666d285f20c3d",
-    "kwargs": "4063b7c4465a73481619036fd196f145c87327fc3c18135261852e0f9e023dd1",
-    "result.temp": "0870e6705a9a90b2fc914b9b88bc4da1ec0d3cfe1377829623f77b5655cc0500"
+    "tool": "4930f7cb4cc60300def9b6da9768f58a18a044f8b875690e006d7ad904328c58",
+    "args": "1689a872fd44165e284b5d172a8710163c2cd7367df98cfe1d84c6543f2dd786",
+    "kwargs": "435c151b8367b2da006422371f1bed32f334f911a340fce98d96450955816c7d",
+    "result.temp": "1ca952266c4ba01b54cde8db7ba373446b76c1982e22959800fddcaf5bf30854"
    },
-   "hash": "13a815662ef557653ecbb1d4a6717def8c2d68bab86511aee07bcb70296a4da1"
+   "hash": "31ac7452d6d7bed1a824b24ad9b53b84f7f56d8c0f6882fa3f4fa3bb55ab4cce"
   },
   {
    "v": 2,
@@ -101,90 +115,97 @@
    "step": 3,
    "kind": "run_end",
    "prov": "observed",
-   "ts": "2026-08-15T21:52:37.140316+00:00",
-   "prev": "13a815662ef557653ecbb1d4a6717def8c2d68bab86511aee07bcb70296a4da1",
+   "ts": "2026-09-05T08:54:21.826573+00:00",
+   "prev": "31ac7452d6d7bed1a824b24ad9b53b84f7f56d8c0f6882fa3f4fa3bb55ab4cce",
    "data": {
     "steps": 4
    },
    "salts": {
-    "steps": "ab80593fe83893aa6a300f2fe2b8b009"
+    "steps": "eb3397d035899ee0fdfb70c400150ce6"
    },
    "commitments": {
-    "steps": "ded46555ec8e65ed752ed11b440728d7f1b169973b794ecc9ad017c00977e3d6"
+    "steps": "4d68c0f9a8ceaf9492985e726421a534fc1bbf482aeeb4ec42c79566f7ddbf5b"
    },
-   "hash": "a2475e0c7dd50e0d38ea13211b198241d10c5bbc489a5eba3c3a3f171439d901"
+   "hash": "54e89ba2b668cf79ca3cbcf1236c6519f794c7a58f7514ade3791f0114e064f4"
   }
  ],
  "chain": {
-  "head_hash": "a2475e0c7dd50e0d38ea13211b198241d10c5bbc489a5eba3c3a3f171439d901"
+  "head_hash": "54e89ba2b668cf79ca3cbcf1236c6519f794c7a58f7514ade3791f0114e064f4"
  },
  "checkpoints": [
   {
    "run_id": "golden-run",
    "seq": 0,
    "steps": 1,
-   "head_hash": "0f7c83321c00a0c87d05d9da3af1cbf955f890657adff3a73c30db2681445368",
+   "head_hash": "564a7ba6f3993a67863a78d5161dc6314b5b7d3a49acc01a08bf9160a8b79a9b",
    "prev_checkpoint": "0000000000000000000000000000000000000000000000000000000000000000",
    "alg": "blake2b-256",
-   "key_id": "cc6e6849cc98b3af",
-   "ts": "2026-08-15T21:52:37.009767+00:00",
-   "public_key": "20a5c5b2cb1076830e4b21adf3a70bc4c90d3ce5a3ae29f901db49316bdd1018",
-   "signature": "17d0d971f27c412957522b1f45472222f589d85ec5625a1e6359e4542bcec108092fcefac1ac4119fd809ab9d6dcaf7dfa961b70bd7885c5f8c4cee7f1f8ed0b"
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:21.789163+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "e7f80a9b055bccb1b705696b0356b685d889155889fc380c94c179ae9bfc14915b2cf6014fcbf160273ef464325f3920c5d03f45e825b5c18b2c8a52bfb00c0f"
   },
   {
    "run_id": "golden-run",
    "seq": 1,
    "steps": 2,
-   "head_hash": "8160c11f50d8b8c856e2c0ec435d725edeccdeadac1a47cf372880658e35e0ed",
-   "prev_checkpoint": "c0ffbb31d651b6fdee713570eb0d714b536dd1bb06f83a955f7d3cc161f363f2",
+   "head_hash": "76223107e65e350822a53194769518c136b6914c2773f9cd2af64ed1a8f62a68",
+   "prev_checkpoint": "4a2ba6b2197823be259c42b6febb12a54c8c559d2d128235b057c223f4edd8f5",
    "alg": "blake2b-256",
-   "key_id": "cc6e6849cc98b3af",
-   "ts": "2026-08-15T21:52:37.074670+00:00",
-   "public_key": "20a5c5b2cb1076830e4b21adf3a70bc4c90d3ce5a3ae29f901db49316bdd1018",
-   "signature": "e333a71027dc3f4d5b40ca63c1ab5c4543c8ea66a4d521b18b5c412f0c093f7f389f5907ff3256ccfd3f9aba9bfe931e2cbcb0e9e72cf790c4d8e15af9150e0f"
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:21.806996+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "35faee3dd2430d5156cea390eb344084de15c8cbd74745a037be1a50fba08028486f3e933bcb3e2dae3d3a6a3b1b7b45fa1f1f630ea3411cda9c6235a55f5003"
   },
   {
    "run_id": "golden-run",
    "seq": 2,
    "steps": 3,
-   "head_hash": "13a815662ef557653ecbb1d4a6717def8c2d68bab86511aee07bcb70296a4da1",
-   "prev_checkpoint": "09a54ba3d235c1b23c48d5f6d66d2c12a60eda3f13526aba05e0f43decfc7ff7",
+   "head_hash": "31ac7452d6d7bed1a824b24ad9b53b84f7f56d8c0f6882fa3f4fa3bb55ab4cce",
+   "prev_checkpoint": "5f98ed7aaf2ed563ee5356f0f70d36baa94c0a97ac410ef0b7453d1106b1589b",
    "alg": "blake2b-256",
-   "key_id": "cc6e6849cc98b3af",
-   "ts": "2026-08-15T21:52:37.119501+00:00",
-   "public_key": "20a5c5b2cb1076830e4b21adf3a70bc4c90d3ce5a3ae29f901db49316bdd1018",
-   "signature": "615f8867051bf9a6853d9579571354f842a485fdfeba75ff2db25eca0209d47066d1768236d3a8c295ab70d64a7d33ff50433b9cc13e053e60241924223a2b06"
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:21.821857+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "b9ff6f5b39cb492c2ecb8fc663b017d13cf9472decae66cb5bda5a3fad42da46b2ccc9d1aeca3d2826f737556006b14a4184bf0c48153b5703eda60ec397c500"
   },
   {
    "run_id": "golden-run",
    "seq": 3,
    "steps": 4,
-   "head_hash": "a2475e0c7dd50e0d38ea13211b198241d10c5bbc489a5eba3c3a3f171439d901",
-   "prev_checkpoint": "d27950c0c835eea0e42de2c5be38708f1d53e647464331cb2dfcf5fc4737b30d",
+   "head_hash": "54e89ba2b668cf79ca3cbcf1236c6519f794c7a58f7514ade3791f0114e064f4",
+   "prev_checkpoint": "f354b625c83111bc7ba6fdc4410f8777cec22222cd0535312e6af3ad90836d70",
    "alg": "blake2b-256",
-   "key_id": "cc6e6849cc98b3af",
-   "ts": "2026-08-15T21:52:37.159987+00:00",
-   "public_key": "20a5c5b2cb1076830e4b21adf3a70bc4c90d3ce5a3ae29f901db49316bdd1018",
-   "signature": "00dd3f483aaf9468770df46f1b3d767e7bfcdbb4800fec4bfb8776643d05b437d4037cce1723ffabc5f6b73e5de1c0205cdcae7e2fe2f3859d4a8ee7a7e3a205"
-  },
-  {
-   "run_id": "golden-run",
-   "seq": 4,
-   "steps": 4,
-   "head_hash": "a2475e0c7dd50e0d38ea13211b198241d10c5bbc489a5eba3c3a3f171439d901",
-   "prev_checkpoint": "5d070fe8e0c051e395527173afb85480b198a6492a924aa6810d91c2772ebf99",
-   "alg": "blake2b-256",
-   "key_id": "cc6e6849cc98b3af",
-   "ts": "2026-08-15T21:52:37.191557+00:00",
-   "public_key": "20a5c5b2cb1076830e4b21adf3a70bc4c90d3ce5a3ae29f901db49316bdd1018",
-   "signature": "0a6c46d88acc0669478ad1ac150591c8e7f432e11be0f61935cf1275639ff57fdb4b5c84bd27a94393522ec8f4b6fd1c461133c17016595d508928898dddb009"
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:21.837094+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "cb3cf515670086a22cf1c991fa1e50b66b1decd8b96d6b26f4841f9d0398a3f4b6eca8455927a77e0c365db7b38cd1381d4ffedbd8dff49edaf1ea7d81c34d0f"
   }
  ],
+ "license_cert": {
+  "format": "bitexact-license/1",
+  "licensee": "Golden Fixtures",
+  "expires": "2099-01-01",
+  "tier": "fixtures",
+  "license_id": "LIC-3218033594ce",
+  "entitlements": [
+   "anchor",
+   "evidence",
+   "fork",
+   "governance",
+   "lifecycle",
+   "otel",
+   "record",
+   "regress",
+   "replay"
+  ],
+  "signature": "7a3f806e437afdb5e078668c41ca1c796d31d75739f9da87e5fed0114281f4a35d002b7069c0db52c0048cb7833a29c671e9ff6ed5bae57745a5ec4413ad4703"
+ },
  "signature": {
   "algorithm": "ed25519",
-  "key_id": "4c65bebbfa7f03e4",
-  "public_key": "5b330c40258cfacecc7a12a61f2c4f0aa25ac0770eb5ff987cdcca49fe9696e8",
-  "signed_at": "2026-08-15T21:52:37.239875+00:00",
-  "signature": "e075570893cb500c4640c2db5e245cfeebffa5158ea7808b85810bbe4501b32fd5fef2756cb6e77ec685521870a6b009d6c9500c9fff2bfdea449af9e2e7bb05"
+  "key_id": "94a8b44c5cfbd4f6",
+  "public_key": "c16f1a3e575779b066c54dcff62214e6472fd0d313bdc55167f699566b19ef9a",
+  "signed_at": "2026-09-05T08:54:21.869232+00:00",
+  "signature": "bc8b1a1e0374731aa0f7116b684dcd56e7f9c2e007780c388dd1dc8239900ce6da4dcceb02c0b93af062f19ef0521ef992314c7ba506c19624f48e239b107600"
  }
 }

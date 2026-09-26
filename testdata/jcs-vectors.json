@@ -1,5 +1,5 @@
 {
- "description": "RFC 8785 canonicalization vectors; every implementation must produce expected_canonical (UTF-8) for input",
+ "description": "Canonicalization vectors for the bitexact-jcs/1 dialect: RFC 8785 restricted to values that canonicalize identically everywhere. Every implementation must produce expected_canonical (UTF-8) for each case in `cases`, and must refuse every case in `refused`.",
  "cases": [
   {
    "name": "integers-stay-integers",
@@ -16,13 +16,6 @@
     "y": -2.0
    },
    "expected_canonical": "{\"x\":1,\"y\":-2}"
-  },
-  {
-   "name": "negative-zero-is-zero",
-   "input": [
-    -0.0
-   ],
-   "expected_canonical": "[0]"
   },
   {
    "name": "small-exponents-es6",
@@ -105,6 +98,24 @@
     "t": "a\ud834b"
    },
    "expected_canonical": "{\"s\":\"\\ud834\",\"t\":\"a\\ud834b\"}"
+  }
+ ],
+ "refused": [
+  {
+   "name": "negative-zero",
+   "input": [
+    -0.0
+   ],
+   "reason": "negative zero",
+   "why": "RFC 8785 errata 7920: the spec's rules emit \"0\" for both zeros, so -0.0 and 0.0 would share one commitment."
+  },
+  {
+   "name": "integer-beyond-double-precision",
+   "input": [
+    9007199254740993
+   ],
+   "reason": "outside the safe integer range",
+   "why": "2**53 + 1 is not an exact double, so a parser elsewhere reads these digits back as 9007199254740992 and canonicalizes different bytes. Integers a double does reproduce, such as 10**18, are accepted."
   }
  ]
 }

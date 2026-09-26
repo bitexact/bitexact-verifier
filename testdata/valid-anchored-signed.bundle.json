@@ -1,0 +1,179 @@
+{
+ "format": "bitexact-bundle/1",
+ "run_id": "golden-worm",
+ "entries": [
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-worm",
+   "step": 0,
+   "kind": "run_meta",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.104066+00:00",
+   "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+   "data": {
+    "python": "3.14.4",
+    "platform": "win32",
+    "bitexact": "1.5.0",
+    "watermark": {
+     "license_id": "LIC-3218033594ce",
+     "scope": null,
+     "image_digest": null,
+     "fingerprint": "fp:7addcff2e92ba624a5991d44"
+    }
+   },
+   "salts": {
+    "python": "ad594d02c8643a3c93e41327875a9c62",
+    "platform": "fb6ff98638ca8e2259d7699509af043c",
+    "bitexact": "e079815b7a0f29b8cc4f859b80aa70ef",
+    "watermark.license_id": "dfe5c7c1cfefaec258b26bd1d62f4a17",
+    "watermark.scope": "ca56de9ba00e484c0bbe8d8b583af899",
+    "watermark.image_digest": "57bf68e5911c54f24c6949c15837989b",
+    "watermark.fingerprint": "7e9994b9a9104ce49cf7b5a309fdeddb"
+   },
+   "commitments": {
+    "python": "eae190a824e4a4d469dd9896aa100807281146a23e1454ab8d7d62a19911e606",
+    "platform": "eabe45959f675d306ea262d2cab96223ee68d4ed2cff0d4d17a8e5bcfc382bd4",
+    "bitexact": "2426011474fdc9e679695992c547c1aeb324ec77e8be94c3d4896552d00b892b",
+    "watermark.license_id": "8f391e8c215e9727aba27ab0a3f071234d9c04037cb27b0272e3554e98f3216c",
+    "watermark.scope": "a2fbff95ef12cb042920e78f521f8447bbcdfa2e973624844ab45db5a78acb7f",
+    "watermark.image_digest": "4e65ca0bae15a4bd9d7ad7d424b97e3f3fe8420d196a10e617f7b92b931480f5",
+    "watermark.fingerprint": "2ef879dde7738428c16e753fd35c3422e9ddcb2527c98bd5472f48c834fd197b"
+   },
+   "hash": "63c2c3086e2a3e14805d9df916028bf099fc43e08171a910481fbd09620279d1"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-worm",
+   "step": 1,
+   "kind": "tool_call",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.122011+00:00",
+   "prev": "63c2c3086e2a3e14805d9df916028bf099fc43e08171a910481fbd09620279d1",
+   "data": {
+    "tool": "lookup",
+    "args": [
+     "Paris"
+    ],
+    "kwargs": {},
+    "result": {
+     "temp": 21
+    }
+   },
+   "salts": {
+    "tool": "5a33810288aa0b0688da7f039c363612",
+    "args": "f3e16a09c49f23971617c5754be93e57",
+    "kwargs": "379fdf893abcdeff91265c5f14e1942b",
+    "result.temp": "7ba8b2ca3eeb926aee5c992da9f7c885"
+   },
+   "commitments": {
+    "tool": "6fa22a81bca64d50a503c6e6cf32e7ecf81b67957cbec164b7ffbbfc5081d83d",
+    "args": "6ed71d4d70044547936e72363583ff861f6ec2c1391795c831c334edbb1fb770",
+    "kwargs": "411eb6efc91a359d2999560bc4dae34d3512df35556b968a8226a454d81a419a",
+    "result.temp": "3e5be0c0ce92306f64eb4fafc511d2d7434472e3b3ec06caa698424386bc81f2"
+   },
+   "hash": "aae235bf8bd4f3b6bc44d2093262ca472a19cecf241ff96c5301ee9de8e1cfe7"
+  },
+  {
+   "v": 2,
+   "alg": "blake2b-256",
+   "run_id": "golden-worm",
+   "step": 2,
+   "kind": "run_end",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.136940+00:00",
+   "prev": "aae235bf8bd4f3b6bc44d2093262ca472a19cecf241ff96c5301ee9de8e1cfe7",
+   "data": {
+    "steps": 3
+   },
+   "salts": {
+    "steps": "1c0a2aed94256b7fec2c378304ec59cb"
+   },
+   "commitments": {
+    "steps": "18ff1eddd852fb4f3e955d233f3abaee87634dbc140eea2b51e81762d58c4e9f"
+   },
+   "hash": "854ad6938f1184e0744bb9241daf3c3c6c32a57b1fed69803c00c5428e7619af"
+  }
+ ],
+ "chain": {
+  "head_hash": "854ad6938f1184e0744bb9241daf3c3c6c32a57b1fed69803c00c5428e7619af"
+ },
+ "checkpoints": [
+  {
+   "run_id": "golden-worm",
+   "seq": 0,
+   "steps": 1,
+   "head_hash": "63c2c3086e2a3e14805d9df916028bf099fc43e08171a910481fbd09620279d1",
+   "prev_checkpoint": "0000000000000000000000000000000000000000000000000000000000000000",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.111637+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "096dacac6c9314e8454ab11a3b65e33430bf187f2d91d868701b1929be14e40ecb992f3a0611d4655c16da3f3af3d528ac0ef9e2ab47a50d13160d28a1934c07"
+  },
+  {
+   "run_id": "golden-worm",
+   "seq": 1,
+   "steps": 2,
+   "head_hash": "aae235bf8bd4f3b6bc44d2093262ca472a19cecf241ff96c5301ee9de8e1cfe7",
+   "prev_checkpoint": "3265d256fc79a5af34b0777af079746bd178b9470507e87b9891e32e2dd97ced",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.132179+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "d036ba1c41527d9620d9c79f7b29c1971a4846b7b16d90af20a9979c839d3f69ecd79a33d8d89d122df54bbb555ecf0b392cdea225a9b8108716e5416debd10d"
+  },
+  {
+   "run_id": "golden-worm",
+   "seq": 2,
+   "steps": 3,
+   "head_hash": "854ad6938f1184e0744bb9241daf3c3c6c32a57b1fed69803c00c5428e7619af",
+   "prev_checkpoint": "bdae7125ce450b886cc0c55220f4ea0d87c2a62f3ef859fa8a7e2bcc51d0a394",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.147707+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "fbde8a52b53817f7d274901f22d241a185a19e07260fcfe871f268b21eb96f278d45ec154439e45ff3962df8a483c97bdc37447742f33a26ad4ad66505c9cf08"
+  }
+ ],
+ "anchors": [
+  {
+   "type": "worm",
+   "run_id": "golden-worm",
+   "steps": 3,
+   "head_hash": "854ad6938f1184e0744bb9241daf3c3c6c32a57b1fed69803c00c5428e7619af",
+   "alg": "blake2b-256",
+   "key_id": "cbf74739c530cca5",
+   "anchored_at": "2026-09-05T08:54:22.173542+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "049ee9d4e9dd8cfa3371cde2de80c610020385801b7599660e5caa57c8eae056e03db5b5e579f4db807b902b710cc0c5d5ac5908e1add8c8e10fbdc90e444702"
+  }
+ ],
+ "license_cert": {
+  "format": "bitexact-license/1",
+  "licensee": "Golden Fixtures",
+  "expires": "2099-01-01",
+  "tier": "fixtures",
+  "license_id": "LIC-3218033594ce",
+  "entitlements": [
+   "anchor",
+   "evidence",
+   "fork",
+   "governance",
+   "lifecycle",
+   "otel",
+   "record",
+   "regress",
+   "replay"
+  ],
+  "signature": "7a3f806e437afdb5e078668c41ca1c796d31d75739f9da87e5fed0114281f4a35d002b7069c0db52c0048cb7833a29c671e9ff6ed5bae57745a5ec4413ad4703"
+ },
+ "signature": {
+  "algorithm": "ed25519",
+  "key_id": "94a8b44c5cfbd4f6",
+  "public_key": "c16f1a3e575779b066c54dcff62214e6472fd0d313bdc55167f699566b19ef9a",
+  "signed_at": "2026-09-05T08:54:22.192817+00:00",
+  "signature": "62d6129909b7b24359b524c3a20a6e5d77adfa057a275f5e5b255a2b8c498cdc1a6c6a1624b576da2891d2f4e521ed3f2f84185ebba1d29e742b8fc13fd06c0d"
+ }
+}

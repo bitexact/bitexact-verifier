@@ -1,0 +1,166 @@
+{
+ "format": "bitexact-bundle/1",
+ "run_id": "golden-sha256",
+ "entries": [
+  {
+   "v": 2,
+   "alg": "sha256",
+   "run_id": "golden-sha256",
+   "step": 0,
+   "kind": "run_meta",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.312596+00:00",
+   "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+   "data": {
+    "python": "3.14.4",
+    "platform": "win32",
+    "bitexact": "1.5.0",
+    "watermark": {
+     "license_id": "LIC-3218033594ce",
+     "scope": null,
+     "image_digest": null,
+     "fingerprint": "fp:7addcff2e92ba624a5991d44"
+    }
+   },
+   "salts": {
+    "python": "3b22f16c257fcb959e166e8505310a5c",
+    "platform": "d5a96ddc4ba4b23e38c4217509765710",
+    "bitexact": "71b1b554429a0831d99bbe30690ab85e",
+    "watermark.license_id": "57557e84be3df3c36309f3ffc088bbf6",
+    "watermark.scope": "c6d664f67e354ca63d040daaa72a6488",
+    "watermark.image_digest": "9dfebdc2ca9b6e3d18bdd95e6e1fbe0d",
+    "watermark.fingerprint": "b00bce6f696d008abd48f1bb3bd9f8e8"
+   },
+   "commitments": {
+    "python": "c3ea9ef593755ce559cec0f9bf0935a69cb2887dc895d3f5b17a1a4ddb086ddc",
+    "platform": "d290ce98e6a65b7ef29f41e434428d2869e475215551c3af0080171609481f63",
+    "bitexact": "c859650926abc638f2e75bbbb1031a582a923877c303229caa27fd2ce6370e4e",
+    "watermark.license_id": "f70729cefecea81398013d7f4d13a3fd3374ac586855a3e44cc6a8a250d2c51d",
+    "watermark.scope": "16e8d9fc58e12f21c6a92c51c26f2ce55aa744e62280d619543c63f3cc9bc13d",
+    "watermark.image_digest": "3c16d7fd4393a4015d8ad1bb55e01c9b049f1e662cb1e605131b243f47d33f1c",
+    "watermark.fingerprint": "239f69aff98b8a5e8e55655268e2e6626aa8291c19c3cc1e10e59f9d5b6b4d00"
+   },
+   "hash": "199c091e2f36355bbaa9585d1754e7adfe8d7be0926d27ad996180243e012128"
+  },
+  {
+   "v": 2,
+   "alg": "sha256",
+   "run_id": "golden-sha256",
+   "step": 1,
+   "kind": "tool_call",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.329707+00:00",
+   "prev": "199c091e2f36355bbaa9585d1754e7adfe8d7be0926d27ad996180243e012128",
+   "data": {
+    "tool": "lookup",
+    "args": [
+     "Paris"
+    ],
+    "kwargs": {},
+    "result": {
+     "temp": 21
+    }
+   },
+   "salts": {
+    "tool": "4e6dc4287d1ffad0278943bc539fc11f",
+    "args": "80a75f9dc278c80d23379cdfc5fa9a10",
+    "kwargs": "7bff83f63a0f812f44c74f17526a585f",
+    "result.temp": "c548c52c593980f345942dc00e7e2719"
+   },
+   "commitments": {
+    "tool": "aa5657bd1ee23b7846860fa7fad5df8dadbfa07ef3ad5c50f4a2da6e16b4dc38",
+    "args": "4d5ea09c6bc3156f68b6237cc3399f9ab055deed5808ba11e3c2496099a72181",
+    "kwargs": "d602b55f4f234b5bc136d3857ea448edfd675ca450d78c3646701836b16f7b8d",
+    "result.temp": "c51679044f52706e8dc2e00d421c06bbe224f113b345f98d9fb57bb1a067fa76"
+   },
+   "hash": "85011584224935860f4ec55e3b6557743d6b72579cf45fea18ad0709b7ec7b74"
+  },
+  {
+   "v": 2,
+   "alg": "sha256",
+   "run_id": "golden-sha256",
+   "step": 2,
+   "kind": "run_end",
+   "prov": "observed",
+   "ts": "2026-09-05T08:54:22.344467+00:00",
+   "prev": "85011584224935860f4ec55e3b6557743d6b72579cf45fea18ad0709b7ec7b74",
+   "data": {
+    "steps": 3
+   },
+   "salts": {
+    "steps": "ed7a01570ea1360a4fa9ece9808c5037"
+   },
+   "commitments": {
+    "steps": "71d839b9ea873c280499c297ee2a133017543ee1406fc5b53f0c3691b47805d3"
+   },
+   "hash": "61201f66ae9cdf035cfc3c836ba6802d62bd4390121b5e601565ea8e8f799833"
+  }
+ ],
+ "chain": {
+  "head_hash": "61201f66ae9cdf035cfc3c836ba6802d62bd4390121b5e601565ea8e8f799833"
+ },
+ "checkpoints": [
+  {
+   "run_id": "golden-sha256",
+   "seq": 0,
+   "steps": 1,
+   "head_hash": "199c091e2f36355bbaa9585d1754e7adfe8d7be0926d27ad996180243e012128",
+   "prev_checkpoint": "0000000000000000000000000000000000000000000000000000000000000000",
+   "alg": "sha256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.319218+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "54545e2765e4e4fec69479e7e8ea961b746b6bc16bb47a17f65b6eb3f6a6deb87ae971f72216e37d374ca5ae09072be456ea78649e7eb8addc0a41c3535d2406"
+  },
+  {
+   "run_id": "golden-sha256",
+   "seq": 1,
+   "steps": 2,
+   "head_hash": "85011584224935860f4ec55e3b6557743d6b72579cf45fea18ad0709b7ec7b74",
+   "prev_checkpoint": "e07361c79923a84fb950bb1b45e33b4bd0835fd62b1f70a054e4e057e76da6ad",
+   "alg": "sha256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.340120+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "4ae17d33c913fbde8f76b86805a821254a08c4d34952f2b6a98e9f7c7888c822a779f807978960821ea9104e2b5ca3e569cbe48f4bd0a18f02c121eca852ad01"
+  },
+  {
+   "run_id": "golden-sha256",
+   "seq": 2,
+   "steps": 3,
+   "head_hash": "61201f66ae9cdf035cfc3c836ba6802d62bd4390121b5e601565ea8e8f799833",
+   "prev_checkpoint": "0e598cbe94813fdbbcbc3132b74682589f46aa65a1c76915f0903b08525d8011",
+   "alg": "sha256",
+   "key_id": "cbf74739c530cca5",
+   "ts": "2026-09-05T08:54:22.354811+00:00",
+   "public_key": "9e26afa96fc7e1aee11f3a0cb5406b1bec26796008b809f2e591bdf0fe1666af",
+   "signature": "53178f1192aa8ed0c8b33671d27af5a60d3e2a068b79381d2ccb90d4ae1214223747788a54c2c53bf18be5a800b2fad2e0d26699e2ea2ccd9ab0c154dc856e06"
+  }
+ ],
+ "license_cert": {
+  "format": "bitexact-license/1",
+  "licensee": "Golden Fixtures",
+  "expires": "2099-01-01",
+  "tier": "fixtures",
+  "license_id": "LIC-3218033594ce",
+  "entitlements": [
+   "anchor",
+   "evidence",
+   "fork",
+   "governance",
+   "lifecycle",
+   "otel",
+   "record",
+   "regress",
+   "replay"
+  ],
+  "signature": "7a3f806e437afdb5e078668c41ca1c796d31d75739f9da87e5fed0114281f4a35d002b7069c0db52c0048cb7833a29c671e9ff6ed5bae57745a5ec4413ad4703"
+ },
+ "signature": {
+  "algorithm": "ed25519",
+  "key_id": "94a8b44c5cfbd4f6",
+  "public_key": "c16f1a3e575779b066c54dcff62214e6472fd0d313bdc55167f699566b19ef9a",
+  "signed_at": "2026-09-05T08:54:22.383249+00:00",
+  "signature": "b6b0b38f30fcf1cf054a4dc48a58e381b569525ac21c1223fba42aa41bfaf5350f8f69097b9cdb949a5f898138f59669e25f813a3fb0ba1c5f3fce5bd9f4ef03"
+ }
+}

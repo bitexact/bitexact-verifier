@@ -1,6 +1,6 @@
 [project]
 name = "bitexact-verifier"
-version = "2.0.0"
+version = "2.3.0"
 description = "Standalone verifier for BitExact evidence bundles (bitexact-bundle/1)"
 readme = "README.md"
 license = "Apache-2.0"

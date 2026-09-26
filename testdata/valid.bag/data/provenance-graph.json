@@ -1,0 +1,28 @@
+{
+ "format": "bitexact-provenance-graph/1",
+ "root": "adverse-decision",
+ "nodes": [
+  {
+   "run_id": "adverse-decision",
+   "bundle": "runs/adverse-decision.bundle.json",
+   "head_hash": "02768dbef736bfb3d8200f93dcb474a77bc1757419804130623c467659b3c5ab",
+   "role": "original"
+  },
+  {
+   "run_id": "adverse-decision-fork",
+   "bundle": "runs/adverse-decision-fork.bundle.json",
+   "head_hash": "0f7ae97d5460e18ffe688f167bf788c06a8fffdbf92892d432562e4df9d98e91",
+   "role": "fork"
+  }
+ ],
+ "edges": [
+  {
+   "child": "adverse-decision-fork",
+   "source_run": "adverse-decision",
+   "at_step": 5,
+   "source_prev_hash": "391e10b6baf7f7d251b79b8e90ea793d3ef35f5066a95a5b407a90b98dee6d84"
+  }
+ ],
+ "fork_matrices": [],
+ "excluded": []
+}
