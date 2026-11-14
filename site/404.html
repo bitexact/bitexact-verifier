@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Crect%20width%3D%2224%22%20height%3D%2224%22%20rx%3D%225%22%20fill%3D%22%230d0f11%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%235cb7c8%22%20stroke-width%3D%222.1%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%222.5%22%20y%3D%225%22%20width%3D%229%22%20height%3D%228%22%20rx%3D%222.6%22/%3E%3Crect%20x%3D%2212.5%22%20y%3D%2211%22%20width%3D%229%22%20height%3D%228%22%20rx%3D%222.6%22/%3E%3Cpath%20d%3D%22M9.5%2011.5l5%202%22/%3E%3C/g%3E%3C/svg%3E">
+<title>Page not found · BitExact</title>
+<!--bx:fonts--><link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/jetbrains-mono.woff2" as="font" type="font/woff2" crossorigin><!--/bx:fonts-->
+<style>
+/*@bitexact-fonts*/
+/* Inter and JetBrains Mono. Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter); Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono). Licensed under the SIL Open Font License 1.1: https://scripts.sil.org/OFL . The license text is served beside each face in /fonts/. */
+@font-face{font-family:Inter;font-style:normal;font-weight:100 900;font-display:swap;src:url(/fonts/inter.woff2) format("woff2")}
+@font-face{font-family:"Inter Fallback";src:local("Arial"),local("Helvetica"),local("Liberation Sans");font-weight:100 449;size-adjust:106.50%;ascent-override:90.96%;descent-override:22.74%;line-gap-override:0%}
+@font-face{font-family:"Inter Fallback";src:local("Arial"),local("Helvetica"),local("Liberation Sans");font-weight:450 549;size-adjust:107.50%;ascent-override:90.12%;descent-override:22.53%;line-gap-override:0%}
+@font-face{font-family:"Inter Fallback";src:local("Arial Bold"),local("Arial-BoldMT"),local("Helvetica Bold"),local("Liberation Sans Bold");font-weight:550 649;size-adjust:101.90%;ascent-override:95.07%;descent-override:23.77%;line-gap-override:0%}
+@font-face{font-family:"Inter Fallback";src:local("Arial Bold"),local("Arial-BoldMT"),local("Helvetica Bold"),local("Liberation Sans Bold");font-weight:650 749;size-adjust:102.80%;ascent-override:94.24%;descent-override:23.56%;line-gap-override:0%}
+@font-face{font-family:"Inter Fallback";src:local("Arial Bold"),local("Arial-BoldMT"),local("Helvetica Bold"),local("Liberation Sans Bold");font-weight:750 900;size-adjust:105.00%;ascent-override:92.26%;descent-override:23.07%;line-gap-override:0%}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:100 900;font-display:swap;src:url(/fonts/jetbrains-mono.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono Fallback";src:local("Consolas");font-weight:100 900;size-adjust:109.13%;ascent-override:93.47%;descent-override:27.49%;line-gap-override:0%}
+@font-face{font-family:"JetBrains Mono Fallback 2";src:local("Menlo"),local("Liberation Mono"),local("Courier New");font-weight:100 900;size-adjust:100.00%;ascent-override:102.00%;descent-override:30.00%;line-gap-override:0%}
+/*@end-bitexact-fonts*//*bx:css*/
+/* BitExact shared design tokens: one source for bitexact.ai, .dev and .org.
+   Inlined into each page's first <style> by scripts/site/shared/inline.py.
+   check_tokens.py proves every text/surface pair here is WCAG AA. */
+:root{
+  /* surfaces */
+  --bg:#0d0f11; --bg2:#101318; --surface:#161a1f; --surface2:#1c2127; --code-bg:#0a0c0e;
+  --line:#252b32; --line2:#333b45;
+  /* text */
+  --ink:#ecebe6; --text:#b7bfc8; --muted:#9aa2ab; --faint:#828b95;
+  /* accents and states. Red marks a broken chain or tampered evidence and
+     nothing else; ordinary mistakes, causes and changes are --attention. */
+  --teal:#5cb7c8; --teal2:#7fd0dd; --green:#5cbf88; --attention:#e0a458; --red:#ee6b61;
+  --on-accent:#06222a;
+  /* a verifier's OK verdict line, on every site */
+  --ok:var(--green);
+
+  --f-sans:Inter,"Inter Fallback","Segoe UI Variable Display",system-ui,-apple-system,"Segoe UI","Helvetica Neue",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono","JetBrains Mono Fallback","JetBrains Mono Fallback 2",ui-monospace,"Cascadia Code","SF Mono",Consolas,monospace;
+
+  /* type: ratio 1.2 from a 16px phone / 17px desktop body. --t-floor is the
+     smallest size any text may render at; --t-prose-floor the smallest for
+     running prose. */
+  --t-floor:13px; --t-prose-floor:16px;
+  --t-label:13px; --t-body:16px; --t-lead:19px; --t-h3:23px; --t-h2:28px;
+  --t-h1:clamp(40px,6vw,80px); --t-display:clamp(48px,8vw,112px);
+  /* the most a page's own hero headline size may reach (no limit but on a
+     short screen, below) */
+  --h1-cap:999px;
+  --lh-tight:1.04; --lh-head:1.15; --lh-body:1.6; --lh-code:1.65;
+  --measure:68ch; --measure-narrow:46ch;
+
+  /* space: 4px base */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px; --s10:128px;
+  /* --container is the one page width: every site's header, footer and
+     content column. A reading page narrows its prose with --measure, never
+     by redefining --container. */
+  --container:1280px; --gutter:clamp(16px,4vw,48px); --nav:56px; --tap:44px;
+
+  /* radius and stroke */
+  --r-sm:6px; --r-md:10px; --r-lg:14px;
+  --stroke:1px; --stroke-icon:1.5px; --stroke-focus:2px;
+
+  /* motion: one family, no overshoot. --ease-out is GSAP power3.out,
+     --ease-inout is power2.inOut. */
+  --ease-out:cubic-bezier(.25,1,.5,1); --ease-inout:cubic-bezier(.65,0,.35,1);
+  --d-micro:160ms; --d-el:240ms; --d-struct:400ms; --stagger:40ms;
+
+  --focus:var(--stroke-focus) solid var(--teal2);
+  color-scheme:dark;
+}
+@media (min-width:1024px){
+  :root{--t-label:14px; --t-body:17px; --t-lead:20px; --t-h3:24px; --t-h2:35px}
+}
+/* a short, wide screen (a phone turned sideways): headlines and section
+   spacing sized to its height, so a heading and what it heads share the
+   screen rather than a heading filling it */
+@media (orientation:landscape) and (max-height:500px){
+  :root{--t-h1:clamp(32px,9vh,40px); --t-display:clamp(36px,11vh,48px); --t-h2:24px; --h1-cap:40px;
+    --s8:40px; --s9:48px; --s10:64px}
+}
+:focus-visible{outline:var(--focus);outline-offset:2px}
+/* hidden means hidden: a component's display (.bx-btn's inline-flex) would
+   otherwise beat the UA's [hidden]{display:none} and show it anyway */
+[hidden]{display:none!important}
+/* every scroll area, a panel inside the page included: a thin bar on the
+   surface rather than the platform's arrowed one */
+*{scrollbar-width:thin;scrollbar-color:var(--line2) transparent}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;
+    transition-duration:1ms!important;scroll-behavior:auto!important}
+}
+/* The shared chrome: skip link, header, footer, icon slot. Uses only tokens.css. */
+.bx-sprite{position:absolute;width:0;height:0;overflow:hidden}
+.bx-ico{width:24px;height:24px;flex:none;color:var(--teal)}
+/* On a button the icon takes the label's color: teal on a teal button is invisible. */
+.bx-btn .bx-ico{color:inherit}
+/* a button label never wraps onto a second line, on any page */
+.bx-btn{white-space:nowrap}
+.bx-slot{display:inline-grid;place-items:center;width:32px;height:32px;flex:none}
+details[open] .bx-if-closed,details:not([open]) .bx-if-open{display:none}
+
+.bx-skip{position:absolute;left:-9999px;top:0;z-index:100;padding:var(--s3) var(--s4);background:var(--teal);
+  color:var(--on-accent);font:600 var(--t-body)/1 var(--f-sans);border-radius:0 0 var(--r-sm) 0}
+.bx-skip:focus{left:0}
+
+.bx-top{position:sticky;top:0;z-index:40;height:var(--nav);background:rgba(13,15,17,.92);
+  border-bottom:var(--stroke) solid var(--line);backdrop-filter:blur(8px)}
+.bx-top-in{max-width:var(--container);height:100%;margin:0 auto;padding:0 var(--gutter);
+  display:flex;align-items:center;gap:var(--s5)}
+.bx-brand{display:inline-flex;align-items:center;gap:var(--s2);min-height:var(--tap);color:var(--ink);
+  font:700 var(--t-body)/1 var(--f-sans);letter-spacing:-.01em;text-decoration:none;white-space:nowrap}
+.bx-role{font:500 var(--t-label)/1 var(--f-mono);color:var(--muted);border-left:var(--stroke) solid var(--line2);
+  padding-left:var(--s2);margin-left:var(--s1)}
+.bx-nav a{display:inline-flex;align-items:center;min-height:var(--tap);color:var(--text);
+  font:500 var(--t-label)/1.2 var(--f-sans);text-decoration:none}
+.bx-nav a:hover,.bx-nav a[aria-current]{color:var(--ink)}
+.bx-nav a{white-space:nowrap}
+.bx-nav a[aria-current=page]{box-shadow:inset 0 -2px var(--teal)}
+.bx-sites{display:flex;gap:var(--s4);align-items:center}
+.bx-btn{display:inline-flex;align-items:center;gap:var(--s2);min-height:var(--tap);padding:0 var(--s4);
+  border:var(--stroke) solid var(--line2);border-radius:var(--r-md);background:var(--surface);color:var(--ink);
+  font:600 var(--t-label)/1 var(--f-sans);text-decoration:none;cursor:pointer;
+  transition:border-color var(--d-micro) var(--ease-out),background-color var(--d-micro) var(--ease-out)}
+.bx-btn:hover{border-color:var(--teal)}
+.bx-nav a.bx-primary,.bx-btn.bx-primary{background:var(--teal);border-color:var(--teal);color:var(--on-accent)}
+.bx-nav a.bx-primary:hover,.bx-btn.bx-primary:hover{background:var(--teal2);color:var(--on-accent)}
+.bx-menu-btn{display:none}
+
+/* wide: the nav is an ordinary row. The [popover] UA rule is overridden here,
+   so it never hides on a wide screen. The breakpoint is the width the longest
+   nav needs: bitexact.ai's four links, the three sites and the CTA run to
+   1038px at the 14px label size of 1024px and wider (measured), so below
+   1080 the nav is the Menu sheet. tests/test_site_quality.py holds the two
+   queries to the same width. */
+@media (min-width:1080px){
+  .bx-nav[popover]{display:flex;align-items:center;gap:var(--s5);position:static;inset:auto;width:auto;height:auto;
+    margin:0 0 0 auto;padding:0;border:0;background:none;color:inherit;overflow:visible}
+  .bx-sites{padding-left:var(--s5);border-left:var(--stroke) solid var(--line2)}
+}
+/* narrow: one row (brand and Menu); the nav opens as a sheet under the bar */
+@media (max-width:1079.98px){
+  .bx-menu-btn{display:inline-flex;margin-left:auto;font:inherit;font-size:var(--t-label)}
+  .bx-nav[popover]:popover-open{position:fixed;inset:var(--nav) 0 auto 0;width:auto;height:auto;margin:0;
+    display:flex;flex-direction:column;align-items:stretch;gap:0;padding:var(--s2) var(--gutter) var(--s4);
+    background:var(--bg2);border:0;border-bottom:var(--stroke) solid var(--line2);color:var(--text)}
+  .bx-nav[popover]:popover-open a{font-size:var(--t-body)}
+  /* in the sheet a full-width underline reads as a divider: mark it at the edge */
+  .bx-nav[popover]:popover-open a[aria-current=page]{box-shadow:inset 2px 0 var(--teal);padding-left:var(--s3)}
+  .bx-nav[popover]:popover-open .bx-sites{flex-direction:column;align-items:stretch;gap:0;
+    margin:var(--s2) 0;padding:var(--s2) 0;border-block:var(--stroke) solid var(--line)}
+  .bx-nav[popover]:popover-open .bx-primary{justify-content:center;margin-top:var(--s2)}
+}
+
+.bx-foot{border-top:var(--stroke) solid var(--line);background:var(--bg2);padding:var(--s7) 0 var(--s8)}
+.bx-foot-in{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+.bx-cols{display:flex;flex-wrap:wrap;gap:var(--s6);justify-content:space-between}
+/* The blurb gives way first, so the four link columns share its row. */
+.bx-about{margin:0;flex:1 1 16rem;max-width:44ch;color:var(--muted);font:400 var(--t-body)/var(--lh-body) var(--f-sans)}
+.bx-col{display:flex;flex-direction:column;min-width:10rem}
+.bx-col-h{margin-bottom:var(--s1);font:500 var(--t-label)/1.4 var(--f-mono);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--faint)}
+.bx-col a{display:inline-flex;align-items:center;min-height:var(--tap);color:var(--text);
+  font:400 var(--t-body)/1.3 var(--f-sans);text-decoration:none}
+.bx-col a:hover{color:var(--teal2)}
+.bx-fine{max-width:90ch;margin:var(--s6) 0 0;color:var(--faint);font:400 var(--t-label)/var(--lh-body) var(--f-mono)}
+.bx-fine a{color:var(--teal2)}
+/*/bx:css*/
+/* bitexact.ai document pages (pricing, compliance, trust): page layout on top of
+   shared/tokens.css and shared/chrome.css. Tokens only. */
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:400 var(--t-body)/var(--lh-body) var(--f-sans);
+  -webkit-font-smoothing:antialiased}
+main{display:block}
+main:focus{outline:none}
+.pg{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+.pg-hero{padding:var(--s9) 0 var(--s7);border-bottom:var(--stroke) solid var(--line)}
+.pg-eyebrow{display:flex;align-items:center;gap:var(--s1);margin:0 0 var(--s4);color:var(--teal);
+  font:500 var(--t-label)/1.4 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+h1{max-width:18ch;margin:0;color:var(--ink);font:700 var(--t-h1)/var(--lh-tight) var(--f-sans);
+  letter-spacing:-.025em;text-wrap:balance}
+.pg-lead{max-width:var(--measure);margin:var(--s5) 0 0;color:var(--text);font-size:var(--t-lead);
+  line-height:1.5;text-wrap:pretty}
+.pg-ctas{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s6)}
+.pg-toc{display:flex;flex-wrap:wrap;gap:0 var(--s5);margin:var(--s6) 0 0;padding:0;list-style:none}
+.pg-toc a{display:inline-flex;align-items:center;min-height:var(--tap);color:var(--teal2);
+  font:500 var(--t-label)/1.2 var(--f-sans);text-decoration:none}
+.pg-toc a:hover{text-decoration:underline}
+
+.pg-sec{padding:var(--s8) 0;border-bottom:var(--stroke) solid var(--line)}
+.pg-sec:last-child{border-bottom:0}
+.pg-sec[id]{scroll-margin-top:calc(var(--nav) + var(--s4))}
+h2{max-width:28ch;margin:0 0 var(--s4);color:var(--ink);font:700 var(--t-h2)/var(--lh-head) var(--f-sans);
+  letter-spacing:-.02em;text-wrap:balance}
+h3{margin:0;color:var(--ink);font:600 var(--t-h3)/var(--lh-head) var(--f-sans);letter-spacing:-.01em}
+p,li{max-width:var(--measure);text-wrap:pretty}
+p{margin:0 0 var(--s4)}
+strong,b{color:var(--ink);font-weight:600}
+a{color:var(--teal2);text-underline-offset:3px}
+code{padding:1px var(--s1);border:var(--stroke) solid var(--line);border-radius:4px;background:var(--code-bg);
+  color:var(--ink);font:500 var(--t-label)/1.4 var(--f-mono);overflow-wrap:anywhere}
+.note{color:var(--muted)}
+/* a subheading inside a section (trust) */
+.pg-sub{margin:var(--s7) 0 var(--s3)}
+.pg-sub + .pg-cards{margin-top:0}
+:is(.pg-terms,.pg-steps) + :is(.note,.pg-sub){margin-top:var(--s6)}
+
+/* a numbered row of cards: the licensing shape */
+.pg-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s4);margin:var(--s6) 0 0;
+  padding:0;list-style:none}
+.pg-card{display:flex;flex-direction:column;gap:var(--s3);max-width:none;padding:var(--s5);
+  border:var(--stroke) solid var(--line2);border-radius:var(--r-lg);background:var(--surface)}
+.pg-card .pg-step{display:flex;align-items:center;gap:var(--s1);color:var(--faint);
+  font:500 var(--t-label)/1.4 var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.pg-card p{margin:0}
+
+/* a list of terms: a bold lead-in, then the sentence */
+.pg-terms{display:grid;gap:var(--s5);margin:var(--s5) 0 0;padding:0;list-style:none}
+.pg-terms li{padding-left:var(--s5);border-left:var(--stroke-focus) solid var(--line2)}
+
+/* the three-line summary under a hero: what you get, what you don't, who checks */
+.pg-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s4);margin:var(--s6) 0 0;
+  padding:0;list-style:none}
+.pg-sum li{max-width:none;padding:var(--s4) var(--s5);border:var(--stroke) solid var(--line2);
+  border-radius:var(--r-md);background:var(--surface)}
+.pg-sum b{display:block;margin-bottom:var(--s1);color:var(--teal2);
+  font:500 var(--t-label)/1.4 var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+
+/* a screen of the real product, whole, with what you do there (product, trust) */
+.pg-shot{margin:var(--s6) 0 0}
+.pg-shot a{display:block;border:var(--stroke) solid var(--line2);border-radius:var(--r-lg);overflow:hidden;
+  background:var(--surface);box-shadow:0 18px 48px rgba(0,0,0,.35)}
+.pg-shot img{display:block;width:100%;height:auto}
+.pg-shot figcaption{max-width:var(--measure);margin-top:var(--s3);color:var(--muted);font-size:var(--t-label);
+  line-height:var(--lh-body)}
+.pg-shot figcaption b{color:var(--ink)}
+.pg-cards.pg-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pg-pair{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s5)}
+.pg-pair .pg-shot{margin-top:var(--s5)}
+.pg-swipe{display:none;margin-top:var(--s2);color:var(--muted);font-size:var(--t-label)}
+/* a phone shows the screen at a readable width and scrolls it inside the frame, never the page */
+@media (max-width:720px){
+  .pg-shot a{overflow-x:auto;overscroll-behavior-x:contain}
+  .pg-shot img{width:960px;max-width:none}
+  .pg-swipe{display:block}
+}
+
+/* numbered steps in plain language */
+.pg-steps{display:grid;gap:var(--s4);margin:var(--s5) 0 0;padding-left:var(--s5)}
+.pg-steps li::marker{color:var(--teal);font-family:var(--f-mono)}
+
+/* a mapping row: the obligation and the plain answer, the mechanism in a drawer */
+.pg-rows{margin:var(--s5) 0 0;border-top:var(--stroke) solid var(--line)}
+.pg-row{border-bottom:var(--stroke) solid var(--line)}
+.pg-row summary,.pg-more summary{list-style:none;cursor:pointer}
+.pg-row summary::-webkit-details-marker,.pg-more summary::-webkit-details-marker{display:none}
+.pg-row summary{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr) 24px;gap:var(--s5);
+  align-items:start;padding:var(--s4) 0}
+.pg-row summary::after{content:"";width:24px;height:24px;margin-top:2px;
+  background:linear-gradient(var(--muted),var(--muted)) center/12px 1.5px no-repeat,
+             linear-gradient(var(--muted),var(--muted)) center/1.5px 12px no-repeat}
+.pg-row[open] summary::after{background:linear-gradient(var(--muted),var(--muted)) center/12px 1.5px no-repeat}
+.pg-row summary:hover .pg-q{color:var(--teal2)}
+.pg-q{color:var(--muted);font-size:var(--t-label);line-height:1.5}
+.pg-a{color:var(--ink)}
+.pg-a.pg-no{color:var(--attention);font-weight:600}
+/* the drawer's text starts under the answer column: 2 of the summary's 5 fractions in */
+.pg-row > p{max-width:var(--measure);margin:0 0 var(--s4) calc((100% - 24px - 2 * var(--s5)) * .4 + var(--s5));
+  color:var(--muted);font-size:var(--t-label);line-height:var(--lh-body)}
+.pg-row > p:last-child{padding-bottom:var(--s2)}
+.pg-row q{color:var(--text)}
+.pg-more{margin-top:var(--s5)}
+.pg-more summary{display:inline-flex;align-items:center;gap:var(--s1);min-height:var(--tap);
+  color:var(--teal2);font:500 var(--t-label)/1.2 var(--f-sans)}
+.pg-more p{color:var(--muted);font-size:var(--t-label)}
+@media (max-width:719.98px){
+  .pg-hero{padding:var(--s8) 0 var(--s6)}
+  .pg-sec{padding:var(--s7) 0}
+  .pg-cards,.pg-cards.pg-two,.pg-sum{grid-template-columns:minmax(0,1fr)}
+  .pg-row summary{grid-template-columns:minmax(0,1fr) 24px;gap:var(--s2) var(--s3)}
+  .pg-q{grid-column:1}
+  .pg-a{grid-column:1}
+  .pg-row summary::after{grid-column:2;grid-row:1}
+  .pg-row > p{margin-left:0}
+}</style>
+</head>
+<body><!--bx:sprite--><svg class="bx-sprite" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" focusable="false">
+<symbol id="i-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="9" height="8" rx="2.6"/><rect x="12.5" y="11" width="9" height="8" rx="2.6"/><path d="M9.5 11.5l5 2"/></symbol>
+<symbol id="i-chain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="7.75" width="8.5" height="8.5" rx="4.25"/><rect x="6.25" y="10" width="11.5" height="4" rx="2"/><rect x="14.5" y="7.75" width="8.5" height="8.5" rx="4.25"/></symbol>
+<symbol id="i-chain-v" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="7.75" y="1" width="8.5" height="8.5" rx="4.25"/><rect x="10" y="6.25" width="4" height="11.5" rx="2"/><rect x="7.75" y="14.5" width="8.5" height="8.5" rx="4.25"/></symbol>
+<symbol id="i-fork" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9.6" width="6" height="4.8" rx="1.5"/><path d="M9 12h3V6.4h3"/><rect x="15" y="4" width="6" height="4.8" rx="1.5"/><path d="M12 12v5.6h3" stroke-dasharray="1.5 2"/><rect x="15" y="15.2" width="6" height="4.8" rx="1.5" stroke-dasharray="1.5 2"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5v-3a4 4 0 0 1 8 0v3M12 14.5v2"/></symbol>
+<symbol id="i-mask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h4M4 17h11"/><rect x="11" y="11" width="8.25" height="2" rx="1" fill="currentColor"/></symbol>
+<symbol id="i-slice" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="5" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="12" rx="1.5"/><rect x="16" y="7" width="5" height="12" rx="1.5"/></symbol>
+<symbol id="i-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v4M15 3v4M6 7h12v3a6 6 0 0 1-12 0zM12 16v5"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.75 2.75L16 9.5"/></symbol>
+<symbol id="i-bound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" stroke-dasharray="2 2.5"/><rect x="9" y="9.6" width="6" height="4.8" rx="1.5"/></symbol>
+<symbol id="i-license" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21H10M14 3l5 5M14 3v5h5M19 8v3"/><path d="M8.5 9.5h2.5M8.5 13h3"/><circle cx="16.5" cy="16" r="3"/><path d="M15 18.6V22l1.5-1 1.5 1v-3.4"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4.5h11.5l-2.5 4 2.5 4H5"/></symbol>
+<symbol id="i-hash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3.5l-2 17M16.5 3.5l-2 17M4.5 8.5h16M3.5 15.5h16"/></symbol>
+<symbol id="i-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="M6.5 9.5l3 2.5-3 2.5M12 15h5"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.25 15.25L20.5 20.5"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-chevron-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16l8-8M9.5 8H16v6.5"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+</svg><!--/bx:sprite--><!--bx:header--><a class="bx-skip" href="#content">Skip to content</a>
+<header class="bx-top"><div class="bx-top-in">
+  <a class="bx-brand" href="https://bitexact.org/"><svg class="bx-ico" aria-hidden="true"><use href="#i-mark"/></svg>BitExact<span class="bx-role">verifier</span></a>
+  <button class="bx-btn bx-menu-btn" type="button" popovertarget="bx-nav"><svg class="bx-ico" aria-hidden="true"><use href="#i-menu"/></svg>Menu</button>
+  <nav class="bx-nav" id="bx-nav" popover aria-label="Site">
+    <span class="bx-sites"><a href="https://bitexact.ai/">Product</a><a href="https://bitexact.dev/">Docs</a><a href="https://bitexact.org/" aria-current="true">Verifier</a></span>
+  </nav>
+</div></header><!--/bx:header-->
+<main id="content" tabindex="-1">
+
+<header class="pg-hero"><div class="pg">
+  <p class="pg-eyebrow">404</p>
+  <h1>There is no page at this address.</h1>
+  <p class="pg-lead">The link may be old, or the address mistyped.</p>
+  <div class="pg-ctas">
+    <a class="bx-btn bx-primary" href="/">Go to the home page<svg class="bx-ico" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+  </div>
+</div></header>
+
+</main>
+<!--bx:footer--><footer class="bx-foot"><div class="bx-foot-in">
+  <div class="bx-cols">
+    <p class="bx-about">bitexact-verifier: the open verifier and the aer-bundle format, Apache-2.0. One Python file that checks BitExact evidence offline, imports nothing from the product and needs no license.</p>
+    <div class="bx-col"><span class="bx-col-h">Product</span>
+      <a href="https://bitexact.ai/">bitexact.ai</a>
+      <a href="https://bitexact.ai/business">For your business</a>
+      <a href="https://bitexact.ai/how-it-works">How it works</a>
+      <a href="https://bitexact.ai/product">Inspector</a>
+      <a href="https://bitexact.ai/pricing">Pricing</a>
+      <a href="https://bitexact.ai/compliance">Compliance mapping</a>
+      <a href="https://bitexact.ai/trust">Security</a></div>
+    <div class="bx-col"><span class="bx-col-h">Docs</span>
+      <a href="https://bitexact.dev/">bitexact.dev</a>
+      <a href="https://bitexact.dev/bundle-spec.html">Bundle spec</a></div>
+    <div class="bx-col"><span class="bx-col-h">Verifier</span>
+      <a href="https://bitexact.org/">bitexact.org</a>
+      <a href="https://github.com/bitexact/bitexact-verifier">Source on GitHub</a></div>
+    <div class="bx-col"><span class="bx-col-h">Contact</span>
+      <a href="mailto:sales@bitexact.ai">sales@bitexact.ai</a>
+      <a href="mailto:security@bitexact.ai">security@bitexact.ai</a></div>
+  </div>
+  <p class="bx-fine">This site sets no cookies, runs no analytics and loads nothing from anywhere else.</p>
+</div></footer><!--/bx:footer-->
+</body>
+</html>

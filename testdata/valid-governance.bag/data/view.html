@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'sha256-5CL7jSijZH+LTnkxWl444uwOy4sN7kzF20OvmVrwUs0='; img-src 'none'; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="aer-view" content="aer-view">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading view - claims</title>
+<style>:root{color-scheme:light dark;--fg:#1d2228;--bg:#fbfaf7;--muted:#5b6470;--line:#c9ced6;--box:#f1efe9}@media (prefers-color-scheme:dark){:root{--fg:#e6e3dc;--bg:#15181c;--muted:#a3abb6;--line:#3a4049;--box:#1e2227}}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif}header.notice{position:sticky;top:0;z-index:1;background:var(--bg);border-bottom:3px double var(--fg);padding:8px 16px;font-weight:600}main{max-width:1100px;margin:0 auto;padding:0 16px 48px}table{border-collapse:collapse;width:100%;margin:8px 0 16px}th,td{border:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top;overflow-wrap:anywhere}tr.gap td{border:2px solid var(--fg)}.gap-mark{font-weight:700;border:1px solid var(--fg);padding:0 4px}pre.recorded{background:var(--box);border:1px solid var(--line);padding:8px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:40em;overflow:auto;font:13px/1.4 ui-monospace,Consolas,monospace}.label,small{color:var(--muted)}details{border-top:1px solid var(--line);padding:4px 0}@media print{header.notice{position:static}pre.recorded{max-height:none}}</style>
+</head><body>
+<header class="notice"><p>This page is a reading aid, not a verification result. It was generated from the bundles in this pack when the pack was made, and it does not say whether they are intact or who signed them. To verify, run the BitExact verifier on the pack&#x27;s root - python data/verification/bitexact_verifier.py . when the pack carries it (verify-procedure.md has the steps). That command also renders this page again and fails the pack if the page differs from the bundles. If this page and data/runs/*.bundle.json ever disagree, the bundles are the record.</p></header>
+<main>
+<h1>Reading view</h1>
+<p>Pack <code>claims</code></p>
+<section>
+<h2>This pack</h2>
+<table><thead><tr><th>Run</th><th>Entries</th><th>Has a run_end entry</th><th>Workflow</th><th>Version</th><th>Environment</th><th>Declared capture gaps</th><th>Checkpoints carried</th><th>Anchors carried</th></tr></thead><tbody>
+<tr><td><a href="#run-1">golden-governed</a></td><td>4</td><td>yes</td><td>claims</td><td>v1</td><td>prod</td><td>none</td><td>4</td><td>0</td></tr>
+</tbody></table>
+<p>Counted from the bundles as recorded. Checkpoints and anchors are carried here; the verifier checks them.</p>
+<h3>Ledgers</h3>
+<table><thead><tr><th>Ledger</th><th>Events</th></tr></thead><tbody>
+<tr><td><code>data/governance.jsonl</code></td><td>3</td></tr>
+</tbody></table>
+</section>
+<section id="run-1">
+<h2>Run 1</h2>
+<p>Run id <code>golden-governed</code>, file <code>data/runs/golden-governed.bundle.json</code></p>
+<h3>Who and what ran</h3>
+<p>The run's identity, each field as its latest identity entry states it: the deployer's statement, recorded as stated; no key binds it to a person.</p>
+<table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>
+<tr><td>workflow</td><td><code>claims</code></td></tr>
+<tr><td>workflow_version</td><td><code>v1</code></td></tr>
+<tr><td>environment</td><td><code>prod</code></td></tr>
+<tr><td>workflow_digest</td><td><code>4909f1f40cf112df48fc89d780898846711ca88986524ffc27e819b6af28de4d</code></td></tr>
+</tbody></table>
+<h3>Capture controls</h3>
+<p>The run opened under capture policy <code>b2:ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e</code>. The pack carries the producer's file <code>data/capture-policy-b2-ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e.json</code> as its document, shown under Capture policies below; the verifier does not check it against the run.</p>
+<p>No entry of this run declares a capture outcome.</p>
+<h3>Steps</h3>
+<table><thead><tr><th>Step</th><th>Time (as recorded)</th><th>What</th><th>Provenance</th><th>Who</th><th>Entry hash</th></tr></thead><tbody>
+<tr><td>0</td><td>2026-11-06T19:22:35.838483+00:00</td><td>Run started</td><td>observed</td><td>-</td><td>2b1832694fbe</td></tr>
+<tr><td>1</td><td>2026-11-06T19:22:35.866732+00:00</td><td>Who and what ran</td><td>asserted</td><td>-</td><td>c6be08c6d81b</td></tr>
+<tr><td>2</td><td>2026-11-06T19:22:35.898367+00:00</td><td>Tool call</td><td>asserted</td><td>-</td><td>380c68e6ab75</td></tr>
+<tr><td>3</td><td>2026-11-06T19:22:35.968358+00:00</td><td>Run sealed</td><td>observed</td><td>-</td><td>b950aa1694c5</td></tr>
+</tbody></table>
+<h3>Steps in full</h3>
+<details><summary>Step 0 - Run started</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;python&quot;: &quot;3.15.2&quot;,
+ &quot;platform&quot;: &quot;win32&quot;,
+ &quot;recorder_version&quot;: &quot;0.0.1a0&quot;,
+ &quot;watermark&quot;: {
+  &quot;license_id&quot;: &quot;LIC-f74d66c99680&quot;,
+  &quot;scope&quot;: null,
+  &quot;image_digest&quot;: null,
+  &quot;fingerprint&quot;: &quot;fp:80a08fafc704809c82f24a4d&quot;
+ },
+ &quot;capture_policy&quot;: &quot;b2:ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e&quot;,
+ &quot;standing&quot;: {
+  &quot;state&quot;: &quot;ok&quot;,
+  &quot;reasons&quot;: [],
+  &quot;records&quot;: true
+ }
+}</pre></details>
+<details><summary>Step 1 - Who and what ran</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;workflow&quot;: &quot;claims&quot;,
+ &quot;workflow_version&quot;: &quot;v1&quot;,
+ &quot;environment&quot;: &quot;prod&quot;,
+ &quot;workflow_digest&quot;: &quot;4909f1f40cf112df48fc89d780898846711ca88986524ffc27e819b6af28de4d&quot;
+}</pre></details>
+<details><summary>Step 2 - Tool call</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Arguments</p><pre class="recorded">[]</pre><p class="label">Result</p><pre class="recorded">{
+ &quot;score&quot;: 640
+}</pre><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;tool&quot;: &quot;score&quot;,
+ &quot;status&quot;: &quot;ok&quot;
+}</pre></details>
+<details><summary>Step 3 - Run sealed</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;steps&quot;: 4,
+ &quot;sealed_by&quot;: &quot;sdk&quot;
+}</pre></details>
+</section>
+<section>
+<h2>Capture policies</h2>
+<p>File <code>data/capture-policy-b2-ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e.json</code>, the producer's document as the pack holds it:</p>
+<pre class="recorded">{
+ &quot;detectors&quot;: {
+  &quot;pan&quot;: {
+   &quot;keep_last4&quot;: true
+  },
+  &quot;iban&quot;: {},
+  &quot;credentials&quot;: {}
+ },
+ &quot;fields&quot;: [
+  {
+   &quot;kind&quot;: &quot;*&quot;,
+   &quot;path&quot;: &quot;*&quot;,
+   &quot;mode&quot;: &quot;scrub&quot;
+  }
+ ],
+ &quot;budget_ms&quot;: 1000
+}</pre>
+</section>
+</main>
+</body></html>

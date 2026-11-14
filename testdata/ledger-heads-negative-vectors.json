@@ -1,0 +1,30 @@
+{
+ "format": "aer-ledger-heads-negative-vectors",
+ "bag": "valid-governance.bag",
+ "cases": [
+  {
+   "name": "newest event dropped",
+   "keep_events": 2,
+   "remove": null,
+   "refusal": "ledger data/governance.jsonl ends at 2 events (head 024df50f95185869c5a7af800eb41c76102ad9af7dc85aeb8c7a918d755f2a10), not at the head the recorder signed: 3 events (head 3dd81a0b197f68ccc4a54c29fafb43fb6fc193fa7452e4bb1000fd1c75991a64)"
+  },
+  {
+   "name": "an older prefix in its place",
+   "keep_events": 1,
+   "remove": null,
+   "refusal": "ledger data/governance.jsonl ends at 1 event (head 3caa43fa0ea6ff44a9ce8a2c29e71142e169c9b03e83175a7f7b4fcee9038537), not at the head the recorder signed: 3 events (head 3dd81a0b197f68ccc4a54c29fafb43fb6fc193fa7452e4bb1000fd1c75991a64)"
+  },
+  {
+   "name": "signed heads removed",
+   "keep_events": null,
+   "remove": "data/ledger-heads.json",
+   "refusal": "the pack carries no signed ledger heads (data/ledger-heads.json) - nothing anchors its ledgers' newest events"
+  },
+  {
+   "name": "ledger removed",
+   "keep_events": null,
+   "remove": "data/governance.jsonl",
+   "refusal": "the recorder signed a head for a ledger the pack does not carry ('data/governance.jsonl') - removed from it"
+  }
+ ]
+}

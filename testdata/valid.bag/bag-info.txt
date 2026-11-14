@@ -1,4 +1,4 @@
 External-Identifier: adverse-decision
-Bagging-Date: 2026-09-05
-Payload-Oxum: 50243.4
+Bagging-Date: 2026-11-06
+Payload-Oxum: 378721.6
 Bag-Software-Agent: BitExact

@@ -1,5 +1,5 @@
 {
- "description": "Canonicalization vectors for the bitexact-jcs/1 dialect: RFC 8785 restricted to values that canonicalize identically everywhere. Every implementation must produce expected_canonical (UTF-8) for each case in `cases`, and must refuse every case in `refused`.",
+ "description": "Canonicalization vectors for the aer-jcs dialect: RFC 8785 restricted to values that canonicalize identically everywhere. Every implementation must produce expected_canonical (UTF-8) for each case in `cases`, and must refuse every case in `refused`.",
  "cases": [
   {
    "name": "integers-stay-integers",

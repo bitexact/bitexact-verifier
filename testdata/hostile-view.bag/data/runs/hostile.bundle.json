@@ -1,0 +1,99 @@
+{
+ "run_id": "hostile",
+ "entries": [
+  {
+   "step": 0,
+   "kind": "run_meta",
+   "prov": "observed",
+   "ts": "2026-10-31T00:00:00Z",
+   "data": {}
+  },
+  {
+   "step": 1,
+   "kind": "identity",
+   "prov": "asserted",
+   "ts": "2026-10-31T00:00:01Z",
+   "data": {
+    "script": "<script>alert('script')</script>",
+    "img_onerror": "</pre><img src=x onerror=alert('img')>",
+    "javascript_url": "javascript:alert('url')",
+    "style": "<style>*{background:url(https://example.invalid/style.png)}</style>",
+    "base": "<base href=\"https://example.invalid/\">",
+    "meta_refresh": "<meta http-equiv=\"refresh\" content=\"0;url=https://example.invalid/refresh\">",
+    "attribute_double": "\" autofocus onfocus=\"alert('double')",
+    "attribute_single": "' autofocus onfocus='alert(1)",
+    "comment": "<!-- the rest of the page is a comment",
+    "details_close": "</details></section><a href=\"https://example.invalid/link\">continue</a>",
+    "table_close": "</code></td></tr></tbody></table><iframe src=\"https://example.invalid/frame\"></iframe>",
+    "entity": "&lt;script&gt;alert('entity')&lt;/script&gt;"
+   }
+  },
+  {
+   "step": 2,
+   "kind": "tool_call",
+   "prov": "observed",
+   "ts": "2026-10-31T00:00:02Z",
+   "data": {
+    "tool": "<script>alert('script')</script>",
+    "args": [
+     "<script>alert('script')</script>",
+     "</pre><img src=x onerror=alert('img')>",
+     "javascript:alert('url')",
+     "<style>*{background:url(https://example.invalid/style.png)}</style>",
+     "<base href=\"https://example.invalid/\">",
+     "<meta http-equiv=\"refresh\" content=\"0;url=https://example.invalid/refresh\">",
+     "\" autofocus onfocus=\"alert('double')",
+     "' autofocus onfocus='alert(1)",
+     "<!-- the rest of the page is a comment",
+     "</details></section><a href=\"https://example.invalid/link\">continue</a>",
+     "</code></td></tr></tbody></table><iframe src=\"https://example.invalid/frame\"></iframe>",
+     "&lt;script&gt;alert('entity')&lt;/script&gt;"
+    ],
+    "result": "abc\u202edef\u200bghi"
+   }
+  },
+  {
+   "step": 3,
+   "kind": "http_call",
+   "prov": "observed",
+   "ts": "2026-10-31T00:00:03Z",
+   "data": {
+    "request": {
+     "q": "lone \ud800 surrogate"
+    },
+    "response": {
+     "text": "</pre><script>alert('response')</script>"
+    }
+   }
+  },
+  {
+   "step": 4,
+   "kind": "marker",
+   "prov": "asserted",
+   "ts": "2026-10-31T00:00:04Z",
+   "data": {
+    "note": "<!-- the rest of the page is a comment",
+    "gap": {
+     "cause": "</details><script>alert('gap')</script>"
+    }
+   }
+  },
+  {
+   "step": 5,
+   "kind": "human_decision",
+   "prov": "asserted",
+   "ts": "2026-10-31T00:00:05Z",
+   "data": {
+    "actor": "\" autofocus onfocus=\"alert('double')",
+    "decision": "</details></section><a href=\"https://example.invalid/link\">continue</a>"
+   }
+  },
+  {
+   "step": 6,
+   "kind": "run_end",
+   "prov": "observed",
+   "ts": "2026-10-31T00:00:06Z",
+   "data": {}
+  }
+ ]
+}
