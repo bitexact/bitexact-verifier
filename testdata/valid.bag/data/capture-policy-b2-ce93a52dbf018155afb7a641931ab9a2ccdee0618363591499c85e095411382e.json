@@ -1,0 +1,17 @@
+{
+ "detectors": {
+  "pan": {
+   "keep_last4": true
+  },
+  "iban": {},
+  "credentials": {}
+ },
+ "fields": [
+  {
+   "kind": "*",
+   "path": "*",
+   "mode": "scrub"
+  }
+ ],
+ "budget_ms": 1000
+}

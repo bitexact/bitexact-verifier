@@ -1,0 +1,59 @@
+name: publish
+
+# Publish bitexact-verifier to PyPI from this public repository, through
+# Trusted Publishing (OIDC - no API token anywhere). Run by hand only, on a
+# verifier-v* tag: Actions -> publish -> Run workflow, and choose the tag (or
+# `gh workflow run publish.yml --ref verifier-v<version>`); run on anything
+# else, the tag check below fails it. The upload's attestation then names
+# code anyone can read. The pending publisher on PyPI names this repository,
+# `publish.yml` and the `pypi` environment; without it the upload fails
+# closed.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi          # protected: a maintainer approves each upload
+    permissions:
+      id-token: write          # OIDC token for Trusted Publishing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.15"
+
+      - name: Conformance suite
+        run: |
+          pip install cryptography asn1crypto pytest
+          python -m pytest test_vectors.py -q
+
+      - name: The tag names the version the file reports
+        run: |
+          v=$(python -c "import bitexact_verifier as m; print(m.__version__)")
+          test "verifier-v$v" = "$GITHUB_REF_NAME"
+
+      - name: PyPI does not have this version yet
+        run: |
+          v=$(python -c "import bitexact_verifier as m; print(m.__version__)")
+          code=$(curl -s -o /dev/null -w '%{http_code}' "https://pypi.org/pypi/bitexact-verifier/$v/json")
+          if [ "$code" = 200 ]; then
+            echo "bitexact-verifier $v is already on PyPI, and PyPI never accepts a version twice: this verifier can only be released under a new version number" >&2
+            exit 1
+          fi
+          test "$code" = 404
+
+      - name: Build sdist and wheel
+        run: |
+          pip install build
+          python -m build --outdir dist
+
+      - name: Publish to PyPI (Trusted Publishing)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist
+          print-hash: true

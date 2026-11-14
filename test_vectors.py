@@ -5,6 +5,7 @@ never import bitexact.
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -18,6 +19,139 @@ TESTDATA = Path(__file__).parent / "testdata"
 
 def _load(name):
     return json.loads((TESTDATA / name).read_text(encoding="utf-8"))
+
+
+def _every_pin():
+    """The trust file's bundle and recorder keys, Ed25519 and ML-DSA, and
+    every published witness."""
+    pins = ["--trust-file", str(TESTDATA / "trust.json")]
+    for name, key in _load("witnesses.json").items():
+        pins += ["--expect-witness", f"{name}={key}"]
+    return pins
+
+
+def test_the_witnessed_vectors_verify_with_every_key_pinned(capsys):
+    """valid-hybrid-witnessed is a signed run exported after a witness
+    cosigned the log, so every key it carries is pinned and its verdict
+    names nothing unsigned or unpinned; valid-gap-witnessed declares a
+    capture gap under the same pins: intact, but exit 3 unless --allow-gaps
+    accepts it."""
+    whole = str(TESTDATA / "valid-hybrid-witnessed.bundle.json")
+    gap = str(TESTDATA / "valid-gap-witnessed.bundle.json")
+    assert main([whole, *_every_pin()]) == 0
+    out = capsys.readouterr().out
+    assert out.startswith("OK: golden-run - ")
+    assert "not pinned" not in out and "unsigned" not in out, out
+    assert main([gap, *_every_pin()]) == 3
+    out = capsys.readouterr().out
+    assert "1 declared capture gap - the capture is incomplete" in out
+    assert "not pinned" not in out and "unsigned" not in out, out
+    assert main([gap, *_every_pin(), "--allow-gaps"]) == 0
+
+
+def test_an_empty_redaction_marker_is_refused():
+    """`redacted` is absent until a path is redacted. It sits outside the
+    entry hash and the signed redaction map, so an empty list is a second
+    spelling of "nothing redacted" anyone could add: it is refused."""
+    bundle = _load("valid-sha256.bundle.json")
+    assert verify_bundle(bundle) == (True, None)
+    bundle["entries"][0]["redacted"] = []
+    ok, err = verify_bundle(bundle)
+    assert not ok and "entry redacted is an empty list" in err, err
+
+
+def test_capture_controls_vectors(capsys):
+    """A bundle recorded under a capture policy verifies, and its verdict
+    says what the policy kept; every way an entry can contradict its capture
+    declaration outside the chain body is refused for its own reason."""
+    bundle = _load("valid-capture.bundle.json")
+    assert verify_bundle(bundle) == (True, None)
+    assert main([str(TESTDATA / "valid-capture.bundle.json")]) == 0
+    out = capsys.readouterr().out
+    assert ", 1 field scrubbed before capture (pan 1), 1 field hash-only " \
+           "(never held; 1 can be opened with key " in out
+    # The scope sentence, on its own line after the verdict, whenever the
+    # policy kept less.
+    assert out.splitlines()[1] == (
+        "Scrubbed and hash-only fields prove that a value was presented and "
+        "which rule removed it. They do not prove what the value was, they "
+        "cannot be replayed, and hash-only custody is not HIPAA "
+        "de-identification.")
+    doc = _load("capture-negative-vectors.json")
+    assert doc["format"] == "aer-capture-negative-vectors"
+    assert len(doc["cases"]) >= 4
+    for case in doc["cases"]:
+        ok, err = verify_bundle(case["bundle"])
+        assert not ok and case["refusal"] in err, (case["name"], err)
+
+
+def test_a_bundle_under_the_retired_vendor_format_name_is_refused(
+        tmp_path, capsys):
+    """The record format is `aer-bundle`; a document naming the vendor format
+    it replaced is refused exactly as any unknown format is, in both the
+    whole and the streamed form, and from the command line."""
+    bundle = _load("valid-signed.bundle.json")
+    assert verify_bundle(bundle) == (True, None)
+    for retired in ("bitexact-bundle", "bitexact-bundle-jsonl"):
+        assert verify_bundle(dict(bundle, format=retired)) == (
+            False, f"unsupported format {retired!r}")
+    assert verify_bundle(dict(bundle, format="x-bundle")) == (
+        False, "unsupported format 'x-bundle'")
+
+    whole = tmp_path / "retired.bundle.json"
+    whole.write_text(json.dumps(dict(bundle, format="bitexact-bundle")),
+                     encoding="utf-8")
+    assert main([str(whole)]) == 2
+    assert "unsupported format 'bitexact-bundle'" in capsys.readouterr().out
+
+    lines = (TESTDATA / "valid.bundle.jsonl").read_text(
+        encoding="utf-8").splitlines()
+    header = json.loads(lines[0])
+    assert header["format"] == "aer-bundle-jsonl"
+    assert main([str(TESTDATA / "valid.bundle.jsonl")]) == 0
+    capsys.readouterr()
+    streamed = tmp_path / "retired.bundle.jsonl"
+    streamed.write_text("\n".join(
+        [json.dumps(dict(header, format="bitexact-bundle-jsonl")),
+         *lines[1:]]) + "\n", encoding="utf-8")
+    assert main([str(streamed)]) == 2
+    assert "OK" not in capsys.readouterr().out
+
+
+def test_post_quantum_negative_vectors():
+    """Every way a post-quantum half can be wrong, each refused for its own
+    reason: the corpus an independent verifier is held to. The genuine
+    bundle they are cut from verifies under the same pins."""
+    doc = _load("pq-negative-vectors.json")
+    assert doc["format"] == "aer-pq-negative-vectors"
+    assert len(doc["cases"]) >= 12
+    trust = _load("trust.json")
+    pins = {"expect_recorder_key": trust["recorder_keys"][0]["public_key"],
+            "expect_recorder_pq_key": trust["recorder_keys"][0]["pq_public_key"],
+            "expect_key": trust["bundle_keys"][0]["public_key"],
+            "expect_pq_key": trust["bundle_keys"][0]["pq_public_key"]}
+    assert verify_bundle(_load("valid-signed.bundle.json"), **pins) == (True, None)
+    assert verify_bundle(_load("valid-signed.bundle.json"), require_pq=True) == \
+        (True, None)
+    for case in doc["cases"]:
+        ok, err = verify_bundle(case["bundle"], **case["pins"])
+        assert not ok and case["refusal"] in err, (case["name"], err)
+
+
+def test_chain_negative_vectors():
+    """Every rule that leaves a chain one reading - a body named by its step
+    when it cannot be canonicalized, data and commitments always present,
+    no boolean where an integer belongs, a seal never redacted, one fork
+    entry, one timestamp grammar, a signature that always names its time and
+    key - each refused for its own reason. The genuine bundle they are cut
+    from verifies."""
+    doc = _load("chain-negative-vectors.json")
+    assert doc["format"] == "aer-chain-negative-vectors"
+    assert len(doc["cases"]) >= 10
+    assert verify_bundle(_load("valid-signed.bundle.json")) == (True, None)
+    for case in doc["cases"]:
+        ok, err = verify_bundle(case["bundle"])
+        assert not ok and case["refusal"] in err, (case["name"], err)
 
 
 def test_canonicalization_vectors():
@@ -98,6 +232,8 @@ def test_signature_strictness_is_this_files_own():
         body["checkpoints"] = bundle["checkpoints"]
     if "anchors" in bundle:
         body["anchors"] = bundle["anchors"]
+    if "tlog" in bundle:
+        body["tlog"] = bundle["tlog"]
     data = _canonical(body)
     good = signed["signature"]
     assert _ed25519_verify(signed["public_key"], data, good) is True
@@ -183,7 +319,7 @@ def test_golden_dsse_envelope_verifies():
 
 
 def test_envelope_pins_keys_with_expect_key_and_trust():
-    # A DSSE envelope must honour key pinning: the right key passes, a
+    # A DSSE envelope must honor key pinning: the right key passes, a
     # wrong one fails. Without this, the envelope's key-match logic is
     # untested and could be inverted without any test noticing.
     envelope = _load("valid.dsse.json")
@@ -225,7 +361,8 @@ def test_golden_adverse_decision_bundle_is_identity_rich_and_verifies():
     assert identity["principal"] and identity["model_version"]
     assert identity["policy_version"].startswith("sha256:")
     assert identity["prompt_pack_version"].startswith("sha256:")
-    assert by_kind["context"][0]["data"]["content_hash"]
+    assert by_kind["context"][0]["data"]["content"]
+    assert "content_hash" not in by_kind["context"][0]["data"]
     decision = by_kind["human_decision"][0]["data"]
     assert decision["decision"] == "uphold"
     assert decision["binds_step"] == by_kind["http_call"][0]["step"]
@@ -281,7 +418,7 @@ def _unsigned_base():
     with no key, so each entry-level integrity check is the sole defense and
     a tamper isolates exactly the check meant to catch it."""
     bundle = _load("valid-signed.bundle.json")
-    for key in ("signature", "checkpoints", "anchors"):
+    for key in ("signature", "checkpoints", "anchors", "tlog"):
         bundle.pop(key, None)
     assert verify_bundle(bundle) == (True, None)
     return bundle
@@ -375,11 +512,12 @@ def _signed_checkpointed_bundle():
         serialization.Encoding.Raw, serialization.PublicFormat.Raw).hex()
 
     def entry(i, prev):
-        body = {"v": 2, "alg": "blake2b-256", "run_id": "r", "step": i,
+        body = {"alg": "blake2b-256","run_id": "r", "step": i,
                 "kind": "run_meta" if i == 0 else "tool_call", "prev": prev,
-                "prov": "observed", "ts": "2026-09-02T00:00:00+00:00"}
-        body["hash"] = _hash_hex("blake2b-256", _canonical(body))
-        return body
+                "prov": "observed", "ts": "2026-09-02T00:00:00+00:00",
+                "commitments": {}}
+        return {**body, "hash": _hash_hex("blake2b-256", _canonical(body)),
+                "data": {}}
 
     e0 = entry(0, "0" * 64)
     e1 = entry(1, e0["hash"])
@@ -398,7 +536,7 @@ def _signed_checkpointed_bundle():
         {k: cp0[k] for k in ("run_id", "seq", "steps", "head_hash",
                              "prev_checkpoint", "alg", "key_id")}))
     cp1 = checkpoint(1, 2, e1["hash"], cp0_hash)
-    bundle = {"format": "bitexact-bundle/1", "run_id": "r",
+    bundle = {"format": "aer-bundle", "run_id": "r",
               "entries": entries, "chain": {"head_hash": e1["hash"]},
               "checkpoints": [cp0, cp1]}
 
@@ -517,6 +655,44 @@ def test_rfc3161_anchor_tsa_pin_is_enforced():
     assert verify_bundle(base, expect_tsa=pem)[0] is False
 
 
+def test_ledger_heads_negative_vectors_each_fail_closed(tmp_path, capsys):
+    """A workflow pack the product wrote verifies, its governance ledger
+    anchored at the head the recorder signed; every cut its holder can make
+    and reseal without the recorder key - the newest event dropped, an older
+    prefix put in its place, the signed heads or the ledger removed - fails
+    with exit 2 and the vector's refusal, the recorder key pinned or not."""
+    import shutil
+
+    from bitexact_verifier import main
+    data = _load("ledger-heads-negative-vectors.json")
+    source = Path(__file__).parent / "testdata" / data["bag"]
+    [recorder] = _load("trust.json")["recorder_keys"]
+    pins = ([], ["--expect-recorder-key", recorder["public_key"],
+                 "--expect-recorder-pq-key", recorder["pq_public_key"]])
+    for pin in pins:
+        assert main([str(source), *pin]) == 0
+        line = capsys.readouterr().out.splitlines()[0]
+        assert "data/governance.jsonl at 3 events" in line
+    assert "anchored at the head the pinned recorder key signed" in line
+    assert len(data["cases"]) == 4
+    for n, case in enumerate(data["cases"]):
+        bag = tmp_path / f"c{n}"
+        shutil.copytree(source, bag)
+        ledger = bag / "data" / "governance.jsonl"
+        if case["keep_events"] is not None:
+            lines = ledger.read_text(encoding="utf-8").splitlines(
+                keepends=True)
+            ledger.write_text("".join(lines[:case["keep_events"]]),
+                              encoding="utf-8")
+        if case["remove"] is not None:
+            (bag / case["remove"]).unlink()
+        _reseal(bag)
+        for pin in pins:
+            assert main([str(bag), *pin]) == 2, case["name"]
+            assert f"FAIL: {case['refusal']}" in capsys.readouterr().out, \
+                case["name"]
+
+
 def test_anchor_negative_vectors_each_fail_closed():
     """Every guard in the verifier's external-anchor path is pinned red-if-
     removed by a committed vector: a bundle that is valid but for one defective
@@ -567,31 +743,35 @@ def _signed_bundle_no_recorder_material():
     """A validly bundle-key-signed bundle with NO checkpoints and NO anchors,
     built from scratch (no product import). Returns (bundle, bundle_public_hex).
     The signed body is exactly what the verifier's signed branch re-checks:
-    {format, run_id, chain} (+ signed_at/key_id when present)."""
+    {format, run_id, chain, signed_at, key_id}."""
     from cryptography.hazmat.primitives import serialization
     from cryptography.hazmat.primitives.asymmetric.ed25519 import (
         Ed25519PrivateKey)
 
-    from bitexact_verifier import _canonical, _hash_hex
+    from bitexact_verifier import _canonical, _hash_hex, _key_id
 
     priv = Ed25519PrivateKey.generate()
     pub = priv.public_key().public_bytes(
         serialization.Encoding.Raw, serialization.PublicFormat.Raw).hex()
 
     def entry(i, prev):
-        body = {"v": 2, "alg": "blake2b-256", "run_id": "r", "step": i,
+        body = {"alg": "blake2b-256","run_id": "r", "step": i,
                 "kind": "run_meta" if i == 0 else "tool_call", "prev": prev,
-                "prov": "observed", "ts": "2026-09-02T00:00:00+00:00"}
-        body["hash"] = _hash_hex("blake2b-256", _canonical(body))
-        return body
+                "prov": "observed", "ts": "2026-09-02T00:00:00+00:00",
+                "commitments": {}}
+        return {**body, "hash": _hash_hex("blake2b-256", _canonical(body)),
+                "data": {}}
 
     e0 = entry(0, "0" * 64)
     e1 = entry(1, e0["hash"])
-    bundle = {"format": "bitexact-bundle/1", "run_id": "r",
+    bundle = {"format": "aer-bundle", "run_id": "r",
               "entries": [e0, e1], "chain": {"head_hash": e1["hash"]}}
+    stamp = "2026-09-02T00:00:00+00:00"
     signed_body = {"format": bundle["format"], "run_id": bundle["run_id"],
-                   "chain": bundle["chain"]}
+                   "chain": bundle["chain"], "signed_at": stamp,
+                   "key_id": _key_id(pub)}
     bundle["signature"] = {"algorithm": "ed25519", "public_key": pub,
+                           "key_id": _key_id(pub), "signed_at": stamp,
                            "signature": priv.sign(_canonical(signed_body)).hex()}
     return bundle, pub
 
@@ -650,7 +830,7 @@ def test_cli_consumes_fixtures(capsys):
     # not recorder-accountable: the CLI refuses it. Bundle-key trust alone
     # verifies the exporter's signature and reports the redaction.
     assert main([str(TESTDATA / "valid-redacted.bundle.json"),
-                 "--trust-file", str(TESTDATA / "trust.json")]) == 1
+                 "--trust-file", str(TESTDATA / "trust.json")]) == 2
     assert "unaccountable" in capsys.readouterr().out
     bundle_only = TESTDATA.parent / "test_bundle_only_trust.json"
     trust = _load("trust.json")
@@ -681,8 +861,8 @@ def test_malformed_entries_fail_with_named_reasons():
     cases.append((b, "malformed salt"))
 
     b = _golden()
-    b["entries"][0]["v"] = 3
-    cases.append((b, "unsupported entry version"))
+    b["entries"][0]["v"] = 2  # a version field is no part of an entry
+    cases.append((b, "step 0: hash mismatch"))
 
     b = _golden()
     b["entries"][0]["alg"] = "md5"
@@ -877,14 +1057,14 @@ def test_sha256_bundle_verifies():
     salt = "ab" * 16
     commitment = hmac.new(bytes.fromhex(salt), _canonical(1),
                           hashlib.sha256).hexdigest()
-    entry = {"v": 2, "alg": "sha256", "run_id": "r", "step": 0,
+    entry = {"alg": "sha256", "run_id": "r", "step": 0,
              "kind": "http_call", "prov": "observed",
              "ts": "2026-09-02T00:00:00+00:00", "prev": "0" * 64,
              "commitments": {"x": commitment}}
     entry["hash"] = hashlib.sha256(_canonical(entry)).hexdigest()
     entry["data"] = {"x": 1}
     entry["salts"] = {"x": salt}
-    bundle = {"format": "bitexact-bundle/1", "run_id": "r",
+    bundle = {"format": "aer-bundle", "run_id": "r",
               "entries": [entry], "chain": {"head_hash": entry["hash"]}}
     ok, err = verify_bundle(bundle)
     assert ok, err
@@ -951,6 +1131,9 @@ def test_recorder_key_demand_fails_without_checkpoints(tmp_path, capsys):
     del bundle["checkpoints"]
     del bundle["signature"]
     ok, err = verify_bundle(bundle)
+    assert not ok and "tlog" in err   # a log proof of a checkpoint not carried
+    del bundle["tlog"]
+    ok, err = verify_bundle(bundle)
     assert ok, err  # unsigned, nothing demanded - still fine
 
     ok, err = verify_bundle(bundle, expect_recorder_key="ab" * 32)
@@ -961,14 +1144,14 @@ def test_recorder_key_demand_fails_without_checkpoints(tmp_path, capsys):
 
     path = tmp_path / "forged.json"
     path.write_text(json.dumps(bundle), encoding="utf-8")
-    assert main([str(path), "--expect-recorder-key", "ab" * 32]) == 1
+    assert main([str(path), "--expect-recorder-key", "ab" * 32]) == 2
     assert "FAIL" in capsys.readouterr().out
 
     trust = tmp_path / "trust.json"
     trust.write_text(json.dumps(
         {"recorder_keys": [{"key_id": "x", "public_key": "ab" * 32}]}),
         encoding="utf-8")
-    assert main([str(path), "--trust-file", str(trust)]) == 1
+    assert main([str(path), "--trust-file", str(trust)]) == 2
     assert "FAIL" in capsys.readouterr().out
 
 
@@ -984,9 +1167,11 @@ def test_trust_file_must_be_well_formed(tmp_path, capsys):
     for text, needle in cases:
         trust = tmp_path / "trust.json"
         trust.write_text(text, encoding="utf-8")
+        # The trust file is the auditor's input: a bad one is an operational
+        # error (exit 1), never a verdict on the bundle.
         assert main([str(bundle_path), "--trust-file", str(trust)]) == 1, text
         out = capsys.readouterr().out
-        assert "FAIL" in out and needle in out, (text, out)
+        assert out.startswith("error: ") and needle in out, (text, out)
 
 
 def test_verify_functions_never_throw(tmp_path, capsys):
@@ -1042,7 +1227,7 @@ def test_verify_functions_never_throw(tmp_path, capsys):
     b = _golden()
     b["entries"][1]["commitments"] = None
     path.write_text(json.dumps(b), encoding="utf-8")
-    assert main([str(path)]) == 1
+    assert main([str(path)]) == 2
     assert "FAIL" in capsys.readouterr().out
 
 
@@ -1121,13 +1306,13 @@ def test_lone_surrogates_escape_and_big_ints_reject():
 
 def test_cli_rejects_malformed_bundle_with_nan(tmp_path, capsys):
     bad = tmp_path / "nan.json"
-    bad.write_text('{"format": "bitexact-bundle/1", "run_id": "r", '
-                   '"entries": [{"v": 2, "alg": "blake2b-256", '
+    bad.write_text('{"format": "aer-bundle", "run_id": "r", '
+                   '"entries": [{"alg": "blake2b-256",'
                    '"run_id": "r", "step": 0, "kind": "http_call", "ts": "2026-09-02T00:00:00+00:00", '
                    '"prev": "' + "0" * 64 + '", "data": {"x": NaN}, '
                    '"salts": {}, "commitments": {}, "hash": "beef"}], '
                    '"chain": {"head_hash": "beef"}}', encoding="utf-8")
-    assert main([str(bad)]) == 1
+    assert main([str(bad)]) == 2
     assert "FAIL" in capsys.readouterr().out
 
 
@@ -1137,11 +1322,11 @@ def test_cli_rejects_duplicate_keys(tmp_path, capsys):
     # verdict and exit 1, not a traceback: the same refusal the loader gives
     # everywhere, extended to the last two unguarded parses (bundle, trust).
     dup = tmp_path / "dup.json"
-    dup.write_text('{"format": "bitexact-bundle/1", '
-                   '"format": "bitexact-bundle/1", "run_id": "r", '
+    dup.write_text('{"format": "aer-bundle", '
+                   '"format": "aer-bundle", "run_id": "r", '
                    '"entries": [], "chain": {"head_hash": "beef"}}',
                    encoding="utf-8")
-    assert main([str(dup)]) == 1
+    assert main([str(dup)]) == 2
     assert "FAIL" in capsys.readouterr().out
 
     bundle_path = TESTDATA / "valid-signed.bundle.json"
@@ -1149,26 +1334,26 @@ def test_cli_rejects_duplicate_keys(tmp_path, capsys):
     trust.write_text('{"bundle_keys": [], "bundle_keys": []}',
                      encoding="utf-8")
     assert main([str(bundle_path), "--trust-file", str(trust)]) == 1
-    assert "FAIL" in capsys.readouterr().out
+    assert capsys.readouterr().out.startswith("error: ")
 
 
 def test_cli_totality_on_invalid_utf8(tmp_path, capsys):
     # main() reads the bundle/trust files with a strict UTF-8 codec. The read
     # decodes BEFORE the parse, so the decode must be guarded too: a stray
-    # 0xFF (a truncated multibyte char, latin-1 mojibake) is a verdict and
-    # exit 1, never a traceback - matching the product inspector, whose
-    # verify_uploaded_bundle catches the same UnicodeDecodeError on the bytes.
+    # 0xFF (a truncated multibyte char, latin-1 mojibake) in a bundle is a
+    # FAIL (exit 2), in the auditor's trust file an error (exit 1), and never
+    # a traceback.
     bad = tmp_path / "bad.json"
-    bad.write_bytes(b'{"format": "bitexact-bundle/1", "run_id": "r\xff", '
+    bad.write_bytes(b'{"format": "aer-bundle", "run_id": "r\xff", '
                     b'"entries": [], "chain": {"head_hash": "beef"}}\n')
-    assert main([str(bad)]) == 1
+    assert main([str(bad)]) == 2
     assert "FAIL" in capsys.readouterr().out
 
     bundle_path = TESTDATA / "valid-signed.bundle.json"
     bad_trust = tmp_path / "trust.bin"
     bad_trust.write_bytes(b'{"bundle_keys": "\xff"}')
     assert main([str(bundle_path), "--trust-file", str(bad_trust)]) == 1
-    assert "FAIL" in capsys.readouterr().out
+    assert capsys.readouterr().out.startswith("error: ")
 
 
 def test_cli_main_is_total_on_hostile_files(tmp_path, capsys):
@@ -1176,38 +1361,39 @@ def test_cli_main_is_total_on_hostile_files(tmp_path, capsys):
     # surfacing one instance at a time is "glue code (decode, DSSE dispatch,
     # indexing) touches a hostile shape before a verify call and escapes as a
     # traceback." This sweeps the hostile file shapes and asserts the closure:
-    # main() renders a verdict (returns 0 or 1), never raises. A future glue
+    # main() renders a verdict (returns 0 or 2), never raises. A future glue
     # crash on any of these shapes turns it red.
     text_shapes = [
         "null", "123", "1.5", "true", "false", '"a string"',
         "[]", "[1, 2, 3]", "{}", '{"format": 5}',
         "", "   ", "not json", "{", "[", "}{",
-        '{"format": "bitexact-bundle/1"',            # truncated
+        '{"format": "aer-bundle"',            # truncated
         '{"a": 1} trailing',                         # trailing junk
         '{"a": 1, "a": 2}',                          # duplicate key
         '{"x": NaN}', '{"x": Infinity}',             # non-finite literals
         '{"payloadType": 5}',                        # DSSE-shaped, unsupported
-        '{"format": "bitexact-bundle-jsonl/1"}',     # jsonl header, no entries
+        '{"format": "aer-bundle-jsonl"}',     # jsonl header, no entries
     ]
     byte_shapes = [b"\xff\xfe", b'{"run_id": "\xff"}', b"\xef\xbb\xbf null",
                    b"\xc3"]                            # BOM+scalar, lone byte
     p = tmp_path / "b.json"
     for text in text_shapes:
         p.write_text(text, encoding="utf-8")
-        assert main([str(p)]) in (0, 1), text     # the point: it does not raise
+        assert main([str(p)]) in (0, 2), text     # the point: it does not raise
         capsys.readouterr()
     for data in byte_shapes:
         p.write_bytes(data)
-        assert main([str(p)]) in (0, 1), data
+        assert main([str(p)]) in (0, 2), data
         capsys.readouterr()
 
-    # the top-level boundary: a nonexistent path is a verdict, not a traceback
+    # the top-level boundary: a nonexistent path is a named error, not a
+    # traceback
     assert main([str(tmp_path / "missing.json")]) == 1
-    assert "FAIL" in capsys.readouterr().out
+    assert capsys.readouterr().out.startswith("error: no such file")
     # the scalar-dispatch instance specifically: routed to verify_bundle (a
     # clean "not a bundle" verdict), not a TypeError from `in` on a scalar.
     p.write_text("null", encoding="utf-8")
-    assert main([str(p)]) == 1
+    assert main([str(p)]) == 2
     assert "not a bundle: the document is null" in capsys.readouterr().out
 
 
@@ -1230,17 +1416,14 @@ def test_a_stack_exhausted_parse_is_refused_by_name():
     """The refusal must not depend on which interpreter the auditor ran.
 
     How deep CPython's JSON scanner recurses before exhausting the stack
-    varies by version. On 3.10 - the floor this verifier declares - a deeply
-    nested array raises RecursionError inside json.loads, before the
-    MAX_DEPTH check downstream of it can refuse; on 3.12 and later the C
-    scanner no longer spends Python frames and parses the same input, leaving
-    the check to name it. The caller gets a verdict either way, but on the
-    floor it reads `malformed bundle: RecursionError(...)` rather than the
-    reason - and only on some versions.
+    depends on the host's stack. Where a deeply nested array raises
+    RecursionError inside json.loads, before the MAX_DEPTH check downstream
+    of it can refuse, the caller would read `malformed bundle:
+    RecursionError(...)` rather than the reason.
 
-    `setrecursionlimit` cannot reproduce that on 3.12+, so the guard itself is
-    what is pinned here: whatever exhausts the parser, the seam refuses by
-    name.
+    `setrecursionlimit` cannot reproduce that on the C scanner, so the guard
+    itself is what is pinned here: whatever exhausts the parser, the seam
+    refuses by name.
     """
     import bitexact_verifier as bv
     from bitexact_verifier import _loads
@@ -1268,7 +1451,7 @@ def test_data_paths_skip_non_string_keys():
     # Byte-identical to the product's commitment_paths: a non-string key is
     # skipped, not a crash. Unreachable through JSON (object keys are always
     # strings), but the two path generators must not diverge on a hand-built
-    # dict passed straight to verify_bundle / verify_uploaded_bundle.
+    # dict passed straight to verify_bundle.
     from bitexact_verifier import _data_paths
     assert _data_paths({1: "x"}) == []                       # non-string top key
     assert _data_paths({"a": {"b": 1}, 3: "z"}) == ["a.b"]   # top key 3 skipped
@@ -1276,7 +1459,7 @@ def test_data_paths_skip_non_string_keys():
 
 
 def _jsonl_lines(bundle, signature=None):
-    header = {"format": "bitexact-bundle-jsonl/1",
+    header = {"format": "aer-bundle-jsonl",
               "run_id": bundle["run_id"], "chain": bundle["chain"]}
     if "checkpoints" in bundle:
         header["checkpoints"] = bundle["checkpoints"]
@@ -1316,7 +1499,7 @@ def test_jsonl_form_verifies_and_fails_loud(tmp_path, capsys):
     assert not ok and "unsupported format" in err
 
     ok, err, _ = verify_jsonl([json.dumps(
-        {"format": "bitexact-bundle-jsonl/1", "run_id": "r",
+        {"format": "aer-bundle-jsonl", "run_id": "r",
          "chain": {"head_hash": None}}), "{not json"])
     assert not ok and isinstance(err, str)  # total, never throws
 
@@ -1332,7 +1515,7 @@ def test_jsonl_form_verifies_and_fails_loud(tmp_path, capsys):
     entry["data"] = {"smuggled": True}
     lines[1] = json.dumps(entry)
     bad.write_text(chr(10).join(lines) + chr(10), encoding="utf-8")
-    assert main([str(bad)]) == 1
+    assert main([str(bad)]) == 2
     assert "FAIL" in capsys.readouterr().out
 
 
@@ -1352,11 +1535,12 @@ def test_jsonl_signature_and_recorder_demand(tmp_path):
     public = key.public_key().public_bytes(
         serialization.Encoding.Raw, serialization.PublicFormat.Raw).hex()
     from bitexact_verifier import _key_id
-    signed_body = {"format": "bitexact-bundle-jsonl/1",
+    signed_body = {"format": "aer-bundle-jsonl",
                    "run_id": bundle["run_id"], "chain": bundle["chain"],
-                   "signed_at": "t", "key_id": _key_id(public)}
+                   "signed_at": "2026-09-02T00:00:00Z",
+                   "key_id": _key_id(public)}
     signature = {"algorithm": "ed25519", "key_id": _key_id(public),
-                 "public_key": public, "signed_at": "t",
+                 "public_key": public, "signed_at": "2026-09-02T00:00:00Z",
                  "signature": key.sign(_canonical(signed_body)).hex()}
 
     ok, err, summary = verify_jsonl(_jsonl_lines(bundle, signature),
@@ -1426,7 +1610,7 @@ def _sealed_bundle():
         commitments = {k: _field_commitment(salt, v, "blake2b-256")
                        for k, v in data.items()}
         from bitexact_verifier import PROV_BY_KIND
-        body = {"v": 2, "alg": "blake2b-256", "run_id": run_id, "step": i,
+        body = {"alg": "blake2b-256","run_id": run_id, "step": i,
                 "kind": kind, "prov": PROV_BY_KIND[kind][0],
                 "ts": "2026-09-02T00:00:00+00:00", "prev": prev,
                 "commitments": commitments}
@@ -1437,7 +1621,7 @@ def _sealed_bundle():
 
     add("http_call", {"model": "gpt-4o"})
     add("run_end", {"steps": 2})
-    return {"format": "bitexact-bundle/1", "run_id": run_id,
+    return {"format": "aer-bundle", "run_id": run_id,
             "entries": entries, "chain": {"head_hash": entries[-1]["hash"]}}
 
 
@@ -1453,7 +1637,7 @@ def test_verifier_enforces_run_end_seal_finality():
     # append a behavioral entry after the seal - must FAIL
     tampered = json.loads(json.dumps(bundle))
     prev = tampered["entries"][-1]["hash"]
-    body = {"v": 2, "alg": "blake2b-256", "run_id": "sealed-run", "step": 2,
+    body = {"alg": "blake2b-256","run_id": "sealed-run", "step": 2,
             "kind": "http_call", "prov": "observed", "ts": "2026-09-02T00:00:00+00:00",
             "prev": prev, "commitments": {}}
     h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
@@ -1490,14 +1674,14 @@ def test_jsonl_verifier_enforces_seal_finality():
     from bitexact_verifier import _canonical
 
     bundle = _sealed_bundle()
-    header = {"format": "bitexact-bundle-jsonl/1", "run_id": "sealed-run",
+    header = {"format": "aer-bundle-jsonl", "run_id": "sealed-run",
               "chain": bundle["chain"]}
     lines = [json.dumps(header)] + [json.dumps(e) for e in bundle["entries"]]
     ok, err, _ = verify_jsonl(lines)
     assert ok, err
 
     prev = bundle["entries"][-1]["hash"]
-    body = {"v": 2, "alg": "blake2b-256", "run_id": "sealed-run", "step": 2,
+    body = {"alg": "blake2b-256","run_id": "sealed-run", "step": 2,
             "kind": "http_call", "prov": "observed", "ts": "2026-09-02T00:00:00+00:00",
             "prev": prev, "commitments": {}}
     h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
@@ -1525,18 +1709,18 @@ def test_verify_bundle_flags_unapplied_redaction_claim():
     data = {"fields": ["0:model"], "by": "auditor"}
     commitments = {k: _field_commitment(salt, v, "blake2b-256")
                    for k, v in data.items()}
-    body = {"v": 2, "alg": "blake2b-256", "run_id": "sealed-run", "step": 1,
+    body = {"alg": "blake2b-256","run_id": "sealed-run", "step": 1,
             "kind": "redaction", "prov": "asserted", "ts": "2026-09-02T00:00:00+00:00",
             "prev": entries[0]["hash"], "commitments": commitments}
     h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
     entries.append({**body, "hash": h, "data": data,
                     "salts": {k: salt for k in data}})
-    b = {"format": "bitexact-bundle/1", "run_id": "sealed-run",
+    b = {"format": "aer-bundle", "run_id": "sealed-run",
          "entries": entries, "chain": {"head_hash": h}}
     ok, err = verify_bundle(b)
     assert not ok and "redaction claim is false" in err
 
-    header = {"format": "bitexact-bundle-jsonl/1", "run_id": "sealed-run",
+    header = {"format": "aer-bundle-jsonl", "run_id": "sealed-run",
               "chain": {"head_hash": h}}
     from bitexact_verifier import verify_jsonl
     ok, err, _ = verify_jsonl([json.dumps(header)]
@@ -1557,13 +1741,13 @@ def test_verify_bundle_ignores_inert_redaction_tokens():
     data = {"fields": ["bogus", "99:x"], "by": "auditor"}
     commitments = {k: _field_commitment(salt, v, "blake2b-256")
                    for k, v in data.items()}
-    body = {"v": 2, "alg": "blake2b-256", "run_id": "sealed-run", "step": 1,
+    body = {"alg": "blake2b-256","run_id": "sealed-run", "step": 1,
             "kind": "redaction", "prov": "asserted", "ts": "2026-09-02T00:00:00+00:00",
             "prev": entries[0]["hash"], "commitments": commitments}
     h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
     entries.append({**body, "hash": h, "data": data,
                     "salts": {k: salt for k in data}})
-    b = {"format": "bitexact-bundle/1", "run_id": "sealed-run",
+    b = {"format": "aer-bundle", "run_id": "sealed-run",
          "entries": entries, "chain": {"head_hash": h}}
     ok, err = verify_bundle(b)
     assert ok, err
@@ -1574,11 +1758,11 @@ def test_verifier_rejects_unknown_provenance():
 
     from bitexact_verifier import _canonical, verify_bundle
 
-    body = {"v": 2, "alg": "blake2b-256", "run_id": "r", "step": 0,
+    body = {"alg": "blake2b-256","run_id": "r", "step": 0,
             "kind": "http_call", "prov": "sneaky", "ts": "2026-09-02T00:00:00+00:00",
             "prev": "0" * 64, "commitments": {}}
     h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
-    bundle = {"format": "bitexact-bundle/1", "run_id": "r",
+    bundle = {"format": "aer-bundle", "run_id": "r",
               "entries": [{**body, "hash": h, "data": {}, "salts": {}}],
               "chain": {"head_hash": h}}
     ok, err = verify_bundle(bundle)
@@ -1610,13 +1794,13 @@ def test_verifier_accepts_committed_decision_record():
                                 ("reason_codes", data["reason_codes"]))}
     for k, v in data["output_flags"].items():
         commitments[f"output_flags.{k}"] = _field_commitment(salt, v, "blake2b-256")
-    body = {"v": 2, "alg": "blake2b-256", "run_id": "gov-run", "step": 0,
+    body = {"alg": "blake2b-256","run_id": "gov-run", "step": 0,
             "kind": "decision_record", "prov": "asserted", "ts": "2026-09-02T00:00:00+00:00",
             "prev": "0" * 64, "commitments": commitments}
     h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
     entry = {**body, "hash": h, "data": data,
              "salts": {p: salt for p in commitments}}
-    bundle = {"format": "bitexact-bundle/1", "run_id": "gov-run",
+    bundle = {"format": "aer-bundle", "run_id": "gov-run",
               "entries": [entry], "chain": {"head_hash": h}}
     ok, err = verify_bundle(bundle)
     assert ok, err
@@ -1628,7 +1812,9 @@ def test_verifier_accepts_committed_decision_record():
 
 # --- provenance bundles: cross-run graph, built with verifier primitives ---
 
-def _prov_run_bundle(run_id, fork_data=None):
+def _prov_run_bundle(run_id, fork_data=None, via=None):
+    """A run bundle as a provenance bag carries it; `via`, when given, names
+    the capture path on every entry."""
     import hashlib
 
     from bitexact_verifier import _canonical, _field_commitment
@@ -1640,9 +1826,11 @@ def _prov_run_bundle(run_id, fork_data=None):
         nonlocal prev
         commitments = {k: _field_commitment(salt, v, "blake2b-256")
                        for k, v in data.items()}
-        body = {"v": 2, "alg": "blake2b-256", "run_id": run_id,
+        body = {"alg": "blake2b-256","run_id": run_id,
                 "step": len(entries), "kind": kind, "prov": prov, "ts": "2026-09-02T00:00:00+00:00",
                 "prev": prev, "commitments": commitments}
+        if via is not None:
+            body["via"] = via
         h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
         entries.append({**body, "hash": h, "data": data,
                         "salts": {k: salt for k in data}})
@@ -1653,12 +1841,12 @@ def _prov_run_bundle(run_id, fork_data=None):
         add("fork", fork_data)
     add("http_call", {"model": "m"})
     add("run_end", {"steps": len(entries) + 1})
-    bundle = {"format": "bitexact-bundle/1", "run_id": run_id,
+    bundle = {"format": "aer-bundle", "run_id": run_id,
               "entries": entries, "chain": {"head_hash": entries[-1]["hash"]}}
     return bundle, entries
 
 
-def _write_prov_bag(bag_dir, specs, root, attestation=None):
+def _write_prov_bag(bag_dir, specs, root, attestation=None, via=None):
     """specs: [(run_id, fork_data|None)]. Returns (graph, {run_id: entries})."""
     import hashlib
 
@@ -1667,7 +1855,7 @@ def _write_prov_bag(bag_dir, specs, root, attestation=None):
     ids = {rid for rid, _ in specs}
     nodes, edges, ents = [], [], {}
     for rid, fork in specs:
-        bundle, entries = _prov_run_bundle(rid, fork)
+        bundle, entries = _prov_run_bundle(rid, fork, via)
         (bag / "data" / "runs" / (rid + ".bundle.json")).write_text(
             json.dumps(bundle), encoding="utf-8")
         ents[rid] = entries
@@ -1679,7 +1867,7 @@ def _write_prov_bag(bag_dir, specs, root, attestation=None):
             edges.append({"child": rid, "source_run": fork["source_run"],
                           "at_step": fork["at_step"],
                           "source_prev_hash": fork["source_prev_hash"]})
-    graph = {"format": "bitexact-provenance-graph/1", "root": root,
+    graph = {"format": "aer-provenance-graph", "root": root,
              "nodes": nodes, "edges": edges, "fork_matrices": []}
     (bag / "data" / "provenance-graph.json").write_text(json.dumps(graph),
                                                         encoding="utf-8")
@@ -1715,6 +1903,925 @@ def _linked_forks():
     return [("orig", None), ("fork-a", fa), ("fork-b", fb)], fa, fb
 
 
+def _pack_run(run_id, *, sealed=True, gap=False, relay=None, via=None):
+    """A run bundle as a case, workflow or selection pack carries it; `via`,
+    when given, names the capture path on every entry."""
+    import hashlib
+
+    from bitexact_verifier import _canonical, _data_paths, _field_commitment
+    entries, prev = [], "0" * 64
+
+    def leaf(value, path):
+        for part in path.split("."):
+            value = value[part]
+        return value
+
+    def add(kind, data, prov="observed"):
+        nonlocal prev
+        paths = list(_data_paths(data))          # one commitment per leaf
+        commitments = {p: _field_commitment("ab" * 16, leaf(data, p),
+                                            "blake2b-256") for p in paths}
+        body = {"alg": "blake2b-256","run_id": run_id,
+                "step": len(entries), "kind": kind, "prov": prov,
+                "ts": "2026-09-02T00:00:00+00:00", "prev": prev,
+                "commitments": commitments}
+        if via is not None:
+            body["via"] = via
+        h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
+        entries.append({**body, "hash": h, "data": data,
+                        "salts": {p: "ab" * 16 for p in paths}})
+        prev = h
+    add("run_meta", {"v": "1"})
+    add("http_call", {"model": "m"} if relay is None else
+        {"model": "m", "aer_source": {"peer": relay, "seq": 1}})
+    if gap:
+        add("marker", {"note": "capture gap: serialization",
+                       "gap": {"cause": "serialization"}}, prov="asserted")
+    if sealed:
+        add("run_end", {"steps": len(entries) + 1})
+    return {"format": "aer-bundle", "run_id": run_id,
+            "entries": entries, "chain": {"head_hash": entries[-1]["hash"]}}
+
+
+def _ledger(n=3):
+    """A hash-chained ledger of n events, as the product writes case and
+    workflow ledgers."""
+    import hashlib
+
+    from bitexact_verifier import _canonical
+    events, prev = [], "0" * 64
+    for i in range(n):
+        body = {"ts": f"2026-09-02T00:00:0{i}+00:00", "kind": "note_added",
+                "by": "alice", "data": {"i": i}, "prev": prev,
+                "alg": "blake2b-256"}
+        h = hashlib.blake2b(_canonical(body), digest_size=32).hexdigest()
+        events.append({**body, "hash": h})
+        prev = h
+    return events
+
+
+_HEADS_KEY = None
+
+
+def _heads_key():
+    """The recorder key the test packs' ledger heads are signed with."""
+    global _HEADS_KEY
+    if _HEADS_KEY is None:
+        _HEADS_KEY = _ed_key()
+    return _HEADS_KEY
+
+
+def _sign_heads(bag, key=None, edit=None):
+    """Sign the bag's ledger heads (`ledger_heads`) as the recorder does,
+    with `key` (an Ed25519 private key; the suite's by default), after
+    `edit(statement)` when given, and write data/ledger-heads.json."""
+    from cryptography.hazmat.primitives import serialization
+
+    from bitexact_verifier import HEADS_FILE, _canonical, _key_id, ledger_heads
+    key = key or _heads_key()[0]
+    public = key.public_key().public_bytes(
+        serialization.Encoding.Raw, serialization.PublicFormat.Raw).hex()
+    heads = ledger_heads(bag)
+    if edit:
+        edit(heads)
+    attested = {**heads, "key_id": _key_id(public)}
+    (Path(bag) / "data" / HEADS_FILE).write_text(json.dumps({
+        **attested, "public_key": public,
+        "signature": key.sign(_canonical(attested)).hex()}),
+        encoding="utf-8")
+
+
+def _write_pack(bag_dir, runs, ledgers=None, heads=True):
+    """A bag with run bundles and ledgers but no provenance graph:
+    {relative path: events} for each ledger, `.jsonl` or `.ledger.json`,
+    and the ledger heads signed by the suite's recorder key (`heads`: True,
+    a key to sign with, or False for none). A ledger that is not a list of
+    events has no head to sign; its walk fails before any head is read."""
+    bag = Path(bag_dir)
+    (bag / "data" / "runs").mkdir(parents=True)
+    for bundle in runs:
+        (bag / "data" / "runs" / f"{bundle['run_id']}.bundle.json").write_text(
+            json.dumps(bundle), encoding="utf-8")
+    for rel, events in (ledgers or {}).items():
+        path = bag / "data" / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps({"events": events}) if rel.endswith(".json") else
+            "".join(json.dumps(e) + "\n" for e in events), encoding="utf-8")
+    if heads and all(isinstance(events, list) and all(
+            isinstance(e, dict) for e in events)
+            for events in (ledgers or {}).values()):
+        _sign_heads(bag, None if heads is True else heads)
+    _reseal(bag)
+    return bag
+
+
+def _reseal(bag):
+    """Rewrite a bag's checksums over its payload, as anyone holding it can."""
+    import hashlib
+
+    payload = sorted(p for p in (bag / "data").rglob("*") if p.is_file())
+    (bag / "bagit.txt").write_text(
+        "BagIt-Version: 1.0\nTag-File-Character-Encoding: UTF-8\n",
+        encoding="utf-8")
+    (bag / "manifest-sha256.txt").write_text("".join(
+        hashlib.sha256(p.read_bytes()).hexdigest() + "  "
+        + p.relative_to(bag).as_posix() + "\n" for p in payload),
+        encoding="utf-8")
+    (bag / "bag-info.txt").write_text("External-Identifier: pack\n",
+                                      encoding="utf-8")
+    (bag / "tagmanifest-sha256.txt").write_text("".join(
+        hashlib.sha256((bag / n).read_bytes()).hexdigest() + "  " + n + "\n"
+        for n in ("bagit.txt", "bag-info.txt", "manifest-sha256.txt")),
+        encoding="utf-8")
+    return bag
+
+
+def test_an_evidence_pack_verifies_its_runs_and_its_ledgers(tmp_path, capsys):
+    """A case, workflow or selection pack carries no provenance graph; the
+    verifier checks it whole - the bag, every run, every ledger."""
+    from bitexact_verifier import main
+    bag = _write_pack(tmp_path / "p", [_pack_run("a"), _pack_run("b")],
+                      {"case.jsonl": _ledger(),
+                       "case/c.ledger.json": _ledger(2)})
+    assert main([str(bag)]) == 0
+    line = capsys.readouterr().out.strip()
+    assert line.startswith(
+        "OK: evidence pack - 2 runs verified, 2 ledgers chain-verified to a "
+        "signed head (data/case.jsonl at 3 events; data/case/c.ledger.json at "
+        "2 events; recorder key not pinned - pass --expect-recorder-key to "
+        "know no newest event is missing)")
+    assert "unsigned" in line
+    # Pinned: these runs carry no recorder checkpoints, so the pinned pack
+    # is one of refusals and a ledger.
+    pinned = _write_pack(tmp_path / "r", [], {
+        "refusals/job-1.jsonl": _refusals(n=1), "case.jsonl": _ledger(1)})
+    assert main([str(pinned), "--expect-recorder-key", _heads_key()[1]]) == 3
+    assert ("1 ledger chain-verified and anchored at the head the pinned "
+            "recorder key signed (data/case.jsonl at 1 event)"
+            ) in capsys.readouterr().out
+    bare = _write_pack(tmp_path / "q", [_pack_run("a")])
+    assert main([str(bare)]) == 0
+    assert "ledger" not in capsys.readouterr().out
+
+
+def test_a_ledger_cut_or_swapped_under_its_signed_head_fails_the_pack(
+        tmp_path, capsys):
+    """The pack holder can edit any file in the bag and reseal it, but not
+    sign as the recorder. A ledger whose newest events were dropped, or
+    which was replaced by an older prefix, still re-walks; it no longer
+    ends at the head the recorder signed, and the pack fails naming it."""
+    from bitexact_verifier import main
+    full = _ledger(3)
+    # A pack of refusals and the ledger: its runs would need recorder
+    # checkpoints of their own to verify with the recorder key pinned.
+    for n, events in enumerate((full[:2], _ledger(1))):
+        bag = _write_pack(tmp_path / f"p{n}", [],
+                          {"refusals/job-1.jsonl": _refusals(n=1),
+                           "governance.jsonl": full})
+        (bag / "data" / "governance.jsonl").write_text(
+            "".join(json.dumps(e) + "\n" for e in events), encoding="utf-8")
+        _reseal(bag)
+        for pins in ([], ["--expect-recorder-key", _heads_key()[1]]):
+            assert main([str(bag), *pins]) == 2
+            assert (f"FAIL: ledger data/governance.jsonl ends at "
+                    f"{len(events)} event{'s' if len(events) > 1 else ''} "
+                    f"(head {events[-1]['hash']}), not at the head the "
+                    f"recorder signed: 3 events (head {full[-1]['hash']})"
+                    ) in capsys.readouterr().out
+
+
+def test_a_ledger_heads_statement_that_does_not_stand_fails_the_pack(
+        tmp_path, capsys):
+    from bitexact_verifier import HEADS_FILE, main, verify_provenance_bundle
+    other, other_public = _ed_key()
+
+    def bag(name, edit=None, key=None, heads=True, ledgers=None, runs=True):
+        path = _write_pack(tmp_path / name, [_pack_run("a")] if runs else [],
+                           {"case.jsonl": _ledger()} if ledgers is None
+                           else ledgers, heads=heads)
+        if edit or key:
+            _sign_heads(path, key, edit)
+            _reseal(path)
+        return path
+
+    def doc_edit(path, change):
+        target = path / "data" / HEADS_FILE
+        doc = json.loads(target.read_text(encoding="utf-8"))
+        target.write_text(json.dumps(change(doc) or doc), encoding="utf-8")
+        _reseal(path)
+        return path
+
+    def problem(heads):
+        heads["ledgers"][0]["problem"] = "event 3: ledger truncated"
+
+    def extra(heads):
+        heads["ledgers"].append({"path": "data/gone.jsonl", "events": 1,
+                                 "head_hash": "ab" * 32, "problem": None})
+
+    def runs(heads):
+        heads["runs"].append({"run_id": "b", "steps": 2,
+                              "head_hash": "cd" * 32})
+
+    def unsigned_ledger(heads):
+        heads["ledgers"].clear()
+
+    cases = [
+        (bag("none", heads=False),
+         "the pack carries no signed ledger heads (data/ledger-heads.json) - "
+         "nothing anchors its ledgers' newest events"),
+        (bag("bare", heads=False, ledgers={}),
+         "the pack carries no signed ledger heads"),
+        (doc_edit(bag("format"), lambda d: d.update(format="x")),
+         "data/ledger-heads.json is not an aer-ledger-heads statement"),
+        (doc_edit(bag("list"), lambda d: [d]),
+         "data/ledger-heads.json is not an aer-ledger-heads statement"),
+        (doc_edit(bag("sig"), lambda d: d.update(signature="00" * 64)),
+         "the ledger heads' signature does not verify"),
+        (doc_edit(bag("kid"), lambda d: d.update(key_id="00" * 8)),
+         "the ledger heads' signature does not verify"),
+        (doc_edit(bag("pq"), lambda d: d.update(pq_alg="ML-DSA-65")),
+         "the ledger heads: post-quantum signature is incomplete"),
+        (bag("problem", problem),
+         "ledger data/case.jsonl failed the recorder's own verification "
+         "when it signed its head: event 3: ledger truncated"),
+        (bag("unsigned", unsigned_ledger),
+         "ledger data/case.jsonl ends at 3 events (head "),
+        (bag("extra", extra),
+         "the recorder signed a head for a ledger the pack does not carry "
+         "('data/gone.jsonl') - removed from it"),
+        (bag("runs", runs),
+         "the ledger heads were signed for another set of runs than the "
+         "pack holds - its ledgers and their heads are not this pack's"),
+    ]
+    for path, why in cases:
+        assert main([str(path)]) == 2, why
+        assert f"FAIL: {why}" in capsys.readouterr().out, why
+    assert "not at the head the recorder signed: none" in (
+        verify_provenance_bundle(str(cases[8][0]))[1])
+
+    # Signed by a key the caller did not pin: the holder's own re-signing.
+    resigned = bag("resigned", key=other, runs=False,
+                   ledgers={"refusals/job-1.jsonl": _refusals(n=1),
+                            "case.jsonl": _ledger()})
+    assert main([str(resigned)]) == 3                # refusals are gaps
+    capsys.readouterr()
+    assert main([str(resigned), "--expect-recorder-key",
+                 _heads_key()[1]]) == 2
+    assert ("FAIL: the ledger heads are not signed by the pinned recorder "
+            "key") in capsys.readouterr().out
+    ok, err, _ = verify_provenance_bundle(
+        str(resigned), trusted_recorder_keys=[_heads_key()[1]])
+    assert (ok, err) == (False, "the ledger heads are not signed by the "
+                                "pinned recorder key")
+    assert verify_provenance_bundle(
+        str(resigned), trusted_recorder_keys=[other_public])[0]
+
+
+def test_a_ledger_that_does_not_rewalk_fails_the_pack(tmp_path, capsys):
+    from bitexact_verifier import main
+    edited, odd_alg, no_alg = _ledger(), _ledger(1), _ledger(1)
+    edited[-1]["data"] = {"i": 99}
+    odd_alg[0]["alg"] = "md5"
+    del no_alg[0]["alg"]
+    cases = [("not a list", "is not a list of events"),
+             (["not an object"], "event 0 is not an object"),
+             (_ledger()[1:], "event 0: chain broken"),
+             (edited, "event 2: hash mismatch"),
+             (odd_alg, "event 0: hash mismatch"),
+             (no_alg, "event 0: names no hash algorithm")]
+    for n, (events, why) in enumerate(cases):
+        bag = _write_pack(tmp_path / f"p{n}", [_pack_run("a")],
+                          {"case/c.ledger.json": events})
+        assert main([str(bag)]) == 2, why
+        assert f"ledger data/case/c.ledger.json {why}" in \
+            capsys.readouterr().out, why
+
+
+def test_a_pack_with_a_broken_or_missing_run_fails(tmp_path, capsys):
+    from bitexact_verifier import main
+    broken = _pack_run("a")
+    broken["entries"][1]["data"]["model"] = "other"
+    assert main([str(_write_pack(tmp_path / "p", [broken]))]) == 2
+    assert "run 'a'" in capsys.readouterr().out
+    assert main([str(_write_pack(tmp_path / "q", []))]) == 2
+    assert "no run bundles" in capsys.readouterr().out
+
+
+def test_a_pack_without_bag_info_verifies(tmp_path, capsys):
+    """bag-info.txt is optional (RFC 8493 section 2.2.2): a pack that omits
+    it declares no Payload-Oxum, so there is no count to check."""
+    import hashlib
+
+    from bitexact_verifier import main
+    bag = _write_pack(tmp_path / "p", [_pack_run("a")])
+    (bag / "bag-info.txt").unlink()
+    (bag / "tagmanifest-sha256.txt").write_text("".join(
+        hashlib.sha256((bag / n).read_bytes()).hexdigest() + "  " + n + "\n"
+        for n in ("bagit.txt", "manifest-sha256.txt")), encoding="utf-8")
+    assert main([str(bag)]) == 0
+    assert capsys.readouterr().out.startswith(
+        "OK: evidence pack - 1 run verified")
+
+
+def test_a_pack_reports_unsealed_runs_and_gates_on_gaps(tmp_path, capsys):
+    from bitexact_verifier import main
+    bag = _write_pack(tmp_path / "p", [_pack_run("a", sealed=False),
+                                       _pack_run("b", gap=True)])
+    assert main([str(bag)]) == 3                     # a declared gap
+    line = capsys.readouterr().out.strip()
+    assert "1 run unsealed" in line and "1 declared capture gap -" in line
+    assert main([str(bag), "--allow-gaps"]) == 0
+    capsys.readouterr()
+    assert main([str(bag), "--require-sealed"]) == 2
+    assert "unsealed run a -" in capsys.readouterr().out
+
+
+def _refusals(name="job-1", n=2, key=None, run_id="same"):
+    """A refusal ledger as the product writes one: `refused` events,
+    hash-chained, each signed by `key` (an Ed25519 private key) when given."""
+    import hashlib
+
+    from bitexact_verifier import _canonical, _key_id
+    events, prev = [], "0" * 64
+    for i in range(n):
+        body = {"ts": f"2026-10-18T00:00:0{i}+00:00", "kind": "refused",
+                "by": "sdk", "prev": prev, "alg": "blake2b-256",
+                "data": {"run_id": name if run_id == "same" else run_id,
+                         "cause": "license_lapsed", "where": "sdk"}}
+        body["hash"] = hashlib.blake2b(
+            _canonical({k: v for k, v in body.items()}),
+            digest_size=32).hexdigest()
+        if key is not None:
+            from cryptography.hazmat.primitives import serialization
+            public = key.public_key().public_bytes(
+                serialization.Encoding.Raw,
+                serialization.PublicFormat.Raw).hex()
+            body = {**body, "sig": key.sign(_canonical(body)).hex(),
+                    "public_key": public, "key_id": _key_id(public)}
+        events.append(body)
+        prev = body["hash"]
+    return events
+
+
+def _ed_key():
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+        Ed25519PrivateKey)
+    from cryptography.hazmat.primitives import serialization
+    key = Ed25519PrivateKey.generate()
+    return key, key.public_key().public_bytes(
+        serialization.Encoding.Raw, serialization.PublicFormat.Raw).hex()
+
+
+def test_a_pack_counts_its_refusals_as_executions_without_evidence(
+        tmp_path, capsys):
+    from bitexact_verifier import main
+    key, public = _ed_key()
+    bag = _write_pack(tmp_path / "p", [_pack_run("a")], {
+        "refusals/job-1.jsonl": _refusals(key=key),
+        "refusals/job-2.jsonl": _refusals("job-2", n=1),
+        "refusals/run-id-rejected.jsonl": _refusals(
+            "run-id-rejected", n=1, run_id=None)})
+    assert main([str(bag)]) == 3                     # executions lacked evidence
+    line = capsys.readouterr().out.strip()
+    assert "1 run verified, bag checksums" in line   # refusals are not ledgers
+    assert ("4 recorded refusals - executions that left no run (2 signed by "
+            "a recorder key, unpinned)") in line
+    assert "declared capture gap" not in line
+    assert main([str(bag), "--allow-gaps"]) == 0
+    capsys.readouterr()
+    # The ledger heads are signed by the pinned key in both: the refusals by
+    # it in the first, by another key in the second.
+    other, other_public = _ed_key()
+    for pin, signed, signer in ((public, 2, key), (other_public, 0, other)):
+        only = _write_pack(tmp_path / f"q{signed}", [], {
+            "refusals/job-1.jsonl": _refusals(key=key),
+            "refusals/job-2.jsonl": _refusals("job-2", n=1)}, heads=signer)
+        assert main([str(only), "--expect-recorder-key", pin]) == 3
+        assert (f"3 recorded refusals - executions that left no run "
+                f"({signed} signed by the pinned recorder key)") in \
+            capsys.readouterr().out
+
+
+def test_a_pack_of_only_refusals_verifies_and_is_never_complete(
+        tmp_path, capsys):
+    from bitexact_verifier import main
+    bag = _write_pack(tmp_path / "p", [],
+                      {"refusals/job-1.jsonl": _refusals(n=1)})
+    assert main([str(bag)]) == 3
+    out = capsys.readouterr().out
+    assert "0 runs verified" in out and "bundle unsigned" in out
+
+
+def test_a_refusal_ledger_that_is_not_one_fails_the_pack(tmp_path, capsys):
+    from bitexact_verifier import _canonical, main
+    key, _ = _ed_key()
+    forged = _refusals(key=key)
+    forged[1]["sig"] = key.sign(b"something else").hex()
+    wrong_id = _refusals(key=key)
+    wrong_id[0]["key_id"] = "00" * 8
+    import hashlib
+    not_refusal = _refusals(n=1)
+    not_refusal[0]["kind"] = "note_added"
+    del not_refusal[0]["hash"]
+    not_refusal[0]["hash"] = hashlib.blake2b(_canonical(
+        {k: not_refusal[0][k] for k in ("ts", "kind", "by", "data", "prev",
+                                        "alg")}), digest_size=32).hexdigest()
+    cases = [(forged, "event 1: signature does not verify"),
+             (wrong_id, "event 0: signature does not verify"),
+             (_refusals(run_id="job-9"),
+              "event 0 names another run than its ledger"),
+             (not_refusal, "event 0 is not a refusal"),
+             (_refusals()[1:], "event 0: chain broken")]
+    for n, (events, why) in enumerate(cases):
+        bag = _write_pack(tmp_path / f"p{n}", [_pack_run("a")],
+                          {"refusals/job-1.jsonl": events})
+        assert main([str(bag)]) == 2, why
+        assert f"ledger data/refusals/job-1.jsonl {why}" in \
+            capsys.readouterr().out, why
+
+
+# --- the transparency log, with only the verifier and `cryptography` -------
+
+def _tlog_fixture(n=3, index=1, witnesses=("w1",), threshold=1):
+    """A head checkpoint, a log of `n` leaves holding it at `index`, a
+    checkpoint note the recorder key signed, and cosignatures from
+    `witnesses`. Returns (proof, checkpoints, trust, keys)."""
+    import base64
+    import hashlib
+
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+        Ed25519PrivateKey)
+
+    from bitexact_verifier import Trust, _canonical
+
+    def raw(key):
+        return key.public_key().public_bytes_raw()
+
+    def kid(name, kind, key):
+        return hashlib.sha256(name.encode() + b"\n" + kind + raw(key)).digest()[:4]
+
+    def h(b):
+        return hashlib.sha256(b).digest()
+
+    def mth(leaves):
+        if len(leaves) == 1:
+            return h(b"\x00" + leaves[0])
+        k = 1
+        while k * 2 < len(leaves):
+            k *= 2
+        return h(b"\x01" + mth(leaves[:k]) + mth(leaves[k:]))
+
+    def path(leaves, m):
+        if len(leaves) == 1:
+            return []
+        k = 1
+        while k * 2 < len(leaves):
+            k *= 2
+        return (path(leaves[:k], m) + [mth(leaves[k:])] if m < k else
+                path(leaves[k:], m - k) + [mth(leaves[:k])])
+
+    recorder = Ed25519PrivateKey.generate()
+    head = {"run_id": "r", "seq": 1, "steps": 3, "head_hash": "ab" * 32,
+            "prev_checkpoint": None, "alg": "blake2b-256", "key_id": "k1",
+            "public_key": raw(recorder).hex()}
+    attested = {k: head[k] for k in ("run_id", "seq", "steps", "head_hash",
+                                     "prev_checkpoint", "alg", "key_id")}
+    leaf = _canonical(attested)
+    leaves = [b"other-%d" % i for i in range(n)]
+    leaves[index] = leaf
+    origin = "log.example/one"
+    text = (f"{origin}\n{n}\n{base64.b64encode(mth(leaves)).decode()}\n")
+    lines = [f"— {origin} " + base64.b64encode(
+        kid(origin, b"\x01", recorder) + recorder.sign(text.encode())).decode()]
+    pinned = {}
+    for name in witnesses:
+        wkey = Ed25519PrivateKey.generate()
+        pinned[name] = raw(wkey).hex()
+        stamp = (1_700_000_000).to_bytes(8, "big")
+        sig = wkey.sign(f"cosignature/v1\ntime 1700000000\n{text}".encode())
+        lines.append(f"— {name} " + base64.b64encode(
+            kid(name, b"\x04", wkey) + stamp + sig).decode())
+    proof = {"note": text + "\n" + "\n".join(lines) + "\n",
+             "leaf": leaf.decode(), "index": index, "size": n,
+             "proof": [base64.b64encode(p).decode()
+                       for p in path(leaves, index)]}
+    trust = Trust(expect_witnesses=pinned or None, witness_threshold=threshold)
+    return proof, [head], trust, {"recorder": recorder, "text": text}
+
+
+def test_a_log_proof_with_its_witnesses_holds_at_every_position():
+    from bitexact_verifier import _check_tlog, _log_note
+    for n, index in ((1, 0), (2, 0), (3, 0), (3, 2), (5, 4), (8, 3)):
+        proof, cps, trust, _ = _tlog_fixture(n=n, index=index)
+        assert _check_tlog(proof, cps, trust) is None, (n, index)
+    assert "witnessed by 1 of 1 pinned" in _log_note(proof, trust)
+    unpinned = trust._replace(expect_witnesses=None)
+    assert _check_tlog(proof, cps, unpinned) is None
+    assert "witnesses not pinned" in _log_note(proof, unpinned)
+    assert _log_note(None, trust) == ""
+
+
+def test_an_unsigned_bundle_under_a_pinned_key_names_its_recorder():
+    """A pinned key on an unsigned bundle is most often the recorder's key
+    given where the exporter's belongs; the refusal names the recorder key id
+    and the flag that pins it, and only key ids it can read."""
+    from bitexact_verifier import Trust, _check_bundle_signature
+    trust = Trust(expect_key="ab" * 32)
+    base = "bundle is unsigned but a trusted key was required - refusing to verify"
+    for cps, said in (
+            ([{"key_id": "k2"}, {"key_id": "k1"}, {"key_id": "k1"}],
+             base + "; its checkpoints are signed by recorder key id k1, k2"
+             " - to pin that recorder, pass its public key with"
+             " --expect-recorder-key"),
+            ([], base), ("not a list", base), ([7, {"key_id": 3}], base)):
+        assert _check_bundle_signature({"checkpoints": cps}, trust, []) == (
+            False, said), cps
+    assert _check_bundle_signature({}, Trust(), []) == (True, None)
+
+
+def test_a_log_proof_is_checked_against_the_head_checkpoints_key():
+    """After a key rotation the log is signed by the head's key, not the
+    first checkpoint's."""
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+        Ed25519PrivateKey)
+
+    from bitexact_verifier import _check_tlog
+    proof, [head], trust, _ = _tlog_fixture(n=4, index=2)
+    other = Ed25519PrivateKey.generate().public_key().public_bytes_raw()
+    older = {**head, "public_key": other.hex()}
+    assert _check_tlog(proof, [older, head], trust) is None
+    assert _check_tlog(proof, [head, older], trust) == (
+        "tlog checkpoint is not signed by the recorder key")
+
+
+def test_a_log_proof_that_does_not_hold_is_named():
+    import base64
+
+    from bitexact_verifier import _check_tlog
+    proof, cps, trust, keys = _tlog_fixture(n=4, index=2)
+
+    def fails(change, why, checkpoints=cps, using=trust):
+        bad = dict(proof)
+        change(bad)
+        assert why in (_check_tlog(bad, checkpoints, using) or ""), why
+
+    assert "carries no transparency-log proof" in _check_tlog(None, cps, trust)
+    assert _check_tlog(None, cps, trust._replace(expect_witnesses=None)) is None
+    fails(lambda p: None, "not a proof of a checkpoint", checkpoints=[])
+    fails(lambda p: p.update(index=-1), "malformed")
+    fails(lambda p: p.update(proof=["!!not base64"]), "malformed")
+    fails(lambda p: p.update(leaf="{}"), "not the bundle's head")
+    fails(lambda p: p.update(note="no blank line"), "not a checkpoint note")
+    fails(lambda p: p.update(note="o\n1\n\n\n— x y\n"), "not a checkpoint note")
+    fails(lambda p: p.update(note="o\n01\nAA==\n\n"), "not a checkpoint note")
+    fails(lambda p: p.update(note="o\n1\n!!\n\n"), "not a checkpoint note")
+    fails(lambda p: p.update(note="o\n1\nAAAA\n\n"), "not a checkpoint note")
+    fails(lambda p: p.update(size=5), "size does not match")
+    fails(lambda p: p.update(index=3), "does not hold")
+    fails(lambda p: p.update(index=9), "does not hold")
+    fails(lambda p: p.update(proof=p["proof"] + p["proof"]), "does not hold")
+    # Lines a note may carry that are nobody's signature are passed over.
+    origin = proof["note"].split("\n", 1)[0]
+    noisy = (keys["text"] + "\nnot a signature line\n— nospace\n"
+             f"— {origin} !!!\n" + proof["note"].split("\n\n", 1)[1])
+    assert _check_tlog(dict(proof, note=noisy), cps, trust) is None
+    stranger = keys["text"] + "\n— " + origin + " " + base64.b64encode(
+        b"\x00" * 68).decode() + "\n"
+    fails(lambda p: p.update(note=stranger), "not signed by the recorder")
+    fails(lambda p: None, "cosigned by 1 of the pinned witnesses; 2 required",
+          using=trust._replace(witness_threshold=2))
+
+
+def test_the_cli_refuses_a_witness_pin_it_cannot_use(tmp_path, capsys):
+    from bitexact_verifier import main
+    bundle = tmp_path / "b.json"
+    bundle.write_text("{}", encoding="utf-8")
+    assert main([str(bundle), "--expect-witness", "nokey"]) == 1
+    assert "NAME=KEY" in capsys.readouterr().out
+    assert main([str(bundle), "--expect-witness", "w=" + "ab" * 32,
+                 "--witness-threshold", "2"]) == 1
+    assert "between 1 and the 1 pinned" in capsys.readouterr().out
+
+
+# --- the log held against what the auditor holds ----------------------------
+
+def _log_world():
+    """A log of seven leaves: run r's head checkpoint at leaf 1, the same
+    leaf logged again at 2, a refusal leaf at 3, a later head of r at 4,
+    another run's head at 5 and a JSON leaf that is no checkpoint at 6.
+    Gives notes the recorder key signs at any size, a bundle's proof of r's
+    head at size 3, and tails of the log, each computed here from RFC 9162
+    directly rather than by the verifier."""
+    import base64
+    import hashlib
+    import types
+
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+        Ed25519PrivateKey)
+
+    from bitexact_verifier import _canonical
+
+    def raw(key):
+        return key.public_key().public_bytes_raw()
+
+    def h(b):
+        return hashlib.sha256(b).digest()
+
+    def mth(leaves):
+        if len(leaves) == 1:
+            return h(b"\x00" + leaves[0])
+        k = 1
+        while k * 2 < len(leaves):
+            k *= 2
+        return h(b"\x01" + mth(leaves[:k]) + mth(leaves[k:]))
+
+    def path(leaves, m):
+        if len(leaves) == 1:
+            return []
+        k = 1
+        while k * 2 < len(leaves):
+            k *= 2
+        return (path(leaves[:k], m) + [mth(leaves[k:])] if m < k else
+                path(leaves[k:], m - k) + [mth(leaves[:k])])
+
+    recorder = Ed25519PrivateKey.generate()
+    origin = "log.example/one"
+
+    def attested(run_id, seq, steps):
+        return {"run_id": run_id, "seq": seq, "steps": steps,
+                "head_hash": f"{seq:02x}" * 32, "prev_checkpoint": None,
+                "alg": "blake2b-256", "key_id": "k1"}
+
+    leaves = [b"other-0", _canonical(attested("r", 1, 3)),
+              _canonical(attested("r", 1, 3)),
+              b'{"ledger":"refusals","entity_id":"job"}',
+              _canonical(attested("r", 2, 5)),
+              _canonical(attested("s", 1, 1)), b"[1]"]
+
+    def note(size, root=None, key=recorder, at=origin):
+        text = (f"{at}\n{size}\n"
+                f"{base64.b64encode(root or mth(leaves[:size])).decode()}\n")
+        kid = hashlib.sha256(at.encode() + b"\n\x01" + raw(key)).digest()[:4]
+        return (text + "\n— " + at + " "
+                + base64.b64encode(kid + key.sign(text.encode())).decode()
+                + "\n")
+
+    def proof(index, size):
+        return {"note": note(size), "leaf": leaves[index].decode(),
+                "index": index, "size": size,
+                "proof": [base64.b64encode(p).decode()
+                          for p in path(leaves[:size], index)]}
+
+    def frontier(start, of=leaves):
+        out, lo = [], 0
+        for bit in range(start.bit_length() - 1, -1, -1):
+            if start >> bit & 1:
+                out.append(mth(of[lo:lo + (1 << bit)]))
+                lo += 1 << bit
+        return out
+
+    def tail(start, end, of=leaves):
+        return {"from": start, "leaves": [t.decode() for t in of[start:end]],
+                "left": [base64.b64encode(r).decode()
+                         for r in frontier(start, of)]}
+
+    def head(seq, steps):
+        return {**attested("r", seq, steps), "public_key": raw(recorder).hex()}
+    return types.SimpleNamespace(
+        note=note, proof=proof, tail=tail, frontier=frontier, mth=mth,
+        h=h, leaves=leaves, origin=origin, head=head, raw=raw,
+        recorder=recorder)
+
+
+def test_two_roots_at_one_size_fail_as_a_split_view():
+    """L3: the log's key signing two roots for one size is the operator's
+    own proof of equivocation - the bundle's checkpoint against a held one,
+    or two held ones against each other."""
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+        Ed25519PrivateKey)
+
+    from bitexact_verifier import Trust, _check_tlog, _log_note
+    w = _log_world()
+    proof, cps = w.proof(1, 3), [w.head(1, 3)]
+
+    def check(*held, **kw):
+        return _check_tlog(proof, cps, Trust(log_checkpoints=held, **kw))
+
+    split = (f"split view: log {w.origin} has two different roots at size "
+             f"{{}}, both signed by its key")
+    assert split.format(3) in check(w.note(3, root=bytes(32)))
+    assert split.format(5) in check(w.note(5), w.note(5, root=b"\x01" * 32))
+    assert check(w.note(3)) is None
+    assert _log_note(proof, Trust(log_checkpoints=(w.note(3),)), cps).endswith(
+        ", 1 held log checkpoint of this log, no two roots at one size")
+    # Another log's checkpoint says nothing of this one; nor does a value
+    # that is not a note's text.
+    other = w.note(3, root=bytes(32), at="log.example/two")
+    assert check(other, b"bytes") is None
+    assert "held log checkpoint" not in _log_note(
+        proof, Trust(log_checkpoints=(other,)), cps)
+    # A note naming this log that its key did not sign is held against
+    # nothing; under a trust file's rotation window, the next key's is.
+    stranger = Ed25519PrivateKey.generate()
+    assert check(w.note(3, key=stranger)) == (
+        f"a held checkpoint of log {w.origin} (size 3) is not signed by its "
+        f"key - it cannot be held against the bundle")
+    rotated = w.raw(stranger).hex()
+    assert check(w.note(3, key=stranger),
+                 trusted_recorder_keys=[rotated]) is None
+    assert split.format(3) in check(w.note(3, root=bytes(32), key=stranger),
+                                    trusted_recorder_keys=[rotated])
+
+
+def test_a_later_checkpoint_needs_the_head_to_be_the_runs_latest():
+    """L4: given a checkpoint later than the bundle's, the run's head must
+    be shown to be its latest logged one up to it - from the log's leaves
+    after the head, which must give the held roots. A later head of the run
+    fails the bundle and is named; asked about a point in time, the bundle
+    stands as the run stood then and the later head is named."""
+    from bitexact_verifier import Trust, _check_tlog, _log_note
+    w = _log_world()
+    proof, cps = w.proof(1, 3), [w.head(1, 3)]
+
+    def check(held=(), tail=None, at=False):
+        trust = Trust(log_checkpoints=held, log_tail=tail, point_in_time=at)
+        return _check_tlog(proof, cps, trust), _log_note(proof, trust, cps)
+
+    later = f"leaf 4, checkpoint 2 at step 5, head {'02' * 32}"
+    err, _ = check((w.note(7),))
+    assert ("a checkpoint of log log.example/one at size 7 is held, later "
+            "than the bundle's at 3, but no log tail shows the leaves after "
+            "the bundle's head: the bundle cannot be shown to be run 'r''s "
+            "latest logged head") == err
+    err, note = check((w.note(7),), at=True)
+    assert err is None and note.endswith(
+        ", as the run stood at log size 3: the log up to the held checkpoint "
+        "at size 7 was not searched for a later head (no log tail reaches "
+        "it)")
+    err, _ = check((w.note(7),), w.tail(1, 7))
+    assert err == ("the bundle's head is not run 'r''s latest logged head: "
+                   f"log {w.origin} holds a later one - {later}")
+    err, note = check((w.note(7),), w.tail(1, 7), at=True)
+    assert err is None and note.endswith(
+        ", 1 held log checkpoint of this log, no two roots at one size, as "
+        "the run stood at log size 3 (asked about that point in time): the "
+        f"log holds a later head of it - {later}")
+    # A tail shorter than the newest held checkpoint has not shown it.
+    err, _ = check((w.note(4), w.note(7)), w.tail(1, 4))
+    assert err == (f"the log tail ends at size 4, before the held checkpoint "
+                   f"of log {w.origin} at size 7: the bundle cannot be shown "
+                   f"to be run 'r''s latest logged head")
+    err, note = check((w.note(4), w.note(7)), w.tail(1, 4), at=True)
+    assert err is None and note.endswith(
+        ", as the run stood at log size 3: the log up to the held checkpoint "
+        "at size 7 was not searched for a later head (no log tail reaches "
+        "it)")
+    # The tail up to the bundle's own checkpoint shows its head latest there.
+    err, note = check((), w.tail(1, 3))
+    assert err is None and note.endswith(
+        ", the run's latest logged head as of log size 3")
+
+    # The later head's own bundle is the run's latest, from any start.
+    new, new_cps = w.proof(4, 7), [w.head(2, 5)]
+    for start in range(5):
+        trust = Trust(log_checkpoints=(w.note(7),), log_tail=w.tail(start, 7))
+        assert _check_tlog(new, new_cps, trust) is None, start
+        assert _log_note(new, trust, new_cps).endswith(
+            ", the run's latest logged head as of log size 7")
+
+
+def test_a_log_tail_that_is_not_the_logs_is_refused():
+    """The tail is the operator's, so it proves nothing until its leaves
+    give a root the log's key signed - and a held root they do not give,
+    below the one they do, is a fork of the log."""
+    from bitexact_verifier import Trust, _check_tlog
+    w = _log_world()
+    proof, cps = w.proof(1, 3), [w.head(1, 3)]
+
+    def check(tail, held=(), at=False):
+        return _check_tlog(proof, cps, Trust(log_checkpoints=held,
+                                             log_tail=tail, point_in_time=at))
+
+    assert check(w.tail(2, 7), (w.note(7),)) == (
+        "the log tail (leaves 2 to 6) does not hold the bundle's head at "
+        "leaf 1")
+    assert check(w.tail(0, 1), (w.note(7),)) == (
+        "the log tail (leaves 0 to 0) does not hold the bundle's head at "
+        "leaf 1")
+    forged = w.tail(1, 7)
+    forged["leaves"][3] = "hidden"
+    assert check(forged, (w.note(7),)) == (
+        f"the log tail's leaves do not give log {w.origin}'s root at size 7 "
+        f"- they are not the log's leaves")
+    assert check(w.tail(1, 6), (w.note(7),), at=True) == (
+        f"the log tail ends at size 6, and no checkpoint of log {w.origin} "
+        f"at that size is held to check it against")
+    assert check(w.tail(1, 7), (w.note(5, root=bytes(32)), w.note(7))) == (
+        f"split view: log {w.origin}'s root at size 5 is not the one its "
+        f"leaves give at size 7 - the log was forked or rewritten between "
+        f"them")
+    shape = ('the log tail is not {"from", "leaves", "left"} - the first '
+             'leaf index, the leaves from it, and one base64 root per set '
+             'bit of the index')
+    good = w.tail(1, 7)
+    for bent in ([], {**good, "extra": 1}, {**good, "from": -1},
+                 {**good, "from": True}, {**good, "leaves": []},
+                 {**good, "leaves": "x"}, {**good, "leaves": ["a\nb"]},
+                 {**good, "leaves": [7]}, {**good, "left": "x"},
+                 {**good, "left": []}, {**good, "left": [7]},
+                 {**good, "from": 2 ** 64 - 1}):
+        assert check(bent) == shape, bent
+    for left in (["!!"], ["AAAA"]):
+        assert check({**good, "left": left}) == (
+            "the log tail's left roots are not base64 of 32 bytes each")
+    assert _check_tlog(None, cps, Trust(log_checkpoints=(w.note(3),))) == (
+        "a log checkpoint or log tail was given but the bundle carries no "
+        "transparency-log proof to hold it against")
+    assert _check_tlog(None, cps, Trust(log_tail=good)) is not None
+
+
+def test_a_tail_gives_every_root_after_its_start():
+    """The roots before a tail's first leaf, one per set bit of its index,
+    with the leaves from it give the root at every size after it - checked
+    against RFC 9162's own recursion for every start and size of logs up to
+    seventeen leaves."""
+    from bitexact_verifier import _tail_root
+    w = _log_world()
+    for n in range(1, 18):
+        log = [b"leaf-%d" % i for i in range(n)]
+        hashes = [w.h(b"\x00" + t) for t in log]
+        for start in range(n):
+            left = w.frontier(start, log)
+            assert len(left) == bin(start).count("1")
+            for size in range(start + 1, n + 1):
+                assert _tail_root(size, start, left, hashes[start:]) == \
+                    w.mth(log[:size]), (n, start, size)
+
+
+def test_a_bag_verdict_names_each_runs_log_history():
+    """A bag's verdict carries each run's clause on what the held
+    checkpoints and tail established, and nothing when none was given or
+    they established nothing of the run."""
+    from bitexact_verifier import Trust, _run_log_note
+    w = _log_world()
+    bundle = {"run_id": "r", "tlog": w.proof(1, 3),
+              "checkpoints": [w.head(1, 3)]}
+    assert _run_log_note(bundle, Trust()) == []
+    other = w.note(3, root=bytes(32), at="log.example/two")
+    assert _run_log_note(bundle, Trust(log_checkpoints=(other,))) == []
+    assert _run_log_note(bundle, Trust(log_tail=w.tail(1, 3))) == [
+        ", run 'r', the run's latest logged head as of log size 3"]
+
+
+def test_the_cli_reads_the_log_an_auditor_holds_before_any_bundle(
+        tmp_path, capsys):
+    """A held checkpoint or log tail that cannot be read or is not one is
+    the auditor's own error (exit 1), named before the bundle is read."""
+    from bitexact_verifier import main
+    w = _log_world()
+    bundle = tmp_path / "b.json"
+    bundle.write_text("{}", encoding="utf-8")
+    note = tmp_path / "n.note"
+    note.write_text(w.note(3), encoding="utf-8")
+    for args, said in (
+            (["--log-checkpoint", str(tmp_path / "gone")], "cannot read"),
+            (["--log-checkpoint", str(bundle)], "is not a checkpoint note"),
+            (["--log-tail", str(tmp_path / "gone")], "no such file"),
+            (["--log-checkpoint", str(note), "--log-tail", str(note)],
+             "is not JSON"),
+            (["--log-tail", str(bundle)], 'is not {"from", "leaves"')):
+        assert main([str(bundle), *args]) == 1, args
+        assert said in capsys.readouterr().out, args
+    undecodable = tmp_path / "u.note"
+    undecodable.write_bytes(b"\xff\xfe")
+    assert main([str(bundle), "--log-checkpoint", str(undecodable)]) == 1
+    assert "cannot read" in capsys.readouterr().out
+    tail = tmp_path / "t.json"
+    tail.write_text(json.dumps(w.tail(1, 3)), encoding="utf-8")
+    # Read and accepted, they leave the verdict to the bundle: this one is
+    # empty, so it fails (exit 2) rather than erring (exit 1).
+    assert main([str(bundle), "--log-checkpoint", str(note), "--log-tail",
+                 str(tail), "--point-in-time"]) == 2
+
+
+def test_the_ok_line_counts_what_remote_hosts_relayed(tmp_path, capsys):
+    """An observed entry carrying a source block was captured on that host,
+    not seen by the recorder: both bundle forms say how many, from how many
+    hosts."""
+    from bitexact_verifier import main
+    bundle = _pack_run("relayed", relay="spiffe://acme/host-1")
+    single = tmp_path / "r.json"
+    single.write_text(json.dumps(bundle), encoding="utf-8")
+    streamed = tmp_path / "r.jsonl"
+    streamed.write_text("\n".join(_jsonl_lines(bundle)) + "\n",
+                        encoding="utf-8")
+    for path in (single, streamed):
+        assert main([str(path)]) == 0
+        assert "1 of them captured and relayed by 1 remote host" in \
+            capsys.readouterr().out
+
+
 def test_provenance_bag_verifies_offline(tmp_path):
     from bitexact_verifier import main, verify_provenance_bundle
     specs, _, _ = _linked_forks()
@@ -1722,7 +2829,17 @@ def test_provenance_bag_verifies_offline(tmp_path):
     ok, err, summary = verify_provenance_bundle(str(tmp_path / "bag"))
     assert ok, err
     assert summary == {"runs": 3, "edges": 2, "root": "orig", "signed": False,
-                       "anchors": [], "sealed": True}
+                       "anchors": [], "sealed": True, "gaps": 0,
+                       "capture": {"runs": 3},
+                       "ledgers": 0, "anchored": [], "refusals": 0,
+                       "refusals_signed": 0,
+                       "via": {None: 8},
+                       "signatures": {"objects": 0, "hybrid": 0, "pinned": 0,
+                                      "unpinned": {"recorder": 0,
+                                                   "bundle": 0},
+                                      "unchecked": 0, "pq_algs": [],
+                                      "timestamps": []},
+                       "log": []}
     assert main([str(tmp_path / "bag")]) == 0
 
 
@@ -1787,7 +2904,7 @@ def test_provenance_bag_attestation_semantic_checks(tmp_path):
     subjects = [{"name": n["run_id"], "digest": {"head": n["head_hash"]}}
                 for n in graph["nodes"]]
 
-    def stmt(predicate_type="https://bitexact.dev/provenance-graph/v1",
+    def stmt(predicate_type="urn:aer:provenance-graph",
              subject=None):
         return {"_type": "https://in-toto.io/Statement/v1",
                 "predicateType": predicate_type, "predicate": graph,
@@ -1830,13 +2947,18 @@ def _reseal_bag(bag):
 
 def _sign_bundles_in_bag(bag, priv, pub):
     """Sign every member run bundle in the bag with `priv` (a bundle-key
-    signature over the canonical {format, run_id, chain} body)."""
-    from bitexact_verifier import _canonical
+    signature over the canonical {format, run_id, chain, signed_at, key_id}
+    body)."""
+    from bitexact_verifier import _canonical, _key_id
 
+    stamp = "2026-09-02T00:00:00+00:00"
     for bf in sorted((Path(bag) / "data" / "runs").glob("*.bundle.json")):
         b = json.loads(bf.read_text(encoding="utf-8"))
-        body = {"format": b["format"], "run_id": b["run_id"], "chain": b["chain"]}
+        body = {"format": b["format"], "run_id": b["run_id"],
+                "chain": b["chain"], "signed_at": stamp,
+                "key_id": _key_id(pub)}
         b["signature"] = {"algorithm": "ed25519", "public_key": pub,
+                          "key_id": _key_id(pub), "signed_at": stamp,
                           "signature": priv.sign(_canonical(body)).hex()}
         bf.write_text(json.dumps(b), encoding="utf-8")
 
@@ -1970,7 +3092,7 @@ def test_provenance_bag_attestation_binding_is_pinned(tmp_path):
                 for n in graph["nodes"]]
     other_graph = dict(graph, root="a-different-root")
     stmt = {"_type": "https://in-toto.io/Statement/v1",
-            "predicateType": "https://bitexact.dev/provenance-graph/v1",
+            "predicateType": "urn:aer:provenance-graph",
             "predicate": other_graph, "subject": subjects}
     b2 = tmp_path / "g20b"
     _write_prov_bag(b2, specs, "orig", attestation=_sign_attestation(stmt))
@@ -2001,7 +3123,26 @@ def test_golden_accountable_redaction_verifies_at_the_recorder_tier(capsys):
     assert main([str(TESTDATA / "valid-accountable-redaction.bundle.json"),
                  "--expect-recorder-key", recorder[0]]) == 0
     out = capsys.readouterr().out
-    assert "field(s) redacted" in out and "demand a signed bundle" not in out
+    assert re.search(r"\b\d+ fields? redacted", out) and "demand a signed bundle" not in out
+
+
+def test_golden_identity_on_behalf_of_verifies_with_its_authority_redacted():
+    """A run that acted for a person under a consent, the consent's reference
+    redacted on the chain: it verifies under the recorder's key, the party
+    it acted for is readable, and the redacted authority is gone from the
+    bytes while the commitment over it still holds."""
+    bundle = _load("valid-identity-on-behalf-of.bundle.json")
+    trust = _load("trust.json")
+    recorder = [k["public_key"] for k in trust["recorder_keys"]]
+    ok, err = verify_bundle(bundle, trusted_recorder_keys=recorder)
+    assert ok, err
+    bound = next(e for e in bundle["entries"] if e["kind"] == "identity")
+    assert bound["prov"] == "asserted"
+    assert bound["data"]["on_behalf_of"] == "user:7f3a9c"
+    assert bound["data"]["on_behalf_of_type"] == "human"
+    assert bound["data"]["interaction_mode"] == "interactive"
+    assert "authority_ref" in bound["redacted"]
+    assert "consent:88412" not in json.dumps(bundle)
 
 
 def test_golden_anchored_signed_bundle_verifies_and_names_its_anchor(capsys):
@@ -2045,3 +3186,117 @@ def test_golden_adverse_decision_is_the_current_sample():
     kinds = [e["kind"] for e in bundle["entries"]]
     assert len(kinds) == 10 and "decision_record" in kinds
     assert kinds[-1] == "run_end"
+
+
+def test_each_exit_code_means_what_the_contract_says(tmp_path, capsys):
+    """0 a bundle that verifies, 1 an input the verifier cannot use (a usage
+    error included - never argparse's 2, which here means FAIL), 2 evidence
+    that does not verify, 3 a verified run that declares gaps."""
+    import pytest
+    assert main([str(TESTDATA / "valid-signed.bundle.json")]) == 0
+    for argv in (["--no-such-flag", "x"], [],
+                 ["b.json", "--witness-threshold", "two"]):
+        with pytest.raises(SystemExit) as exc:
+            main(argv)
+        assert exc.value.code == 1, argv
+        assert "error:" in capsys.readouterr().err
+    assert main([str(tmp_path / "absent.json")]) == 1
+    assert capsys.readouterr().out.startswith("error: ")
+    doc = _load("valid-signed.bundle.json")
+    doc["entries"][0]["kind"] = "doctored"
+    bad = tmp_path / "bad.json"
+    bad.write_text(json.dumps(doc), encoding="utf-8")
+    assert main([str(bad)]) == 2
+    assert capsys.readouterr().out.startswith("FAIL: ")
+
+
+def test_verifier_prints_via_attribution_never_as_proof(tmp_path, capsys):
+    """A verified chain whose entries name a capture path (`via`) gets one
+    more line, the per-path mix, worded as attribution and not proof, in
+    the JSON and the streamed JSONL form alike. A `via` that is not a string
+    counts as unlabeled and never crashes; a label carrying a control
+    character is escaped by the verifier's one output path, so it cannot
+    drive the terminal. A chain with no `via` prints no such line, and the
+    line never changes the verdict."""
+    bundle = _unsigned_base()
+    for entry in bundle["entries"]:
+        entry.pop("via", None)
+    _reforge_entries(bundle)
+    plain = tmp_path / "plain.bundle.json"
+    plain.write_text(json.dumps(bundle), encoding="utf-8")
+    assert main([str(plain)]) == 0
+    assert "captured via" not in capsys.readouterr().out
+
+    entries = bundle["entries"]
+    assert len(entries) >= 4
+    for entry in entries:
+        entry["via"] = "proxy"
+    # the last entry is the run_end seal, which the line never counts
+    assert entries[-1]["kind"] == "run_end"
+    entries[-2]["via"] = "relay:sdk-ts\x1b[31m"
+    entries[-3]["via"] = 7
+    _reforge_entries(bundle)
+    assert verify_bundle(bundle) == (True, None)
+    expected = (f"captured via proxy {len(entries) - 3}, "
+                f"relay:sdk-ts\\x1b[31m 1, unlabeled 1 "
+                f"(attribution, not proof)")
+
+    path = tmp_path / "via.bundle.json"
+    path.write_text(json.dumps(bundle), encoding="utf-8")
+    assert main([str(path)]) == 0
+    out = capsys.readouterr().out
+    assert out.splitlines()[0].startswith("OK: ")
+    assert expected in out.splitlines()
+    assert "\x1b" not in out
+
+    streamed = tmp_path / "via.bundle.jsonl"
+    streamed.write_text(chr(10).join(_jsonl_lines(bundle)) + chr(10),
+                        encoding="utf-8")
+    assert main([str(streamed)]) == 0
+    out = capsys.readouterr().out
+    assert expected in out.splitlines()
+    assert "\x1b" not in out
+
+    del entries[0]["via"]
+    _reforge_entries(bundle)
+    path.write_text(json.dumps(bundle), encoding="utf-8")
+    assert main([str(path)]) == 0
+    line = next(text for text in capsys.readouterr().out.splitlines()
+                if text.startswith("captured via "))
+    proxied = len(entries) - 4
+    assert "unlabeled 2" in line
+    assert (f"proxy {proxied}" in line) if proxied else ("proxy" not in line)
+
+
+def test_pack_and_provenance_verdicts_print_via_attribution(tmp_path, capsys):
+    """An evidence pack and a provenance bag get the same attribution line a
+    single bundle does, tallied over every entry of every run they hold, after
+    the OK line; a label carrying a control character is escaped; a bag whose
+    entries name no path prints no such line."""
+    pack = _write_pack(tmp_path / "pack", [
+        _pack_run("a", via="proxy"),
+        _pack_run("b", via="relay:sdk-ts\x1b[31m"),
+        _pack_run("c")])
+    assert main([str(pack)]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert lines[0].startswith("OK: evidence pack - 3 runs verified")
+    # each run's run_end seal is not counted
+    assert ("captured via proxy 2, relay:sdk-ts\\x1b[31m 2, unlabeled 2 "
+            "(attribution, not proof)") in lines
+    assert not any("\x1b" in text for text in lines)
+
+    plain = _write_pack(tmp_path / "plain", [_pack_run("a")])
+    assert main([str(plain)]) == 0
+    assert "captured via" not in capsys.readouterr().out
+
+    bag = tmp_path / "bag"
+    _write_prov_bag(bag, [("orig", None)], "orig", via="relay:sdk-ts")
+    assert main([str(bag)]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert lines[0].startswith("OK: provenance bundle rooted at 'orig'")
+    assert "captured via relay:sdk-ts 2 (attribution, not proof)" in lines
+
+    specs, _, _ = _linked_forks()
+    _write_prov_bag(tmp_path / "forks", specs, "orig")
+    assert main([str(tmp_path / "forks")]) == 0
+    assert "captured via" not in capsys.readouterr().out

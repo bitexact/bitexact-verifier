@@ -1,17 +1,17 @@
 {
- "format": "bitexact-provenance-graph/1",
+ "format": "aer-provenance-graph",
  "root": "adverse-decision",
  "nodes": [
   {
    "run_id": "adverse-decision",
    "bundle": "runs/adverse-decision.bundle.json",
-   "head_hash": "02768dbef736bfb3d8200f93dcb474a77bc1757419804130623c467659b3c5ab",
+   "head_hash": "07b4b63c52186ecacdeebf0c2f837bebed78b9cc1b11be5bacf744a0d5d40f36",
    "role": "original"
   },
   {
    "run_id": "adverse-decision-fork",
    "bundle": "runs/adverse-decision-fork.bundle.json",
-   "head_hash": "0f7ae97d5460e18ffe688f167bf788c06a8fffdbf92892d432562e4df9d98e91",
+   "head_hash": "2c8eac6b74f8b502033227d2bd27068628e3ed407f4d2bdaf9cd6ae3ed6d0807",
    "role": "fork"
   }
  ],
@@ -20,7 +20,7 @@
    "child": "adverse-decision-fork",
    "source_run": "adverse-decision",
    "at_step": 5,
-   "source_prev_hash": "391e10b6baf7f7d251b79b8e90ea793d3ef35f5066a95a5b407a90b98dee6d84"
+   "source_prev_hash": "eb733650a3dff4fddfd2d4a54289664220b16ce301331dea8a47124b24d19da2"
   }
  ],
  "fork_matrices": [],

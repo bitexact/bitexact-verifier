@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'sha256-5CL7jSijZH+LTnkxWl444uwOy4sN7kzF20OvmVrwUs0='; img-src 'none'; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="aer-view" content="aer-view">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading view - adverse-decision</title>
+<style>:root{color-scheme:light dark;--fg:#1d2228;--bg:#fbfaf7;--muted:#5b6470;--line:#c9ced6;--box:#f1efe9}@media (prefers-color-scheme:dark){:root{--fg:#e6e3dc;--bg:#15181c;--muted:#a3abb6;--line:#3a4049;--box:#1e2227}}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif}header.notice{position:sticky;top:0;z-index:1;background:var(--bg);border-bottom:3px double var(--fg);padding:8px 16px;font-weight:600}main{max-width:1100px;margin:0 auto;padding:0 16px 48px}table{border-collapse:collapse;width:100%;margin:8px 0 16px}th,td{border:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top;overflow-wrap:anywhere}tr.gap td{border:2px solid var(--fg)}.gap-mark{font-weight:700;border:1px solid var(--fg);padding:0 4px}pre.recorded{background:var(--box);border:1px solid var(--line);padding:8px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:40em;overflow:auto;font:13px/1.4 ui-monospace,Consolas,monospace}.label,small{color:var(--muted)}details{border-top:1px solid var(--line);padding:4px 0}@media print{header.notice{position:static}pre.recorded{max-height:none}}</style>
+</head><body>
+<header class="notice"><p>This page is a reading aid, not a verification result. It was generated from the bundles in this pack when the pack was made, and it does not say whether they are intact or who signed them. To verify, run the BitExact verifier on the pack&#x27;s root - python data/verification/bitexact_verifier.py . when the pack carries it (verify-procedure.md has the steps). That command also renders this page again and fails the pack if the page differs from the bundles. If this page and data/runs/*.bundle.json ever disagree, the bundles are the record.</p></header>
+<main>
+<h1>Reading view</h1>
+<p>Pack <code>adverse-decision</code></p>
+<section>
+<h2>This pack</h2>
+<table><thead><tr><th>Run</th><th>Entries</th><th>Has a run_end entry</th><th>Workflow</th><th>Version</th><th>Environment</th><th>Declared capture gaps</th><th>Checkpoints carried</th><th>Anchors carried</th></tr></thead><tbody>
+<tr><td><a href="#run-1">adverse-decision-fork</a></td><td>11</td><td>yes</td><td>loan-adjudication</td><td>v4.2</td><td>sample</td><td>none</td><td>11</td><td>0</td></tr>
+<tr><td><a href="#run-2">adverse-decision</a></td><td>10</td><td>yes</td><td>loan-adjudication</td><td>v4.2</td><td>sample</td><td>none</td><td>10</td><td>0</td></tr>
+</tbody></table>
+<p>Counted from the bundles as recorded. Checkpoints and anchors are carried here; the verifier checks them.</p>
+<h3>Forks</h3>
+<ul>
+<li><code>adverse-decision-fork</code> forked from <code>adverse-decision</code> at step 5 (as its fork entry records)</li>
+</ul>
+</section>
+<section id="run-1">
+<h2>Run 1</h2>
+<p>Run id <code>adverse-decision-fork</code>, file <code>data/runs/adverse-decision-fork.bundle.json</code></p>
+<h3>Who and what ran</h3>
+<p>The run's identity, each field as its latest identity entry states it: the deployer's statement, recorded as stated; no key binds it to a person.</p>
+<ul>
+<li>On behalf of: <code>org:retail-bank</code> (organization) - the deployer's statement</li>
+<li>Person in session: no — autonomous - the deployer's statement, not a finding on solely automated decisions</li>
+</ul>
+<table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>
+<tr><td>principal</td><td><code>svc:loan-adjudicator</code></td></tr>
+<tr><td>agent_id</td><td><code>lending-agent@2.3.1</code></td></tr>
+<tr><td>delegation_from</td><td><code>app:retail-lending-portal</code></td></tr>
+<tr><td>scope</td><td><code>[&quot;loans:adjudicate&quot;, &quot;creditbureau:read&quot;]</code></td></tr>
+<tr><td>policy_version</td><td><code>sha256:ac1deb51e3dfee66673f740e0638f5539990abb624db7f7efe1e1ffd37a84988</code></td></tr>
+<tr><td>prompt_pack_version</td><td><code>sha256:eaceeb62f1dd8eccb4f48d1ab3a9bf380d9020a247d42f3e60bde24e35919344</code></td></tr>
+<tr><td>model_version</td><td><code>gpt-4o-2024-08-06</code></td></tr>
+<tr><td>workflow</td><td><code>loan-adjudication</code></td></tr>
+<tr><td>workflow_version</td><td><code>v4.2</code></td></tr>
+<tr><td>environment</td><td><code>sample</code></td></tr>
+<tr><td>on_behalf_of</td><td><code>org:retail-bank</code></td></tr>
+<tr><td>on_behalf_of_type</td><td><code>organization</code></td></tr>
+<tr><td>interaction_mode</td><td><code>autonomous</code></td></tr>
+<tr><td>workflow_digest</td><td><code>ff64a803439392b7608d73f2fb023795c4be9a8a0da82a9859adb08ef5e9157a</code></td></tr>
+</tbody></table>
+<h3>Capture controls</h3>
+<p>The run opened under capture policy <code>b2:ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e</code>. The pack carries the producer's file <code>data/capture-policy-b2-ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e.json</code> as its document, shown under Capture policies below; the verifier does not check it against the run.</p>
+<p>No entry of this run declares a capture outcome.</p>
+<h3>Steps</h3>
+<table><thead><tr><th>Step</th><th>Time (as recorded)</th><th>What</th><th>Provenance</th><th>Who</th><th>Entry hash</th></tr></thead><tbody>
+<tr><td>0</td><td>2026-11-06T19:22:35.166611+00:00</td><td>Run started</td><td>observed</td><td>-</td><td>da94b7734c55</td></tr>
+<tr><td>1</td><td>2026-11-06T19:22:35.195198+00:00</td><td>Who and what ran</td><td>asserted</td><td>-</td><td>57c365e2a3cb</td></tr>
+<tr><td>2</td><td>2026-11-06T19:22:35.227190+00:00</td><td>Fork point</td><td>observed</td><td>-</td><td>25029152e238</td></tr>
+<tr><td>3</td><td>2026-11-06T19:22:35.259792+00:00</td><td>Input context</td><td>asserted</td><td>-</td><td>0cc0c2b38228</td></tr>
+<tr><td>4</td><td>2026-11-06T19:22:35.292745+00:00</td><td>Tool call</td><td>observed</td><td>-</td><td>b4d4d549ece7</td></tr>
+<tr><td>5</td><td>2026-11-06T19:22:35.339121+00:00</td><td>Model call</td><td>observed</td><td>-</td><td>b95f9fd6089a</td></tr>
+<tr><td>6</td><td>2026-11-06T19:22:35.384352+00:00</td><td>Human decision</td><td>asserted</td><td>loan-officer:reviewer-4471</td><td>48fd6fc12a21</td></tr>
+<tr><td>7</td><td>2026-11-06T19:22:35.416553+00:00</td><td>Decision record</td><td>asserted</td><td>-</td><td>c66afffcb5db</td></tr>
+<tr><td>8</td><td>2026-11-06T19:22:35.449271+00:00</td><td>Out-of-band note</td><td>asserted</td><td>-</td><td>1a45e8e86219</td></tr>
+<tr><td>9</td><td>2026-11-06T19:22:35.482272+00:00</td><td>Out-of-band note</td><td>asserted</td><td>-</td><td>b235976b6712</td></tr>
+<tr><td>10</td><td>2026-11-06T19:22:35.646740+00:00</td><td>Run sealed</td><td>observed</td><td>-</td><td>2c8eac6b74f8</td></tr>
+</tbody></table>
+<h3>Steps in full</h3>
+<details><summary>Step 0 - Run started</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;python&quot;: &quot;3.15.2&quot;,
+ &quot;platform&quot;: &quot;win32&quot;,
+ &quot;recorder_version&quot;: &quot;0.0.1a0&quot;,
+ &quot;watermark&quot;: {
+  &quot;license_id&quot;: &quot;LIC-f74d66c99680&quot;,
+  &quot;scope&quot;: null,
+  &quot;image_digest&quot;: null,
+  &quot;fingerprint&quot;: &quot;fp:80a08fafc704809c82f24a4d&quot;
+ },
+ &quot;capture_policy&quot;: &quot;b2:ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e&quot;,
+ &quot;standing&quot;: {
+  &quot;state&quot;: &quot;ok&quot;,
+  &quot;reasons&quot;: [],
+  &quot;records&quot;: true
+ }
+}</pre></details>
+<details><summary>Step 1 - Who and what ran</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;principal&quot;: &quot;svc:loan-adjudicator&quot;,
+ &quot;agent_id&quot;: &quot;lending-agent@2.3.1&quot;,
+ &quot;delegation_from&quot;: &quot;app:retail-lending-portal&quot;,
+ &quot;scope&quot;: [
+  &quot;loans:adjudicate&quot;,
+  &quot;creditbureau:read&quot;
+ ],
+ &quot;policy_version&quot;: &quot;sha256:ac1deb51e3dfee66673f740e0638f5539990abb624db7f7efe1e1ffd37a84988&quot;,
+ &quot;prompt_pack_version&quot;: &quot;sha256:eaceeb62f1dd8eccb4f48d1ab3a9bf380d9020a247d42f3e60bde24e35919344&quot;,
+ &quot;model_version&quot;: &quot;gpt-4o-2024-08-06&quot;,
+ &quot;workflow&quot;: &quot;loan-adjudication&quot;,
+ &quot;workflow_version&quot;: &quot;v4.2&quot;,
+ &quot;environment&quot;: &quot;sample&quot;,
+ &quot;on_behalf_of&quot;: &quot;org:retail-bank&quot;,
+ &quot;on_behalf_of_type&quot;: &quot;organization&quot;,
+ &quot;interaction_mode&quot;: &quot;autonomous&quot;,
+ &quot;workflow_digest&quot;: &quot;ff64a803439392b7608d73f2fb023795c4be9a8a0da82a9859adb08ef5e9157a&quot;
+}</pre></details>
+<details><summary>Step 2 - Fork point</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;source_run&quot;: &quot;adverse-decision&quot;,
+ &quot;at_step&quot;: 5,
+ &quot;source_prev_hash&quot;: &quot;eb733650a3dff4fddfd2d4a54289664220b16ce301331dea8a47124b24d19da2&quot;
+}</pre></details>
+<details><summary>Step 3 - Input context</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;name&quot;: &quot;application_and_policy&quot;,
+ &quot;content&quot;: {
+  &quot;application&quot;: {
+   &quot;applicant_ref&quot;: &quot;app-70255&quot;,
+   &quot;product&quot;: &quot;unsecured-personal-24&quot;,
+   &quot;requested_amount_usd&quot;: 18000,
+   &quot;term_months&quot;: 60,
+   &quot;stated_annual_income_usd&quot;: 52000,
+   &quot;monthly_debt_usd&quot;: 1990,
+   &quot;dti_ratio&quot;: 0.46
+  },
+  &quot;policy_excerpt&quot;: {
+   &quot;max_dti_ratio&quot;: 0.43,
+   &quot;min_credit_score&quot;: 620,
+   &quot;reference&quot;: &quot;Lending Policy section 4.2&quot;
+  }
+ },
+ &quot;source&quot;: &quot;retail-lending-portal&quot;
+}</pre></details>
+<details><summary>Step 4 - Tool call</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Arguments</p><pre class="recorded">[
+ &quot;app-70255&quot;
+]</pre><p class="label">Result</p><pre class="recorded">{
+ &quot;applicant_ref&quot;: &quot;app-70255&quot;,
+ &quot;score&quot;: 604,
+ &quot;model&quot;: &quot;generic-risk-v9&quot;,
+ &quot;bureau&quot;: &quot;sample-bureau&quot;
+}</pre><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;tool&quot;: &quot;credit_bureau_score&quot;,
+ &quot;kwargs&quot;: {},
+ &quot;status&quot;: &quot;ok&quot;,
+ &quot;started&quot;: &quot;2026-11-06T19:22:34.548547+00:00&quot;
+}</pre></details>
+<details><summary>Step 5 - Model call</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Request</p><pre class="recorded">{
+ &quot;method&quot;: &quot;POST&quot;,
+ &quot;path&quot;: &quot;/v1/chat/completions&quot;,
+ &quot;query&quot;: &quot;&quot;,
+ &quot;headers&quot;: {},
+ &quot;text&quot;: &quot;{\&quot;model\&quot;:\&quot;gpt-4o-2024-08-06\&quot;,\&quot;messages\&quot;:[{\&quot;role\&quot;:\&quot;system\&quot;,\&quot;content\&quot;:\&quot;You are an underwriting assistant. Apply the lending policy exactly, state the decision as APPROVE or DECLINE, and give the deciding factors. Do not infer facts not present in the application.\\n\&quot;},{\&quot;role\&quot;:\&quot;user\&quot;,\&quot;content\&quot;:\&quot;Application and policy: {\\\&quot;application\\\&quot;: {\\\&quot;applicant_ref\\\&quot;: \\\&quot;app-70255\\\&quot;, \\\&quot;product\\\&quot;: \\\&quot;unsecured-personal-24\\\&quot;, \\\&quot;requested_amount_usd\\\&quot;: 18000, \\\&quot;term_months\\\&quot;: 60, \\\&quot;stated_annual_income_usd\\\&quot;: 52000, \\\&quot;monthly_debt_usd\\\&quot;: 1990, \\\&quot;dti_ratio\\\&quot;: 0.46}, \\\&quot;policy_excerpt\\\&quot;: {\\\&quot;max_dti_ratio\\\&quot;: 0.43, \\\&quot;min_credit_score\\\&quot;: 620, \\\&quot;reference\\\&quot;: \\\&quot;Lending Policy section 4.2\\\&quot;}} Credit report: {\\\&quot;applicant_ref\\\&quot;: \\\&quot;app-70255\\\&quot;, \\\&quot;score\\\&quot;: 604, \\\&quot;model\\\&quot;: \\\&quot;generic-risk-v9\\\&quot;, \\\&quot;bureau\\\&quot;: \\\&quot;sample-bureau\\\&quot;}\&quot;}]}&quot;
+}</pre><p class="label">Response</p><pre class="recorded">{
+ &quot;status&quot;: 200,
+ &quot;streamed&quot;: false,
+ &quot;media_type&quot;: &quot;application/json&quot;,
+ &quot;complete&quot;: true,
+ &quot;headers&quot;: {},
+ &quot;text&quot;: &quot;{\&quot;id\&quot;:\&quot;chatcmpl-loan-70255\&quot;,\&quot;object\&quot;:\&quot;chat.completion\&quot;,\&quot;model\&quot;:\&quot;gpt-4o-2024-08-06\&quot;,\&quot;choices\&quot;:[{\&quot;index\&quot;:0,\&quot;finish_reason\&quot;:\&quot;stop\&quot;,\&quot;message\&quot;:{\&quot;role\&quot;:\&quot;assistant\&quot;,\&quot;content\&quot;:\&quot;DECISION: DECLINE. The debt-to-income ratio of 46% exceeds the 43% maximum (Lending Policy section 4.2) and the credit score of 604 is below the 620 minimum for an unsecured personal loan. The application does not meet current underwriting criteria.\&quot;}}],\&quot;usage\&quot;:{\&quot;prompt_tokens\&quot;:380,\&quot;completion_tokens\&quot;:54,\&quot;total_tokens\&quot;:434}}&quot;
+}</pre><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;model&quot;: &quot;gpt-4o-2024-08-06&quot;,
+ &quot;started&quot;: &quot;2026-11-06T19:22:34.659429+00:00&quot;
+}</pre></details>
+<details><summary>Step 6 - Human decision</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;actor&quot;: &quot;loan-officer:reviewer-4471&quot;,
+ &quot;decision&quot;: &quot;uphold&quot;,
+ &quot;reason&quot;: &quot;Manual review confirmed DTI 46% over the 43% policy maximum and score 604 below the 620 floor; the decline was upheld under section 4.2 and the adverse-action reasons were recorded.&quot;,
+ &quot;binds_step&quot;: 5
+}</pre></details>
+<details><summary>Step 7 - Decision record</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;retention_deadline&quot;: &quot;2028-12-05T19:22:35.416317+00:00&quot;,
+ &quot;retention_basis&quot;: &quot;ECOA/Reg B adverse-action record retention (illustrative)&quot;,
+ &quot;output_flags&quot;: {
+  &quot;is_automated_decision&quot;: true,
+  &quot;is_adverse_action&quot;: true
+ },
+ &quot;reason_codes&quot;: [
+  &quot;DTI_OVER_MAX&quot;,
+  &quot;SCORE_BELOW_MIN&quot;
+ ]
+}</pre></details>
+<details><summary>Step 8 - Out-of-band note</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;note&quot;: &quot;The adverse-action notice was generated and mailed to the applicant by the downstream fulfillment service; that step is outside BitExact&#x27;s capture boundary, so this run does not show it - noted here so no reader assumes it does.&quot;
+}</pre></details>
+<details><summary>Step 9 - Out-of-band note</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;note&quot;: &quot;Seeded sample: the model response was served from a fixture, not a live provider call. The recording, chain, and seal are real; the model&#x27;s answer is illustrative.&quot;
+}</pre></details>
+<details><summary>Step 10 - Run sealed</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;steps&quot;: 11,
+ &quot;sealed_by&quot;: &quot;sdk&quot;
+}</pre></details>
+</section>
+<section id="run-2">
+<h2>Run 2</h2>
+<p>Run id <code>adverse-decision</code>, file <code>data/runs/adverse-decision.bundle.json</code></p>
+<h3>Who and what ran</h3>
+<p>The run's identity, each field as its latest identity entry states it: the deployer's statement, recorded as stated; no key binds it to a person.</p>
+<ul>
+<li>On behalf of: <code>org:retail-bank</code> (organization) - the deployer's statement</li>
+<li>Person in session: no — autonomous - the deployer's statement, not a finding on solely automated decisions</li>
+</ul>
+<table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>
+<tr><td>principal</td><td><code>svc:loan-adjudicator</code></td></tr>
+<tr><td>agent_id</td><td><code>lending-agent@2.3.1</code></td></tr>
+<tr><td>delegation_from</td><td><code>app:retail-lending-portal</code></td></tr>
+<tr><td>scope</td><td><code>[&quot;loans:adjudicate&quot;, &quot;creditbureau:read&quot;]</code></td></tr>
+<tr><td>policy_version</td><td><code>sha256:ac1deb51e3dfee66673f740e0638f5539990abb624db7f7efe1e1ffd37a84988</code></td></tr>
+<tr><td>prompt_pack_version</td><td><code>sha256:eaceeb62f1dd8eccb4f48d1ab3a9bf380d9020a247d42f3e60bde24e35919344</code></td></tr>
+<tr><td>model_version</td><td><code>gpt-4o-2024-08-06</code></td></tr>
+<tr><td>workflow</td><td><code>loan-adjudication</code></td></tr>
+<tr><td>workflow_version</td><td><code>v4.2</code></td></tr>
+<tr><td>environment</td><td><code>sample</code></td></tr>
+<tr><td>on_behalf_of</td><td><code>org:retail-bank</code></td></tr>
+<tr><td>on_behalf_of_type</td><td><code>organization</code></td></tr>
+<tr><td>interaction_mode</td><td><code>autonomous</code></td></tr>
+<tr><td>workflow_digest</td><td><code>ff64a803439392b7608d73f2fb023795c4be9a8a0da82a9859adb08ef5e9157a</code></td></tr>
+</tbody></table>
+<h3>Capture controls</h3>
+<p>The run opened under capture policy <code>b2:ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e</code>. The pack carries the producer's file <code>data/capture-policy-b2-ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e.json</code> as its document, shown under Capture policies below; the verifier does not check it against the run.</p>
+<p>No entry of this run declares a capture outcome.</p>
+<h3>Steps</h3>
+<table><thead><tr><th>Step</th><th>Time (as recorded)</th><th>What</th><th>Provenance</th><th>Who</th><th>Entry hash</th></tr></thead><tbody>
+<tr><td>0</td><td>2026-11-06T19:22:34.456958+00:00</td><td>Run started</td><td>observed</td><td>-</td><td>6f8df3183f74</td></tr>
+<tr><td>1</td><td>2026-11-06T19:22:34.484231+00:00</td><td>Who and what ran</td><td>asserted</td><td>-</td><td>65f18768f1d9</td></tr>
+<tr><td>2</td><td>2026-11-06T19:22:34.516616+00:00</td><td>Input context</td><td>asserted</td><td>-</td><td>6b612be0e58d</td></tr>
+<tr><td>3</td><td>2026-11-06T19:22:34.548891+00:00</td><td>Tool call</td><td>observed</td><td>-</td><td>210b71bf1786</td></tr>
+<tr><td>4</td><td>2026-11-06T19:22:34.670202+00:00</td><td>Model call</td><td>observed</td><td>-</td><td>eb733650a3df</td></tr>
+<tr><td>5</td><td>2026-11-06T19:22:34.715460+00:00</td><td>Human decision</td><td>asserted</td><td>loan-officer:reviewer-4471</td><td>ade91ac402d9</td></tr>
+<tr><td>6</td><td>2026-11-06T19:22:34.749045+00:00</td><td>Decision record</td><td>asserted</td><td>-</td><td>99486d6dafe5</td></tr>
+<tr><td>7</td><td>2026-11-06T19:22:34.784498+00:00</td><td>Out-of-band note</td><td>asserted</td><td>-</td><td>8961db7867cb</td></tr>
+<tr><td>8</td><td>2026-11-06T19:22:34.816224+00:00</td><td>Out-of-band note</td><td>asserted</td><td>-</td><td>75365d807bc5</td></tr>
+<tr><td>9</td><td>2026-11-06T19:22:35.045283+00:00</td><td>Run sealed</td><td>observed</td><td>-</td><td>07b4b63c5218</td></tr>
+</tbody></table>
+<h3>Steps in full</h3>
+<details><summary>Step 0 - Run started</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;python&quot;: &quot;3.15.2&quot;,
+ &quot;platform&quot;: &quot;win32&quot;,
+ &quot;recorder_version&quot;: &quot;0.0.1a0&quot;,
+ &quot;watermark&quot;: {
+  &quot;license_id&quot;: &quot;LIC-f74d66c99680&quot;,
+  &quot;scope&quot;: null,
+  &quot;image_digest&quot;: null,
+  &quot;fingerprint&quot;: &quot;fp:80a08fafc704809c82f24a4d&quot;
+ },
+ &quot;capture_policy&quot;: &quot;b2:ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e&quot;,
+ &quot;standing&quot;: {
+  &quot;state&quot;: &quot;ok&quot;,
+  &quot;reasons&quot;: [],
+  &quot;records&quot;: true
+ }
+}</pre></details>
+<details><summary>Step 1 - Who and what ran</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;principal&quot;: &quot;svc:loan-adjudicator&quot;,
+ &quot;agent_id&quot;: &quot;lending-agent@2.3.1&quot;,
+ &quot;delegation_from&quot;: &quot;app:retail-lending-portal&quot;,
+ &quot;scope&quot;: [
+  &quot;loans:adjudicate&quot;,
+  &quot;creditbureau:read&quot;
+ ],
+ &quot;policy_version&quot;: &quot;sha256:ac1deb51e3dfee66673f740e0638f5539990abb624db7f7efe1e1ffd37a84988&quot;,
+ &quot;prompt_pack_version&quot;: &quot;sha256:eaceeb62f1dd8eccb4f48d1ab3a9bf380d9020a247d42f3e60bde24e35919344&quot;,
+ &quot;model_version&quot;: &quot;gpt-4o-2024-08-06&quot;,
+ &quot;workflow&quot;: &quot;loan-adjudication&quot;,
+ &quot;workflow_version&quot;: &quot;v4.2&quot;,
+ &quot;environment&quot;: &quot;sample&quot;,
+ &quot;on_behalf_of&quot;: &quot;org:retail-bank&quot;,
+ &quot;on_behalf_of_type&quot;: &quot;organization&quot;,
+ &quot;interaction_mode&quot;: &quot;autonomous&quot;,
+ &quot;workflow_digest&quot;: &quot;ff64a803439392b7608d73f2fb023795c4be9a8a0da82a9859adb08ef5e9157a&quot;
+}</pre></details>
+<details><summary>Step 2 - Input context</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;name&quot;: &quot;application_and_policy&quot;,
+ &quot;content&quot;: {
+  &quot;application&quot;: {
+   &quot;applicant_ref&quot;: &quot;app-70255&quot;,
+   &quot;product&quot;: &quot;unsecured-personal-24&quot;,
+   &quot;requested_amount_usd&quot;: 18000,
+   &quot;term_months&quot;: 60,
+   &quot;stated_annual_income_usd&quot;: 52000,
+   &quot;monthly_debt_usd&quot;: 1990,
+   &quot;dti_ratio&quot;: 0.46
+  },
+  &quot;policy_excerpt&quot;: {
+   &quot;max_dti_ratio&quot;: 0.43,
+   &quot;min_credit_score&quot;: 620,
+   &quot;reference&quot;: &quot;Lending Policy section 4.2&quot;
+  }
+ },
+ &quot;source&quot;: &quot;retail-lending-portal&quot;
+}</pre></details>
+<details><summary>Step 3 - Tool call</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Arguments</p><pre class="recorded">[
+ &quot;app-70255&quot;
+]</pre><p class="label">Result</p><pre class="recorded">{
+ &quot;applicant_ref&quot;: &quot;app-70255&quot;,
+ &quot;score&quot;: 604,
+ &quot;model&quot;: &quot;generic-risk-v9&quot;,
+ &quot;bureau&quot;: &quot;sample-bureau&quot;
+}</pre><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;tool&quot;: &quot;credit_bureau_score&quot;,
+ &quot;kwargs&quot;: {},
+ &quot;status&quot;: &quot;ok&quot;,
+ &quot;started&quot;: &quot;2026-11-06T19:22:34.548547+00:00&quot;
+}</pre></details>
+<details><summary>Step 4 - Model call</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Request</p><pre class="recorded">{
+ &quot;method&quot;: &quot;POST&quot;,
+ &quot;path&quot;: &quot;/v1/chat/completions&quot;,
+ &quot;query&quot;: &quot;&quot;,
+ &quot;headers&quot;: {},
+ &quot;text&quot;: &quot;{\&quot;model\&quot;:\&quot;gpt-4o-2024-08-06\&quot;,\&quot;messages\&quot;:[{\&quot;role\&quot;:\&quot;system\&quot;,\&quot;content\&quot;:\&quot;You are an underwriting assistant. Apply the lending policy exactly, state the decision as APPROVE or DECLINE, and give the deciding factors. Do not infer facts not present in the application.\\n\&quot;},{\&quot;role\&quot;:\&quot;user\&quot;,\&quot;content\&quot;:\&quot;Application and policy: {\\\&quot;application\\\&quot;: {\\\&quot;applicant_ref\\\&quot;: \\\&quot;app-70255\\\&quot;, \\\&quot;product\\\&quot;: \\\&quot;unsecured-personal-24\\\&quot;, \\\&quot;requested_amount_usd\\\&quot;: 18000, \\\&quot;term_months\\\&quot;: 60, \\\&quot;stated_annual_income_usd\\\&quot;: 52000, \\\&quot;monthly_debt_usd\\\&quot;: 1990, \\\&quot;dti_ratio\\\&quot;: 0.46}, \\\&quot;policy_excerpt\\\&quot;: {\\\&quot;max_dti_ratio\\\&quot;: 0.43, \\\&quot;min_credit_score\\\&quot;: 620, \\\&quot;reference\\\&quot;: \\\&quot;Lending Policy section 4.2\\\&quot;}} Credit report: {\\\&quot;applicant_ref\\\&quot;: \\\&quot;app-70255\\\&quot;, \\\&quot;score\\\&quot;: 604, \\\&quot;model\\\&quot;: \\\&quot;generic-risk-v9\\\&quot;, \\\&quot;bureau\\\&quot;: \\\&quot;sample-bureau\\\&quot;}\&quot;}]}&quot;
+}</pre><p class="label">Response</p><pre class="recorded">{
+ &quot;status&quot;: 200,
+ &quot;streamed&quot;: false,
+ &quot;media_type&quot;: &quot;application/json&quot;,
+ &quot;complete&quot;: true,
+ &quot;headers&quot;: {},
+ &quot;text&quot;: &quot;{\&quot;id\&quot;:\&quot;chatcmpl-loan-70255\&quot;,\&quot;object\&quot;:\&quot;chat.completion\&quot;,\&quot;model\&quot;:\&quot;gpt-4o-2024-08-06\&quot;,\&quot;choices\&quot;:[{\&quot;index\&quot;:0,\&quot;finish_reason\&quot;:\&quot;stop\&quot;,\&quot;message\&quot;:{\&quot;role\&quot;:\&quot;assistant\&quot;,\&quot;content\&quot;:\&quot;DECISION: DECLINE. The debt-to-income ratio of 46% exceeds the 43% maximum (Lending Policy section 4.2) and the credit score of 604 is below the 620 minimum for an unsecured personal loan. The application does not meet current underwriting criteria.\&quot;}}],\&quot;usage\&quot;:{\&quot;prompt_tokens\&quot;:380,\&quot;completion_tokens\&quot;:54,\&quot;total_tokens\&quot;:434}}&quot;
+}</pre><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;model&quot;: &quot;gpt-4o-2024-08-06&quot;,
+ &quot;started&quot;: &quot;2026-11-06T19:22:34.659429+00:00&quot;
+}</pre></details>
+<details><summary>Step 5 - Human decision</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;actor&quot;: &quot;loan-officer:reviewer-4471&quot;,
+ &quot;decision&quot;: &quot;uphold&quot;,
+ &quot;reason&quot;: &quot;Manual review confirmed DTI 46% over the 43% policy maximum and score 604 below the 620 floor; the decline was upheld under section 4.2 and the adverse-action reasons were recorded.&quot;,
+ &quot;binds_step&quot;: 4
+}</pre></details>
+<details><summary>Step 6 - Decision record</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;retention_deadline&quot;: &quot;2028-12-05T19:22:34.748766+00:00&quot;,
+ &quot;retention_basis&quot;: &quot;ECOA/Reg B adverse-action record retention (illustrative)&quot;,
+ &quot;output_flags&quot;: {
+  &quot;is_automated_decision&quot;: true,
+  &quot;is_adverse_action&quot;: true
+ },
+ &quot;reason_codes&quot;: [
+  &quot;DTI_OVER_MAX&quot;,
+  &quot;SCORE_BELOW_MIN&quot;
+ ]
+}</pre></details>
+<details><summary>Step 7 - Out-of-band note</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;note&quot;: &quot;The adverse-action notice was generated and mailed to the applicant by the downstream fulfillment service; that step is outside BitExact&#x27;s capture boundary, so this run does not show it - noted here so no reader assumes it does.&quot;
+}</pre></details>
+<details><summary>Step 8 - Out-of-band note</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;note&quot;: &quot;Seeded sample: the model response was served from a fixture, not a live provider call. The recording, chain, and seal are real; the model&#x27;s answer is illustrative.&quot;
+}</pre></details>
+<details><summary>Step 9 - Run sealed</summary><p class="label">Recorded content (as the bundle holds it)</p><p class="label">Recorded data</p><pre class="recorded">{
+ &quot;steps&quot;: 10,
+ &quot;sealed_by&quot;: &quot;sdk&quot;
+}</pre></details>
+</section>
+<section>
+<h2>Capture policies</h2>
+<p>File <code>data/capture-policy-b2-ce93a52dbf018155afb7a641931ab9a2ccdee0618363591499c85e095411382e.json</code>, the producer's document as the pack holds it:</p>
+<pre class="recorded">{
+ &quot;detectors&quot;: {
+  &quot;pan&quot;: {
+   &quot;keep_last4&quot;: true
+  },
+  &quot;iban&quot;: {},
+  &quot;credentials&quot;: {}
+ },
+ &quot;fields&quot;: [
+  {
+   &quot;kind&quot;: &quot;*&quot;,
+   &quot;path&quot;: &quot;*&quot;,
+   &quot;mode&quot;: &quot;scrub&quot;
+  }
+ ],
+ &quot;budget_ms&quot;: 1000
+}</pre>
+</section>
+</main>
+</body></html>

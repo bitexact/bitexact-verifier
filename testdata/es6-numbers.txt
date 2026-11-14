@@ -1,4 +1,4 @@
-# ECMAScript Number::toString conformance vectors for bitexact-jcs/1.
+# ECMAScript Number::toString conformance vectors for aer-jcs.
 #
 # Format: <IEEE-754 binary64 bits, big-endian hex>,<expected output>
 #
